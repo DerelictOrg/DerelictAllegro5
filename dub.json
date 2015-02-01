@@ -1,0 +1,16 @@
+{
+    "name": "derelict-allegro5",
+    "description": "A dynamic binding to the Allegro 5 libraries.",
+    "homepage": "https://github.com/DerelictOrg/DerelictAllegro5",
+    "license": "Boost",
+    "authors": [
+        "Mike Parker"
+    ],
+
+    "targetName": "DerelictAllegro5",
+    "targetPath": "lib",
+
+    "dependencies": {
+        "derelict-util": ">=1.0.0"
+    }
+}
