@@ -33,6 +33,10 @@ void main() {
 }
 ```
 
+This binding is a bit different from most other Derelict packages, especially when building on Mac OSX. Please refer to this [blog post about DerelictAllegro5 at The One With D][4] for more information until the Derelict documentation is complete.
+
+
 [1]: http://alleg.sourceforge.net/
 [2]: http://derelictorg.github.io/compiling.html
 [3]: http://derelictorg.github.io/using.html
+[4]: http://dblog.aldacron.net/derelictallegro5/
