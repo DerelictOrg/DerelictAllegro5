@@ -439,7 +439,7 @@ struct ALLEGRO_DISPLAY_MODE {
 struct ALLEGRO_JOYSTICK;
 
 struct _Axes {
-    float axis[ _AL_MAX_JOYSTICK_AXES ];
+    float[ _AL_MAX_JOYSTICK_AXES ] axis;
 }
 
 struct ALLEGRO_JOYSTICK_STATE {
@@ -647,7 +647,7 @@ struct ALLEGRO_MOUSE_STATE {
     int y;
     int z;
     int w;
-    int more_axes[ ALLEGRO_MOUSE_MAX_EXTRA_AXES ];
+    int[ ALLEGRO_MOUSE_MAX_EXTRA_AXES ] more_axes;
     int button;
     float pressure;
     ALLEGRO_DISPLAY* display;
