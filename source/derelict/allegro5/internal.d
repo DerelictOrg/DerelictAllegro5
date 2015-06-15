@@ -32,7 +32,7 @@ package string genLibNames( string prefix ) {
     }
     else static if( Derelict_OS_Posix ) {
         // TODO What is the monolith name format on other Posix platforms?
-        enum MoolithNames = "";
+        enum MonolithNames = "";
         auto lwr = prefix.toLower;
         if( lwr != "allegro" ) {
             lwr = "_" ~ lwr;
