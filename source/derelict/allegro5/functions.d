@@ -28,302 +28,304 @@ DEALINGS IN THE SOFTWARE.
 module derelict.allegro5.functions;
 
 private {
-    import core.stdc.stdarg;
-    import core.stdc.stdint;
-    import core.stdc.time;
+    import core.stdc.stdarg,
+           core.stdc.stdint,
+           core.stdc.time;
+
+    import derelict.util.system;
     import derelict.allegro5.types;
 }
 
 nothrow {
     // memory.h
-    void* al_malloc( size_t n, int line = __LINE__, const( char )* file = __FILE__.ptr ) {
-        return al_malloc_with_context( n, line, file, "" );
+    void* al_malloc(size_t n, int line = __LINE__, const(char)* file = __FILE__.ptr) {
+        return al_malloc_with_context(n, line, file, "");
     }
 
-    void al_free( void* p, int line = __LINE__, const( char )* file = __FILE__.ptr ) {
-        al_free_with_context( p, line, file, "" );
+    void al_free(void* p, int line = __LINE__, const(char)* file = __FILE__.ptr) {
+        al_free_with_context(p, line, file, "");
     }
 
-    void* al_realloc( void* p, size_t n, int line = __LINE__, const( char )* file = __FILE__.ptr ) {
-        return al_realloc_with_context( p, n, line, file, "" );
+    void* al_realloc(void* p, size_t n, int line = __LINE__, const(char)* file = __FILE__.ptr) {
+        return al_realloc_with_context(p, n, line, file, "");
     }
 
-    void* al_calloc( size_t c, size_t n, int line = __LINE__, const( char )* file = __FILE__.ptr ) {
-        return al_calloc_with_context( c, n, line, file, "" );
+    void* al_calloc(size_t c, size_t n, int line = __LINE__, const(char)* file = __FILE__.ptr) {
+        return al_calloc_with_context(c, n, line, file, "");
     }
 
     // system.h
     bool al_init() {
         import core.stdc.stdlib;
-        return al_install_system( ALLEGRO_VERSION_INT, &atexit );
+        return al_install_system(ALLEGRO_VERSION_INT, &atexit);
     }
 }
 
 
-extern( C ) nothrow {
+extern(C) @nogc nothrow {
     // altime.h
     alias da_al_get_time = double function();
-    alias da_al_rest = void function( double );
-    alias da_al_init_timeout = void function( ALLEGRO_TIMEOUT*, double );
+    alias da_al_rest = void function(double);
+    alias da_al_init_timeout = void function(ALLEGRO_TIMEOUT*, double);
 
     // base.h
     alias da_al_get_allegro_version = uint function();
-    alias da_al_run_main = int function( int, char**, int function( int, char** ));
+    alias da_al_run_main = int function(int, char**, int function(int, char**));
 
     // bitmap.h
-    alias da_al_set_new_bitmap_format = void function( int );
-    alias da_al_set_new_bitmap_flags = void function( int );
+    alias da_al_set_new_bitmap_format = void function(int);
+    alias da_al_set_new_bitmap_flags = void function(int);
     alias da_al_get_new_bitmap_format = int function();
     alias da_al_get_new_bitmap_flags = int function();
-    alias da_al_add_new_bitmap_flag = void function( int );
+    alias da_al_add_new_bitmap_flag = void function(int);
 
-    alias da_al_get_bitmap_width = int function( ALLEGRO_BITMAP* );
-    alias da_al_get_bitmap_height = int function( ALLEGRO_BITMAP* );
-    alias da_al_get_bitmap_format = int function( ALLEGRO_BITMAP* );
-    alias da_al_get_bitmap_flags = int function( ALLEGRO_BITMAP* );
+    alias da_al_get_bitmap_width = int function(ALLEGRO_BITMAP*);
+    alias da_al_get_bitmap_height = int function(ALLEGRO_BITMAP*);
+    alias da_al_get_bitmap_format = int function(ALLEGRO_BITMAP*);
+    alias da_al_get_bitmap_flags = int function(ALLEGRO_BITMAP*);
 
-    alias da_al_create_bitmap = ALLEGRO_BITMAP* function( int, int );
-    alias da_al_destroy_bitmap = void function( ALLEGRO_BITMAP* );
+    alias da_al_create_bitmap = ALLEGRO_BITMAP* function(int, int);
+    alias da_al_destroy_bitmap = void function(ALLEGRO_BITMAP*);
 
-    alias da_al_put_pixel = void function( int, int, ALLEGRO_COLOR );
-    alias da_al_put_blended_pixel = void function( int, int, ALLEGRO_COLOR );
-    alias da_al_get_pixel = ALLEGRO_COLOR function( ALLEGRO_BITMAP*, int, int );
+    alias da_al_put_pixel = void function(int, int, ALLEGRO_COLOR);
+    alias da_al_put_blended_pixel = void function(int, int, ALLEGRO_COLOR);
+    alias da_al_get_pixel = ALLEGRO_COLOR function(ALLEGRO_BITMAP*, int, int);
 
-    alias da_al_convert_mask_to_alpha = void function( ALLEGRO_BITMAP*, ALLEGRO_COLOR );
+    alias da_al_convert_mask_to_alpha = void function(ALLEGRO_BITMAP*, ALLEGRO_COLOR);
 
-    alias da_al_set_clipping_rectangle = void function( int, int, int, int );
+    alias da_al_set_clipping_rectangle = void function(int, int, int, int);
     alias da_al_reset_clipping_rectangle = void function();
-    alias da_al_get_clipping_rectangle = void function( int*, int*, int*, int* );
+    alias da_al_get_clipping_rectangle = void function(int*, int*, int*, int*);
 
-    alias da_al_create_sub_bitmap = ALLEGRO_BITMAP* function ( ALLEGRO_BITMAP*, int, int, int, int );
-    alias da_al_is_sub_bitmap = bool function( ALLEGRO_BITMAP* );
-    alias da_al_get_parent_bitmap = ALLEGRO_BITMAP* function( ALLEGRO_BITMAP* );
+    alias da_al_create_sub_bitmap = ALLEGRO_BITMAP* function (ALLEGRO_BITMAP*, int, int, int, int);
+    alias da_al_is_sub_bitmap = bool function(ALLEGRO_BITMAP*);
+    alias da_al_get_parent_bitmap = ALLEGRO_BITMAP* function(ALLEGRO_BITMAP*);
 
-    alias da_al_clone_bitmap = ALLEGRO_BITMAP* function( ALLEGRO_BITMAP* );
+    alias da_al_clone_bitmap = ALLEGRO_BITMAP* function(ALLEGRO_BITMAP*);
 
     // bitmap_draw.h
-    alias da_al_draw_bitmap = void function( ALLEGRO_BITMAP*, float, float, int );
-    alias da_al_draw_bitmap_region = void function( ALLEGRO_BITMAP*, float, float, float, float, float, float, int );
-    alias da_al_draw_scaled_bitmap = void function( ALLEGRO_BITMAP*, float, float, float, float, float, float, float, float, int );
-    alias da_al_draw_rotated_bitmap = void function( ALLEGRO_BITMAP*, float, float, float, float, float, int );
-    alias da_al_draw_scaled_rotated_bitmap = void function( ALLEGRO_BITMAP*, float, float, float, float, float, float, float, int );
+    alias da_al_draw_bitmap = void function(ALLEGRO_BITMAP*, float, float, int);
+    alias da_al_draw_bitmap_region = void function(ALLEGRO_BITMAP*, float, float, float, float, float, float, int);
+    alias da_al_draw_scaled_bitmap = void function(ALLEGRO_BITMAP*, float, float, float, float, float, float, float, float, int);
+    alias da_al_draw_rotated_bitmap = void function(ALLEGRO_BITMAP*, float, float, float, float, float, int);
+    alias da_al_draw_scaled_rotated_bitmap = void function(ALLEGRO_BITMAP*, float, float, float, float, float, float, float, int);
 
-    alias da_al_draw_tinted_bitmap = void function( ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, int );
-    alias da_al_draw_tinted_bitmap_region = void function( ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, float, int );
-    alias da_al_draw_tinted_scaled_bitmap = void function( ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, float, float, float, int );
-    alias da_al_draw_tinted_rotated_bitmap = void function( ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, int );
-    alias da_al_draw_tinted_scaled_rotated_bitmap = void function( ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, float, float, int );
-    alias da_al_draw_tinted_scaled_rotated_bitmap_region = void function( ALLEGRO_BITMAP*, float, float, float, float, ALLEGRO_COLOR, float, float, float, float, float, float, float, int );
+    alias da_al_draw_tinted_bitmap = void function(ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, int);
+    alias da_al_draw_tinted_bitmap_region = void function(ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, float, int);
+    alias da_al_draw_tinted_scaled_bitmap = void function(ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, float, float, float, int);
+    alias da_al_draw_tinted_rotated_bitmap = void function(ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, int);
+    alias da_al_draw_tinted_scaled_rotated_bitmap = void function(ALLEGRO_BITMAP*, ALLEGRO_COLOR, float, float, float, float, float, float, float, int);
+    alias da_al_draw_tinted_scaled_rotated_bitmap_region = void function(ALLEGRO_BITMAP*, float, float, float, float, ALLEGRO_COLOR, float, float, float, float, float, float, float, int);
 
     // bitmap_io.h
-    alias da_al_register_bitmap_loader = bool function( const( char )*, ALLEGRO_IIO_LOADER_FUNCTION );
-    alias da_al_register_bitmap_saver = bool function( const( char )*, ALLEGRO_IIO_SAVER_FUNCTION );
-    alias da_al_register_bitmap_loader_f = bool function( const( char )*, ALLEGRO_IIO_FS_LOADER_FUNCTION );
-    alias da_al_register_bitmap_saver_f = bool function( const( char )*, ALLEGRO_IIO_FS_SAVER_FUNCTION );
-    alias da_al_load_bitmap = ALLEGRO_BITMAP* function( const( char )* );
-    alias da_al_load_bitmap_f = ALLEGRO_BITMAP* function( ALLEGRO_FILE*, const( char )* );
-    alias da_al_save_bitmap = bool function( const( char )*, ALLEGRO_BITMAP* );
-    alias da_al_save_bitmap_f = bool function( ALLEGRO_FILE*, const( char )*, ALLEGRO_BITMAP* );
+    alias da_al_register_bitmap_loader = bool function(const(char)*, ALLEGRO_IIO_LOADER_FUNCTION);
+    alias da_al_register_bitmap_saver = bool function(const(char)*, ALLEGRO_IIO_SAVER_FUNCTION);
+    alias da_al_register_bitmap_loader_f = bool function(const(char)*, ALLEGRO_IIO_FS_LOADER_FUNCTION);
+    alias da_al_register_bitmap_saver_f = bool function(const(char)*, ALLEGRO_IIO_FS_SAVER_FUNCTION);
+    alias da_al_load_bitmap = ALLEGRO_BITMAP* function(const(char)*);
+    alias da_al_load_bitmap_f = ALLEGRO_BITMAP* function(ALLEGRO_FILE*, const(char)*);
+    alias da_al_save_bitmap = bool function(const(char)*, ALLEGRO_BITMAP*);
+    alias da_al_save_bitmap_f = bool function(ALLEGRO_FILE*, const(char)*, ALLEGRO_BITMAP*);
 
     // bitmap_lock.h
-    alias da_al_lock_bitmap = ALLEGRO_LOCKED_REGION* function( ALLEGRO_BITMAP*, int, int );
-    alias da_al_lock_bitmap_region = ALLEGRO_LOCKED_REGION* function( ALLEGRO_BITMAP*, int, int, int, int, int, int );
-    alias da_al_unlock_bitmap = void function( ALLEGRO_BITMAP* );
-    alias da_al_is_bitmap_locked = bool function( ALLEGRO_BITMAP* );
+    alias da_al_lock_bitmap = ALLEGRO_LOCKED_REGION* function(ALLEGRO_BITMAP*, int, int);
+    alias da_al_lock_bitmap_region = ALLEGRO_LOCKED_REGION* function(ALLEGRO_BITMAP*, int, int, int, int, int, int);
+    alias da_al_unlock_bitmap = void function(ALLEGRO_BITMAP*);
+    alias da_al_is_bitmap_locked = bool function(ALLEGRO_BITMAP*);
 
     // blender.h
-    alias da_al_set_blender = void function( int, int, int );
-    alias da_al_get_blender = void function( int*, int*, int* );
-    alias da_al_set_separate_blender = void function( int, int, int, int, int, int );
-    alias da_al_get_separate_blender = void function( int*, int*, int*, int*, int*, int* );
+    alias da_al_set_blender = void function(int, int, int);
+    alias da_al_get_blender = void function(int*, int*, int*);
+    alias da_al_set_separate_blender = void function(int, int, int, int, int, int);
+    alias da_al_get_separate_blender = void function(int*, int*, int*, int*, int*, int*);
 
     // color.h
-    alias da_al_map_rgb = ALLEGRO_COLOR function( ubyte, ubyte, ubyte );
-    alias da_al_map_rgba = ALLEGRO_COLOR function( ubyte, ubyte, ubyte, ubyte );
-    alias da_al_map_rgb_f = ALLEGRO_COLOR function( float, float, float );
-    alias da_al_map_rgba_f = ALLEGRO_COLOR function( float, float, float, float );
+    alias da_al_map_rgb = ALLEGRO_COLOR function(ubyte, ubyte, ubyte);
+    alias da_al_map_rgba = ALLEGRO_COLOR function(ubyte, ubyte, ubyte, ubyte);
+    alias da_al_map_rgb_f = ALLEGRO_COLOR function(float, float, float);
+    alias da_al_map_rgba_f = ALLEGRO_COLOR function(float, float, float, float);
 
-    alias da_al_unmap_rgb = void function( ALLEGRO_COLOR, ubyte*, ubyte*, ubyte* );
-    alias da_al_unmap_rgba = void function( ALLEGRO_COLOR, ubyte*, ubyte*, ubyte*, ubyte* );
-    alias da_al_unmap_rgb_f = void function( ALLEGRO_COLOR, float*, float*, float* );
-    alias da_al_unmap_rgba_f = void function( ALLEGRO_COLOR, float*, float*, float*, float* );
+    alias da_al_unmap_rgb = void function(ALLEGRO_COLOR, ubyte*, ubyte*, ubyte*);
+    alias da_al_unmap_rgba = void function(ALLEGRO_COLOR, ubyte*, ubyte*, ubyte*, ubyte*);
+    alias da_al_unmap_rgb_f = void function(ALLEGRO_COLOR, float*, float*, float*);
+    alias da_al_unmap_rgba_f = void function(ALLEGRO_COLOR, float*, float*, float*, float*);
 
-    alias da_al_get_pixel_size = int function( int );
-    alias da_al_get_pixel_format_bits = int function( int );
+    alias da_al_get_pixel_size = int function(int);
+    alias da_al_get_pixel_format_bits = int function(int);
 
     // config.h
     alias da_al_create_config = ALLEGRO_CONFIG* function();
-    alias da_al_add_config_section = void function( ALLEGRO_CONFIG*, const( char )* );
-    alias da_al_set_config_value = void function( ALLEGRO_CONFIG*, const( char )*, const( char )*, const( char )* );
-    alias da_al_add_config_comment = void function( ALLEGRO_CONFIG*, const( char )*, const( char )* );
-    alias da_al_get_config_value = const( char )* function( const( ALLEGRO_CONFIG )*, const( char )*, const( char )* );
-    alias da_al_load_config_file = ALLEGRO_CONFIG* function( const( char )* );
-    alias da_al_load_config_file_f = ALLEGRO_CONFIG* function( ALLEGRO_FILE* );
-    alias da_al_save_config_file = bool function( const( char )*, const( ALLEGRO_CONFIG )* );
-    alias da_al_save_config_file_f = bool function( ALLEGRO_FILE*, const( ALLEGRO_CONFIG )* );
-    alias da_al_merge_config_into = void function( ALLEGRO_CONFIG*, const( ALLEGRO_CONFIG )* );
-    alias da_al_merge_config = ALLEGRO_CONFIG* function( const( ALLEGRO_CONFIG )*, const( ALLEGRO_CONFIG )* );
-    alias da_al_destroy_config = void function( ALLEGRO_CONFIG* );
+    alias da_al_add_config_section = void function(ALLEGRO_CONFIG*, const(char)*);
+    alias da_al_set_config_value = void function(ALLEGRO_CONFIG*, const(char)*, const(char)*, const(char)*);
+    alias da_al_add_config_comment = void function(ALLEGRO_CONFIG*, const(char)*, const(char)*);
+    alias da_al_get_config_value = const(char)* function(const(ALLEGRO_CONFIG)*, const(char)*, const(char)*);
+    alias da_al_load_config_file = ALLEGRO_CONFIG* function(const(char)*);
+    alias da_al_load_config_file_f = ALLEGRO_CONFIG* function(ALLEGRO_FILE*);
+    alias da_al_save_config_file = bool function(const(char)*, const(ALLEGRO_CONFIG)*);
+    alias da_al_save_config_file_f = bool function(ALLEGRO_FILE*, const(ALLEGRO_CONFIG)*);
+    alias da_al_merge_config_into = void function(ALLEGRO_CONFIG*, const(ALLEGRO_CONFIG)*);
+    alias da_al_merge_config = ALLEGRO_CONFIG* function(const(ALLEGRO_CONFIG)*, const(ALLEGRO_CONFIG)*);
+    alias da_al_destroy_config = void function(ALLEGRO_CONFIG*);
 
-    alias da_al_get_first_config_section = const( char )* function( const( ALLEGRO_CONFIG )*, ALLEGRO_CONFIG_SECTION** );
-    alias da_al_get_next_config_section = const( char )* function( ALLEGRO_CONFIG_SECTION** );
-    alias da_al_get_first_config_entry = const( char )* function( const( ALLEGRO_CONFIG )*, const( char )*, ALLEGRO_CONFIG_ENTRY** );
-    alias da_al_get_next_config_entry = const( char )* function( ALLEGRO_CONFIG_ENTRY** );
+    alias da_al_get_first_config_section = const(char)* function(const(ALLEGRO_CONFIG)*, ALLEGRO_CONFIG_SECTION**);
+    alias da_al_get_next_config_section = const(char)* function(ALLEGRO_CONFIG_SECTION**);
+    alias da_al_get_first_config_entry = const(char)* function(const(ALLEGRO_CONFIG)*, const(char)*, ALLEGRO_CONFIG_ENTRY**);
+    alias da_al_get_next_config_entry = const(char)* function(ALLEGRO_CONFIG_ENTRY**);
 
     // display.h
-    alias da_al_set_new_display_refresh_rate = void function( int );
-    alias da_al_set_new_display_flags = void function( int );
+    alias da_al_set_new_display_refresh_rate = void function(int);
+    alias da_al_set_new_display_flags = void function(int);
     alias da_al_get_new_display_refresh_rate = int function();
     alias da_al_get_new_display_flags = int function();
 
-    alias da_al_get_display_width = int function( ALLEGRO_DISPLAY* );
-    alias da_al_get_display_height = int function( ALLEGRO_DISPLAY* );
-    alias da_al_get_display_format = int function( ALLEGRO_DISPLAY* );
-    alias da_al_get_display_refresh_rate = int function( ALLEGRO_DISPLAY* );
-    alias da_al_get_display_flags = int function( ALLEGRO_DISPLAY* );
-    alias da_al_set_display_flag = bool function( ALLEGRO_DISPLAY*, int, bool );
-    alias da_al_toggle_display_flag = bool function( ALLEGRO_DISPLAY*, int, bool );
+    alias da_al_get_display_width = int function(ALLEGRO_DISPLAY*);
+    alias da_al_get_display_height = int function(ALLEGRO_DISPLAY*);
+    alias da_al_get_display_format = int function(ALLEGRO_DISPLAY*);
+    alias da_al_get_display_refresh_rate = int function(ALLEGRO_DISPLAY*);
+    alias da_al_get_display_flags = int function(ALLEGRO_DISPLAY*);
+    alias da_al_set_display_flag = bool function(ALLEGRO_DISPLAY*, int, bool);
+    alias da_al_toggle_display_flag = bool function(ALLEGRO_DISPLAY*, int, bool);
 
-    alias da_al_create_display = ALLEGRO_DISPLAY* function( int, int );
-    alias da_al_destroy_display = void function( ALLEGRO_DISPLAY* );
+    alias da_al_create_display = ALLEGRO_DISPLAY* function(int, int);
+    alias da_al_destroy_display = void function(ALLEGRO_DISPLAY*);
     alias da_al_get_current_display = ALLEGRO_DISPLAY* function();
-    alias da_al_set_target_bitmap = void function( ALLEGRO_BITMAP* );
-    alias da_al_set_target_backbuffer = void function( ALLEGRO_DISPLAY* );
-    alias da_al_get_backbuffer = ALLEGRO_BITMAP* function( ALLEGRO_DISPLAY* );
+    alias da_al_set_target_bitmap = void function(ALLEGRO_BITMAP*);
+    alias da_al_set_target_backbuffer = void function(ALLEGRO_DISPLAY*);
+    alias da_al_get_backbuffer = ALLEGRO_BITMAP* function(ALLEGRO_DISPLAY*);
     alias da_al_get_target_bitmap = ALLEGRO_BITMAP* function();
 
-    alias da_al_acknowledge_resize = bool function( ALLEGRO_DISPLAY* );
-    alias da_al_resize_display = bool function( ALLEGRO_DISPLAY* );
+    alias da_al_acknowledge_resize = bool function(ALLEGRO_DISPLAY*);
+    alias da_al_resize_display = bool function(ALLEGRO_DISPLAY*);
     alias da_al_flip_display = void function();
-    alias da_al_update_display_region = void function( int, int, int, int );
-    alias da_al_is_compatible_bitmap = bool function( ALLEGRO_BITMAP* );
+    alias da_al_update_display_region = void function(int, int, int, int);
+    alias da_al_is_compatible_bitmap = bool function(ALLEGRO_BITMAP*);
 
     alias da_al_wait_for_vsync = bool function();
 
-    alias da_al_get_display_event_source = ALLEGRO_EVENT_SOURCE* function( ALLEGRO_DISPLAY* );
+    alias da_al_get_display_event_source = ALLEGRO_EVENT_SOURCE* function(ALLEGRO_DISPLAY*);
 
-    alias da_al_set_display_icon = void function( ALLEGRO_DISPLAY*, ALLEGRO_BITMAP* );
-    alias da_al_set_display_icons = void function( ALLEGRO_DISPLAY*, int, ALLEGRO_BITMAP** );
+    alias da_al_set_display_icon = void function(ALLEGRO_DISPLAY*, ALLEGRO_BITMAP*);
+    alias da_al_set_display_icons = void function(ALLEGRO_DISPLAY*, int, ALLEGRO_BITMAP**);
 
     alias da_al_get_new_display_adapter = int function();
-    alias da_al_set_new_display_adapter = void function( int );
-    alias da_al_set_new_window_position = void function( int, int );
-    alias da_al_get_new_window_position = void function( int*, int* );
-    alias da_al_set_window_position = void function( ALLEGRO_DISPLAY*, int, int );
-    alias da_al_get_window_position = void function( ALLEGRO_DISPLAY*, int*, int* );
+    alias da_al_set_new_display_adapter = void function(int);
+    alias da_al_set_new_window_position = void function(int, int);
+    alias da_al_get_new_window_position = void function(int*, int*);
+    alias da_al_set_window_position = void function(ALLEGRO_DISPLAY*, int, int);
+    alias da_al_get_window_position = void function(ALLEGRO_DISPLAY*, int*, int*);
 
-    alias da_al_set_window_title = void function( ALLEGRO_DISPLAY*, const( char )* );
+    alias da_al_set_window_title = void function(ALLEGRO_DISPLAY*, const(char)*);
 
-    alias da_al_set_new_display_option = void function( int, int, int );
-    alias da_al_get_new_display_option = int function( int, int* );
+    alias da_al_set_new_display_option = void function(int, int, int);
+    alias da_al_get_new_display_option = int function(int, int*);
     alias da_al_reset_new_display_options = void function();
-    alias da_al_get_display_option = int function( ALLEGRO_DISPLAY*, int );
+    alias da_al_get_display_option = int function(ALLEGRO_DISPLAY*, int);
 
-    alias da_al_hold_bitmap_drawing = void function( bool );
+    alias da_al_hold_bitmap_drawing = void function(bool);
     alias da_al_is_bitmap_drawing_held = bool function();
 
     // drawing.h
-    alias da_al_clear_to_color = void function( ALLEGRO_COLOR );
-    alias da_al_draw_pixel = void function( float, float, ALLEGRO_COLOR );
+    alias da_al_clear_to_color = void function(ALLEGRO_COLOR);
+    alias da_al_draw_pixel = void function(float, float, ALLEGRO_COLOR);
 
     // error.h
     alias da_al_get_errno = int function();
-    alias da_al_set_errno = void function( int );
+    alias da_al_set_errno = void function(int);
 
     // events.h
-    alias da_al_init_user_event_source = void function( ALLEGRO_EVENT_SOURCE* );
-    alias da_al_destroy_user_event_source = void function( ALLEGRO_EVENT_SOURCE* );
-    alias da_al_emit_user_event = bool function( ALLEGRO_EVENT_SOURCE*, ALLEGRO_EVENT*, void function( ALLEGRO_USER_EVENT* ));
-    alias da_al_unref_user_event = void function( ALLEGRO_USER_EVENT* );
-    alias da_al_set_event_source_data = void function( ALLEGRO_EVENT_SOURCE*, intptr_t );
-    alias da_al_get_event_source_data = intptr_t function( const( ALLEGRO_EVENT_SOURCE* ));
+    alias da_al_init_user_event_source = void function(ALLEGRO_EVENT_SOURCE*);
+    alias da_al_destroy_user_event_source = void function(ALLEGRO_EVENT_SOURCE*);
+    alias da_al_emit_user_event = bool function(ALLEGRO_EVENT_SOURCE*, ALLEGRO_EVENT*, void function(ALLEGRO_USER_EVENT*));
+    alias da_al_unref_user_event = void function(ALLEGRO_USER_EVENT*);
+    alias da_al_set_event_source_data = void function(ALLEGRO_EVENT_SOURCE*, intptr_t);
+    alias da_al_get_event_source_data = intptr_t function(const(ALLEGRO_EVENT_SOURCE*));
 
     alias da_al_create_event_queue = ALLEGRO_EVENT_QUEUE* function();
-    alias da_al_destroy_event_queue = void function( ALLEGRO_EVENT_QUEUE* );
-    alias da_al_register_event_source = void function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT_SOURCE* );
-    alias da_al_unregister_event_source = void function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT_SOURCE* );
-    alias da_al_is_event_queue_empty = bool function( ALLEGRO_EVENT_QUEUE* );
-    alias da_al_get_next_event = bool function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT* );
-    alias da_al_peek_next_event = bool function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT* );
-    alias da_al_drop_next_event = bool function( ALLEGRO_EVENT_QUEUE* );
-    alias da_al_flush_event_queue = void function( ALLEGRO_EVENT_QUEUE* );
-    alias da_al_wait_for_event = void function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT* );
-    alias da_al_wait_for_event_timed = bool function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*, float );
-    alias da_al_wait_for_event_until = bool function( ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*, ALLEGRO_TIMEOUT* );
+    alias da_al_destroy_event_queue = void function(ALLEGRO_EVENT_QUEUE*);
+    alias da_al_register_event_source = void function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT_SOURCE*);
+    alias da_al_unregister_event_source = void function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT_SOURCE*);
+    alias da_al_is_event_queue_empty = bool function(ALLEGRO_EVENT_QUEUE*);
+    alias da_al_get_next_event = bool function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*);
+    alias da_al_peek_next_event = bool function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*);
+    alias da_al_drop_next_event = bool function(ALLEGRO_EVENT_QUEUE*);
+    alias da_al_flush_event_queue = void function(ALLEGRO_EVENT_QUEUE*);
+    alias da_al_wait_for_event = void function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*);
+    alias da_al_wait_for_event_timed = bool function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*, float);
+    alias da_al_wait_for_event_until = bool function(ALLEGRO_EVENT_QUEUE*, ALLEGRO_EVENT*, ALLEGRO_TIMEOUT*);
 
     // file.h
-    alias da_al_fopen = ALLEGRO_FILE* function( const( char )*, const( char )* );
-    alias da_al_fopen_interface = ALLEGRO_FILE* function( const( ALLEGRO_FILE_INTERFACE )*, const( char )*, const( char )* );
-    alias da_al_create_file_handle = ALLEGRO_FILE* function( const( ALLEGRO_FILE_INTERFACE )*, void* );
-    alias da_al_fclose = void function( ALLEGRO_FILE* );
-    alias da_al_fread = size_t function( ALLEGRO_FILE*, void*, size_t );
-    alias da_al_fwrite = size_t function( ALLEGRO_FILE*, const( void )*, size_t );
-    alias da_al_fflush = bool function( ALLEGRO_FILE* );
-    alias da_al_ftell = long function( ALLEGRO_FILE* );
-    alias da_al_fseek = bool function( ALLEGRO_FILE*, long, int );
-    alias da_al_feof = bool function( ALLEGRO_FILE* );
-    alias da_al_ferror = bool function( ALLEGRO_FILE* );
-    alias da_al_fclearerr = void function( ALLEGRO_FILE* );
-    alias da_al_fungetc = int function( ALLEGRO_FILE*, int );
-    alias da_al_fsize = long function( ALLEGRO_FILE* );
+    alias da_al_fopen = ALLEGRO_FILE* function(const(char)*, const(char)*);
+    alias da_al_fopen_interface = ALLEGRO_FILE* function(const(ALLEGRO_FILE_INTERFACE)*, const(char)*, const(char)*);
+    alias da_al_create_file_handle = ALLEGRO_FILE* function(const(ALLEGRO_FILE_INTERFACE)*, void*);
+    alias da_al_fclose = void function(ALLEGRO_FILE*);
+    alias da_al_fread = size_t function(ALLEGRO_FILE*, void*, size_t);
+    alias da_al_fwrite = size_t function(ALLEGRO_FILE*, const(void)*, size_t);
+    alias da_al_fflush = bool function(ALLEGRO_FILE*);
+    alias da_al_ftell = long function(ALLEGRO_FILE*);
+    alias da_al_fseek = bool function(ALLEGRO_FILE*, long, int);
+    alias da_al_feof = bool function(ALLEGRO_FILE*);
+    alias da_al_ferror = bool function(ALLEGRO_FILE*);
+    alias da_al_fclearerr = void function(ALLEGRO_FILE*);
+    alias da_al_fungetc = int function(ALLEGRO_FILE*, int);
+    alias da_al_fsize = long function(ALLEGRO_FILE*);
 
-    alias da_al_fgetc = int function( ALLEGRO_FILE* );
-    alias da_al_fputc = int function( ALLEGRO_FILE*, int );
-    alias da_al_fread16le = short function( ALLEGRO_FILE* );
-    alias da_al_fread16be = short function( ALLEGRO_FILE* );
-    alias da_al_fwrite16le = size_t function( ALLEGRO_FILE*, short );
-    alias da_al_fwrite16be = size_t function( ALLEGRO_FILE*, short );
-    alias da_al_fread32le = int function( ALLEGRO_FILE* );
-    alias da_al_fread32be = int function( ALLEGRO_FILE* );
-    alias da_al_fwrite32le = size_t function( ALLEGRO_FILE*, int );
-    alias da_al_fwrite32be = size_t function( ALLEGRO_FILE*, int );
-    alias da_al_fgets = char* function( ALLEGRO_FILE* );
-    //alias da_al_fget_ustr = ALLEGRO_USTR* function( ALLEGRO_FILE* );
-    alias da_al_fputs = int function( ALLEGRO_FILE*, const( char )* );
+    alias da_al_fgetc = int function(ALLEGRO_FILE*);
+    alias da_al_fputc = int function(ALLEGRO_FILE*, int);
+    alias da_al_fread16le = short function(ALLEGRO_FILE*);
+    alias da_al_fread16be = short function(ALLEGRO_FILE*);
+    alias da_al_fwrite16le = size_t function(ALLEGRO_FILE*, short);
+    alias da_al_fwrite16be = size_t function(ALLEGRO_FILE*, short);
+    alias da_al_fread32le = int function(ALLEGRO_FILE*);
+    alias da_al_fread32be = int function(ALLEGRO_FILE*);
+    alias da_al_fwrite32le = size_t function(ALLEGRO_FILE*, int);
+    alias da_al_fwrite32be = size_t function(ALLEGRO_FILE*, int);
+    alias da_al_fgets = char* function(ALLEGRO_FILE*);
+    //alias da_al_fget_ustr = ALLEGRO_USTR* function(ALLEGRO_FILE*);
+    alias da_al_fputs = int function(ALLEGRO_FILE*, const(char)*);
 
-    alias da_al_fopen_fd = ALLEGRO_FILE* function( int, const( char )* );
-    alias da_al_make_temp_file = ALLEGRO_FILE* function( const( char )*, ALLEGRO_PATH** );
+    alias da_al_fopen_fd = ALLEGRO_FILE* function(int, const(char)*);
+    alias da_al_make_temp_file = ALLEGRO_FILE* function(const(char)*, ALLEGRO_PATH**);
 
-    alias da_al_fopen_slice = ALLEGRO_FILE* function( ALLEGRO_FILE*, size_t, const( char )* );
+    alias da_al_fopen_slice = ALLEGRO_FILE* function(ALLEGRO_FILE*, size_t, const(char)*);
 
-    alias da_al_get_new_file_interface = const( ALLEGRO_FILE_INTERFACE )* function();
-    alias da_al_set_new_file_interface = void function( const( ALLEGRO_FILE_INTERFACE )* );
+    alias da_al_get_new_file_interface = const(ALLEGRO_FILE_INTERFACE)* function();
+    alias da_al_set_new_file_interface = void function(const(ALLEGRO_FILE_INTERFACE)*);
     alias da_al_set_standard_file_interface = void function();
 
-    alias da_al_get_file_userdata = void* function( ALLEGRO_FILE* );
+    alias da_al_get_file_userdata = void* function(ALLEGRO_FILE*);
 
     // fshook.h
-    alias da_al_create_fs_entry = ALLEGRO_FS_ENTRY* function( const( char* ));
-    alias da_al_destroy_fs_entry = void function( ALLEGRO_FS_ENTRY* );
-    alias da_al_get_fs_entry_name = const( char )* function( ALLEGRO_FS_ENTRY* );
-    alias da_al_update_fs_entry = bool function( ALLEGRO_FS_ENTRY* );
-    alias da_al_get_fs_entry_mode = uint function( ALLEGRO_FS_ENTRY* );
-    alias da_al_get_fs_entry_atime = time_t function( ALLEGRO_FS_ENTRY* );
-    alias da_al_get_fs_entry_mtime = time_t function( ALLEGRO_FS_ENTRY* );
-    alias da_al_get_fs_entry_ctime = time_t function( ALLEGRO_FS_ENTRY* );
-    alias da_al_get_fs_entry_size = off_t function( ALLEGRO_FS_ENTRY* );
-    alias da_al_fs_entry_exists = bool function( ALLEGRO_FS_ENTRY* );
-    alias da_al_remove_fs_entry = bool function( ALLEGRO_FS_ENTRY* );
+    alias da_al_create_fs_entry = ALLEGRO_FS_ENTRY* function(const(char*));
+    alias da_al_destroy_fs_entry = void function(ALLEGRO_FS_ENTRY*);
+    alias da_al_get_fs_entry_name = const(char)* function(ALLEGRO_FS_ENTRY*);
+    alias da_al_update_fs_entry = bool function(ALLEGRO_FS_ENTRY*);
+    alias da_al_get_fs_entry_mode = uint function(ALLEGRO_FS_ENTRY*);
+    alias da_al_get_fs_entry_atime = time_t function(ALLEGRO_FS_ENTRY*);
+    alias da_al_get_fs_entry_mtime = time_t function(ALLEGRO_FS_ENTRY*);
+    alias da_al_get_fs_entry_ctime = time_t function(ALLEGRO_FS_ENTRY*);
+    alias da_al_get_fs_entry_size = off_t function(ALLEGRO_FS_ENTRY*);
+    alias da_al_fs_entry_exists = bool function(ALLEGRO_FS_ENTRY*);
+    alias da_al_remove_fs_entry = bool function(ALLEGRO_FS_ENTRY*);
 
-    alias da_al_open_directory = bool function( ALLEGRO_FS_ENTRY* );
-    alias da_al_read_directory = ALLEGRO_FS_ENTRY* function( ALLEGRO_FS_ENTRY* );
-    alias da_al_close_directory = bool function( ALLEGRO_FS_ENTRY* );
+    alias da_al_open_directory = bool function(ALLEGRO_FS_ENTRY*);
+    alias da_al_read_directory = ALLEGRO_FS_ENTRY* function(ALLEGRO_FS_ENTRY*);
+    alias da_al_close_directory = bool function(ALLEGRO_FS_ENTRY*);
 
-    alias da_al_filename_exists = bool function( const( char )* );
-    alias da_al_remove_filename = bool function( const( char )* );
+    alias da_al_filename_exists = bool function(const(char)*);
+    alias da_al_remove_filename = bool function(const(char)*);
     alias da_al_get_current_directory = char* function();
-    alias da_al_change_directory = bool function( const( char )* );
-    alias da_al_make_directory = bool function( const( char )* );
+    alias da_al_change_directory = bool function(const(char)*);
+    alias da_al_make_directory = bool function(const(char)*);
 
-    alias da_al_open_fs_entry = ALLEGRO_FILE* function( ALLEGRO_FS_ENTRY*, const( char )* );
+    alias da_al_open_fs_entry = ALLEGRO_FILE* function(ALLEGRO_FS_ENTRY*, const(char)*);
 
-    alias da_al_get_fs_interface = const( ALLEGRO_FS_INTERFACE )* function();
-    alias da_al_set_fs_interface = void function( const( ALLEGRO_FS_INTERFACE )* );
+    alias da_al_get_fs_interface = const(ALLEGRO_FS_INTERFACE)* function();
+    alias da_al_set_fs_interface = void function(const(ALLEGRO_FS_INTERFACE)*);
     alias da_al_set_standard_fs_interface = void function();
 
     // fullscreen_mode.h
     alias da_al_get_num_display_modes = int function();
-    alias da_al_get_display_mode = ALLEGRO_DISPLAY_MODE* function( int, ALLEGRO_DISPLAY_MODE* );
+    alias da_al_get_display_mode = ALLEGRO_DISPLAY_MODE* function(int, ALLEGRO_DISPLAY_MODE*);
 
     // joystick.h
     alias da_al_install_joystick = bool function();
@@ -332,22 +334,22 @@ extern( C ) nothrow {
     alias da_al_reconfigure_joysticks = bool function();
 
     alias da_al_get_num_joysticks = int function();
-    alias da_al_get_joystick = ALLEGRO_JOYSTICK* function( int );
-    alias da_al_release_joystick = void function( ALLEGRO_JOYSTICK* );
-    alias da_al_get_joystick_active = bool function( ALLEGRO_JOYSTICK* );
-    alias da_al_get_joystick_name = const( char )* function( ALLEGRO_JOYSTICK* );
+    alias da_al_get_joystick = ALLEGRO_JOYSTICK* function(int);
+    alias da_al_release_joystick = void function(ALLEGRO_JOYSTICK*);
+    alias da_al_get_joystick_active = bool function(ALLEGRO_JOYSTICK*);
+    alias da_al_get_joystick_name = const(char)* function(ALLEGRO_JOYSTICK*);
 
-    alias da_al_get_joystick_num_sticks = int function( ALLEGRO_JOYSTICK* );
-    alias da_al_get_joystick_stick_flags = int function( ALLEGRO_JOYSTICK*, int );
-    alias da_al_get_joystick_stick_name = const( char )* function( ALLEGRO_JOYSTICK*, int );
+    alias da_al_get_joystick_num_sticks = int function(ALLEGRO_JOYSTICK*);
+    alias da_al_get_joystick_stick_flags = int function(ALLEGRO_JOYSTICK*, int);
+    alias da_al_get_joystick_stick_name = const(char)* function(ALLEGRO_JOYSTICK*, int);
 
-    alias da_al_get_joystick_num_axes = int function( ALLEGRO_JOYSTICK* );
-    alias da_al_get_joystick_axis_name = const( char )* function( ALLEGRO_JOYSTICK*, int, int );
+    alias da_al_get_joystick_num_axes = int function(ALLEGRO_JOYSTICK*);
+    alias da_al_get_joystick_axis_name = const(char)* function(ALLEGRO_JOYSTICK*, int, int);
 
-    alias da_al_get_joystick_num_buttons = int function( ALLEGRO_JOYSTICK* );
-    alias da_al_get_joystick_button_name = const( char )* function( ALLEGRO_JOYSTICK*, int );
+    alias da_al_get_joystick_num_buttons = int function(ALLEGRO_JOYSTICK*);
+    alias da_al_get_joystick_button_name = const(char)* function(ALLEGRO_JOYSTICK*, int);
 
-    alias da_al_get_joystick_state = void function( ALLEGRO_JOYSTICK*, ALLEGRO_JOYSTICK_STATE* );
+    alias da_al_get_joystick_state = void function(ALLEGRO_JOYSTICK*, ALLEGRO_JOYSTICK_STATE*);
 
     alias da_al_get_joystick_event_source = ALLEGRO_EVENT_SOURCE* function();
 
@@ -356,24 +358,24 @@ extern( C ) nothrow {
     alias da_al_install_keyboard = bool function();
     alias da_al_uninstall_keyboard = void function();
 
-    alias da_al_set_keyboard_leds = bool function( int );
+    alias da_al_set_keyboard_leds = bool function(int);
 
-    alias da_al_keycode_to_name = const( char )* function( int );
+    alias da_al_keycode_to_name = const(char)* function(int);
 
-    alias da_al_get_keyboard_state = void function( ALLEGRO_KEYBOARD_STATE* );
-    alias da_al_key_down = bool function( const( ALLEGRO_KEYBOARD_STATE )*, int );
+    alias da_al_get_keyboard_state = void function(ALLEGRO_KEYBOARD_STATE*);
+    alias da_al_key_down = bool function(const(ALLEGRO_KEYBOARD_STATE)*, int);
 
     alias da_al_get_keyboard_event_source = ALLEGRO_EVENT_SOURCE* function();
 
     // memory.h
-    alias da_al_malloc_with_context = void* function( size_t, int, const( char )*, const( char )* );
-    alias da_al_free_with_context = void function( void*, int, const( char )*, const( char )* );
-    alias da_al_realloc_with_context = void* function( void*, size_t, int, const( char )*, const( char )* );
-    alias da_al_calloc_with_context = void* function( size_t, size_t, int, const( char )*, const( char )* );
+    alias da_al_malloc_with_context = void* function(size_t, int, const(char)*, const(char)*);
+    alias da_al_free_with_context = void function(void*, int, const(char)*, const(char)*);
+    alias da_al_realloc_with_context = void* function(void*, size_t, int, const(char)*, const(char)*);
+    alias da_al_calloc_with_context = void* function(size_t, size_t, int, const(char)*, const(char)*);
 
     // monitor.h
     alias da_al_get_num_video_adapters = int function();
-    alias da_al_get_monitor_info = bool function( int, ALLEGRO_MONITOR_INFO* );
+    alias da_al_get_monitor_info = bool function(int, ALLEGRO_MONITOR_INFO*);
 
     // mouse.h
     alias da_al_is_mouse_installed = bool function();
@@ -381,172 +383,172 @@ extern( C ) nothrow {
     alias da_al_uninstall_mouse = void function();
     alias da_al_get_mouse_num_buttons = uint function();
     alias da_al_get_mouse_num_axes = uint function();
-    alias da_al_set_mouse_xy = bool function( ALLEGRO_DISPLAY*, int, int );
-    alias da_al_set_mouse_z = bool function( int );
-    alias da_al_set_mouse_w = bool function( int );
-    alias da_al_set_mouse_axis = bool function( int, int );
-    alias da_al_get_mouse_state = void function( ALLEGRO_MOUSE_STATE* );
-    alias da_al_mouse_button_down = bool function( const( ALLEGRO_MOUSE_STATE )*, int );
-    alias da_al_get_mouse_state_axis = int function( const( ALLEGRO_MOUSE_STATE )*, int );
-    alias da_al_get_mouse_cursor_position = bool function( int*, int* );
-    alias da_al_grab_mouse = bool function( ALLEGRO_DISPLAY* );
+    alias da_al_set_mouse_xy = bool function(ALLEGRO_DISPLAY*, int, int);
+    alias da_al_set_mouse_z = bool function(int);
+    alias da_al_set_mouse_w = bool function(int);
+    alias da_al_set_mouse_axis = bool function(int, int);
+    alias da_al_get_mouse_state = void function(ALLEGRO_MOUSE_STATE*);
+    alias da_al_mouse_button_down = bool function(const(ALLEGRO_MOUSE_STATE)*, int);
+    alias da_al_get_mouse_state_axis = int function(const(ALLEGRO_MOUSE_STATE)*, int);
+    alias da_al_get_mouse_cursor_position = bool function(int*, int*);
+    alias da_al_grab_mouse = bool function(ALLEGRO_DISPLAY*);
     alias da_al_ungrab_mouse = bool function();
 
     alias da_al_get_mouse_event_source = ALLEGRO_EVENT_SOURCE* function();
 
     // mouse_cursor.h
-    alias da_al_create_mouse_cursor = ALLEGRO_MOUSE_CURSOR* function( ALLEGRO_BITMAP*, int, int );
-    alias da_al_destroy_mouse_cursor = void function( ALLEGRO_MOUSE_CURSOR* );
-    alias da_al_set_mouse_cursor = bool function( ALLEGRO_DISPLAY*, ALLEGRO_MOUSE_CURSOR* );
-    alias da_al_set_system_mouse_cursor = bool function( ALLEGRO_DISPLAY*, ALLEGRO_SYSTEM_MOUSE_CURSOR );
-    alias da_al_show_mouse_cursor = bool function( ALLEGRO_DISPLAY* );
-    alias da_al_hide_mouse_cursor = bool function( ALLEGRO_DISPLAY* );
+    alias da_al_create_mouse_cursor = ALLEGRO_MOUSE_CURSOR* function(ALLEGRO_BITMAP*, int, int);
+    alias da_al_destroy_mouse_cursor = void function(ALLEGRO_MOUSE_CURSOR*);
+    alias da_al_set_mouse_cursor = bool function(ALLEGRO_DISPLAY*, ALLEGRO_MOUSE_CURSOR*);
+    alias da_al_set_system_mouse_cursor = bool function(ALLEGRO_DISPLAY*, ALLEGRO_SYSTEM_MOUSE_CURSOR);
+    alias da_al_show_mouse_cursor = bool function(ALLEGRO_DISPLAY*);
+    alias da_al_hide_mouse_cursor = bool function(ALLEGRO_DISPLAY*);
 
     // path.h
-    alias da_al_create_path = ALLEGRO_PATH* function( const( char )* );
-    alias da_al_create_path_for_directory = ALLEGRO_PATH* function( const( char )* );
-    alias da_al_clone_path = ALLEGRO_PATH* function( const( ALLEGRO_PATH )* );
+    alias da_al_create_path = ALLEGRO_PATH* function(const(char)*);
+    alias da_al_create_path_for_directory = ALLEGRO_PATH* function(const(char)*);
+    alias da_al_clone_path = ALLEGRO_PATH* function(const(ALLEGRO_PATH)*);
 
-    alias da_al_get_path_num_components = int function( const( ALLEGRO_PATH )* );
-    alias da_al_get_path_component = const( char )* function( const( ALLEGRO_PATH )*, int );
-    alias da_al_replace_path_component = void function( ALLEGRO_PATH*, int, const( char )* );
-    alias da_al_remove_path_component = void function( ALLEGRO_PATH*, int );
-    alias da_al_insert_path_component = void function( ALLEGRO_PATH*, int, const( char )* );
-    alias da_al_get_path_tail = const( char )* function( const( ALLEGRO_PATH )* );
-    alias da_al_drop_path_tail = void function( ALLEGRO_PATH* );
-    alias da_al_append_path_component = void function( ALLEGRO_PATH*, const( char )* );
-    alias da_al_join_paths = bool function( ALLEGRO_PATH*, const( ALLEGRO_PATH )* );
-    alias da_al_rebase_path = bool function( const( ALLEGRO_PATH )*, ALLEGRO_PATH* );
-    alias da_al_path_cstr = const( char )* function( const( ALLEGRO_PATH )*, char );
-    alias da_al_destroy_path = void function( ALLEGRO_PATH* );
+    alias da_al_get_path_num_components = int function(const(ALLEGRO_PATH)*);
+    alias da_al_get_path_component = const(char)* function(const(ALLEGRO_PATH)*, int);
+    alias da_al_replace_path_component = void function(ALLEGRO_PATH*, int, const(char)*);
+    alias da_al_remove_path_component = void function(ALLEGRO_PATH*, int);
+    alias da_al_insert_path_component = void function(ALLEGRO_PATH*, int, const(char)*);
+    alias da_al_get_path_tail = const(char)* function(const(ALLEGRO_PATH)*);
+    alias da_al_drop_path_tail = void function(ALLEGRO_PATH*);
+    alias da_al_append_path_component = void function(ALLEGRO_PATH*, const(char)*);
+    alias da_al_join_paths = bool function(ALLEGRO_PATH*, const(ALLEGRO_PATH)*);
+    alias da_al_rebase_path = bool function(const(ALLEGRO_PATH)*, ALLEGRO_PATH*);
+    alias da_al_path_cstr = const(char)* function(const(ALLEGRO_PATH)*, char);
+    alias da_al_destroy_path = void function(ALLEGRO_PATH*);
 
-    alias da_al_set_path_drive = void function( ALLEGRO_PATH*, const( char )* );
-    alias da_al_get_path_drive = const( char )* function( const( ALLEGRO_PATH )* );
+    alias da_al_set_path_drive = void function(ALLEGRO_PATH*, const(char)*);
+    alias da_al_get_path_drive = const(char)* function(const(ALLEGRO_PATH)*);
 
-    alias da_al_set_path_filename = void function( ALLEGRO_PATH*, const( char )* );
-    alias da_al_get_path_filename = const( char )* function( const( ALLEGRO_PATH )* );
+    alias da_al_set_path_filename = void function(ALLEGRO_PATH*, const(char)*);
+    alias da_al_get_path_filename = const(char)* function(const(ALLEGRO_PATH)*);
 
-    alias da_al_get_path_extension = const( char )* function( const( ALLEGRO_PATH )* );
-    alias da_al_set_path_extension = bool function( ALLEGRO_PATH*, const( char )* );
-    alias da_al_get_path_basename = const( char )* function( const( ALLEGRO_PATH )* );
+    alias da_al_get_path_extension = const(char)* function(const(ALLEGRO_PATH)*);
+    alias da_al_set_path_extension = bool function(ALLEGRO_PATH*, const(char)*);
+    alias da_al_get_path_basename = const(char)* function(const(ALLEGRO_PATH)*);
 
-    alias da_al_make_path_canonical = bool function( ALLEGRO_PATH* );
+    alias da_al_make_path_canonical = bool function(ALLEGRO_PATH*);
 
     // system.h
-    alias da_al_install_system = bool function( int, int function( void function() ));
+    alias da_al_install_system = bool function(int, int function(void function()));
     alias da_al_uninstall_system = void function();
     alias da_al_is_system_installed = bool function();
     alias da_al_get_system_driver = ALLEGRO_SYSTEM* function();
     alias da_al_get_system_config = ALLEGRO_CONFIG* function();
 
-    alias da_al_get_standard_path = ALLEGRO_PATH* function( int );
-    alias da_al_set_exe_name = void function( const( char )* );
+    alias da_al_get_standard_path = ALLEGRO_PATH* function(int);
+    alias da_al_set_exe_name = void function(const(char)*);
 
-    alias da_al_set_org_name = void function( const( char )* );
-    alias da_al_set_app_name = void function( const( char )* );
-    alias da_al_get_org_name = const( char )* function();
-    alias da_al_get_app_name = const( char )* function();
+    alias da_al_set_org_name = void function(const(char)*);
+    alias da_al_set_app_name = void function(const(char)*);
+    alias da_al_get_org_name = const(char)* function();
+    alias da_al_get_app_name = const(char)* function();
 
-    alias da_al_inhibit_screensaver = bool function( bool );
+    alias da_al_inhibit_screensaver = bool function(bool);
 
     // timer.h
-    alias da_al_create_timer = ALLEGRO_TIMER* function( double );
-    alias da_al_destroy_timer = void function( ALLEGRO_TIMER* );
-    alias da_al_start_timer = void function( ALLEGRO_TIMER* );
-    alias da_al_stop_timer = void function( ALLEGRO_TIMER* );
-    alias da_al_get_timer_started = bool function( const( ALLEGRO_TIMER )* );
-    alias da_al_get_timer_speed = double function( const( ALLEGRO_TIMER )* );
-    alias da_al_set_timer_speed = void function( ALLEGRO_TIMER*, double );
-    alias da_al_get_timer_count = long function( const( ALLEGRO_TIMER )* );
-    alias da_al_set_timer_count = void function( ALLEGRO_TIMER*, long );
-    alias da_al_add_timer_count = void function( ALLEGRO_TIMER*, long );
-    alias da_al_get_timer_event_source = ALLEGRO_EVENT_SOURCE* function( ALLEGRO_TIMER* );
+    alias da_al_create_timer = ALLEGRO_TIMER* function(double);
+    alias da_al_destroy_timer = void function(ALLEGRO_TIMER*);
+    alias da_al_start_timer = void function(ALLEGRO_TIMER*);
+    alias da_al_stop_timer = void function(ALLEGRO_TIMER*);
+    alias da_al_get_timer_started = bool function(const(ALLEGRO_TIMER)*);
+    alias da_al_get_timer_speed = double function(const(ALLEGRO_TIMER)*);
+    alias da_al_set_timer_speed = void function(ALLEGRO_TIMER*, double);
+    alias da_al_get_timer_count = long function(const(ALLEGRO_TIMER)*);
+    alias da_al_set_timer_count = void function(ALLEGRO_TIMER*, long);
+    alias da_al_add_timer_count = void function(ALLEGRO_TIMER*, long);
+    alias da_al_get_timer_event_source = ALLEGRO_EVENT_SOURCE* function(ALLEGRO_TIMER*);
 
     // tls.h
-    alias da_al_store_state = void function( ALLEGRO_STATE*, int );
-    alias da_al_restore_state = void function( const( ALLEGRO_STATE )* );
+    alias da_al_store_state = void function(ALLEGRO_STATE*, int);
+    alias da_al_restore_state = void function(const(ALLEGRO_STATE)*);
 
     // transformations.h
-    alias da_al_use_transform = void function( const( ALLEGRO_TRANSFORM )* );
-    alias da_al_copy_transform = void function( ALLEGRO_TRANSFORM*, const( ALLEGRO_TRANSFORM )* );
-    alias da_al_identity_transform = void function( ALLEGRO_TRANSFORM* );
-    alias da_al_build_transform = void function( ALLEGRO_TRANSFORM*, float, float, float, float, float );
-    alias da_al_translate_transform = void function( ALLEGRO_TRANSFORM*, float, float );
-    alias da_al_rotate_transform = void function( ALLEGRO_TRANSFORM*, float );
-    alias da_al_scale_transform = void function( ALLEGRO_TRANSFORM*, float, float );
-    alias da_al_transform_coordinates = void function( const( ALLEGRO_TRANSFORM )*, float*, float* );
-    alias da_al_compose_transform = void function( ALLEGRO_TRANSFORM*, const( ALLEGRO_TRANSFORM )* );
-    alias da_al_get_current_transform = const( ALLEGRO_TRANSFORM )* function();
-    alias da_al_invert_transform = void function( ALLEGRO_TRANSFORM* );
-    alias da_al_check_inverse = int function( const( ALLEGRO_TRANSFORM )*, float );
+    alias da_al_use_transform = void function(const(ALLEGRO_TRANSFORM)*);
+    alias da_al_copy_transform = void function(ALLEGRO_TRANSFORM*, const(ALLEGRO_TRANSFORM)*);
+    alias da_al_identity_transform = void function(ALLEGRO_TRANSFORM*);
+    alias da_al_build_transform = void function(ALLEGRO_TRANSFORM*, float, float, float, float, float);
+    alias da_al_translate_transform = void function(ALLEGRO_TRANSFORM*, float, float);
+    alias da_al_rotate_transform = void function(ALLEGRO_TRANSFORM*, float);
+    alias da_al_scale_transform = void function(ALLEGRO_TRANSFORM*, float, float);
+    alias da_al_transform_coordinates = void function(const(ALLEGRO_TRANSFORM)*, float*, float*);
+    alias da_al_compose_transform = void function(ALLEGRO_TRANSFORM*, const(ALLEGRO_TRANSFORM)*);
+    alias da_al_get_current_transform = const(ALLEGRO_TRANSFORM)* function();
+    alias da_al_invert_transform = void function(ALLEGRO_TRANSFORM*);
+    alias da_al_check_inverse = int function(const(ALLEGRO_TRANSFORM)*, float);
 
     // utf8.h
-    alias da_al_ustr_new = ALLEGRO_USTR* function( const( char )* );
-    alias da_al_ustr_new_from_buffer = ALLEGRO_USTR* function( const( char )*, size_t );
-    alias da_al_ustr_newf = ALLEGRO_USTR* function( const( char )*, ... );
-    alias da_al_ustr_free = void function( ALLEGRO_USTR* );
-    alias da_al_cstr = const( char )* function( const( ALLEGRO_USTR )* );
-    alias da_al_ustr_to_buffer = void function( const( ALLEGRO_USTR)*, char*, int );
-    alias da_al_cstr_dup = char* function( const( ALLEGRO_USTR )* );
-    alias da_al_ustr_dup = ALLEGRO_USTR* function( const( ALLEGRO_USTR )* );
-    alias da_al_ustr_dup_substr = ALLEGRO_USTR* function( const( ALLEGRO_USTR )*, int, int );
+    alias da_al_ustr_new = ALLEGRO_USTR* function(const(char)*);
+    alias da_al_ustr_new_from_buffer = ALLEGRO_USTR* function(const(char)*, size_t);
+    alias da_al_ustr_newf = ALLEGRO_USTR* function(const(char)*, ...);
+    alias da_al_ustr_free = void function(ALLEGRO_USTR*);
+    alias da_al_cstr = const(char)* function(const(ALLEGRO_USTR)*);
+    alias da_al_ustr_to_buffer = void function(const(ALLEGRO_USTR)*, char*, int);
+    alias da_al_cstr_dup = char* function(const(ALLEGRO_USTR)*);
+    alias da_al_ustr_dup = ALLEGRO_USTR* function(const(ALLEGRO_USTR)*);
+    alias da_al_ustr_dup_substr = ALLEGRO_USTR* function(const(ALLEGRO_USTR)*, int, int);
     alias da_al_ustr_empty_string = ALLEGRO_USTR* function();
-    alias da_al_ref_cstr = const( ALLEGRO_USTR )* function( ALLEGRO_USTR_INFO*, const( char )* );
-    alias da_al_ref_buffer = const( ALLEGRO_USTR )* function( ALLEGRO_USTR_INFO*, const( char )*, size_t );
-    alias da_al_ref_ustr = const( ALLEGRO_USTR )* function( ALLEGRO_USTR_INFO*, const( ALLEGRO_USTR )*, int, int );
-    alias da_al_ustr_size = size_t function( const( ALLEGRO_USTR )* );
-    alias da_al_ustr_length = size_t function( const( ALLEGRO_USTR )* );
-    alias da_al_ustr_offset = int function( const( ALLEGRO_USTR )*, int );
-    alias da_al_ustr_next = bool function( const( ALLEGRO_USTR )*, int* );
-    alias da_al_ustr_prev = bool function( const( ALLEGRO_USTR )*, int* );
-    alias da_al_ustr_get = int function( const( ALLEGRO_USTR )*, int );
-    alias da_al_ustr_get_next = int function( const( ALLEGRO_USTR )*, int* );
-    alias da_al_ustr_prev_get = int function( const( ALLEGRO_USTR )*, int* );
-    alias da_al_ustr_insert = bool function( ALLEGRO_USTR*, int, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_insert_cstr = bool function( ALLEGRO_USTR*, int, const( char )* );
-    alias da_al_ustr_insert_chr = size_t function( ALLEGRO_USTR*, int, int );
-    alias da_al_ustr_append = bool function( ALLEGRO_USTR*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_append_cstr = bool function( ALLEGRO_USTR*, const( char )* );
-    alias da_al_ustr_append_chr = size_t function( ALLEGRO_USTR*, int );
-    alias da_al_ustr_appendf = bool function( ALLEGRO_USTR*, const( char )*, ... );
-    alias da_al_ustr_vappendf = bool function( ALLEGRO_USTR*, const( char )*, va_list );
-    alias da_al_ustr_remove_chr = bool function( ALLEGRO_USTR*, int );
-    alias da_al_ustr_remove_range = bool function( ALLEGRO_USTR*, int, int );
-    alias da_al_ustr_truncate = bool function( ALLEGRO_USTR*, int );
-    alias da_al_ustr_ltrim_ws = bool function( ALLEGRO_USTR* );
-    alias da_al_ustr_rtrim_ws = bool function( ALLEGRO_USTR* );
-    alias da_al_ustr_trim_ws = bool function( ALLEGRO_USTR* );
-    alias da_al_ustr_assign = bool function( ALLEGRO_USTR*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_assign_substr = bool function( ALLEGRO_USTR*, const( ALLEGRO_USTR )*, int, int );
-    alias da_al_ustr_assign_cstr = bool function( ALLEGRO_USTR*, const( char )* );
-    alias da_al_ustr_set_chr = size_t function( ALLEGRO_USTR*, int, int );
-    alias da_al_ustr_replace_range = bool function( ALLEGRO_USTR*, int, int, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_find_chr = int function( const( ALLEGRO_USTR )*, int, int );
-    alias da_al_ustr_rfind_chr = int function( const( ALLEGRO_USTR )*, int, int );
-    alias da_al_ustr_find_set = int function( const( ALLEGRO_USTR )*, int, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_find_set_cstr = int function( const( ALLEGRO_USTR )*, int, const( char )* );
-    alias da_al_ustr_find_cset = int function( const( ALLEGRO_USTR )*, int, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_find_cset_cstr = int function( const( ALLEGRO_USTR )*, int, const( char )* );
-    alias da_al_ustr_find_str = int function( const( ALLEGRO_USTR )*, int, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_find_cstr = int function( const( ALLEGRO_USTR )*, int, const( char )* );
-    alias da_al_ustr_rfind_str = int function( const( ALLEGRO_USTR )*, int, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_rfind_cstr = int function( const( ALLEGRO_USTR )*, int, const( char )* );
-    alias da_al_ustr_find_replace = bool function( ALLEGRO_USTR*, int, const( ALLEGRO_USTR )*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_find_replace_cstr = bool function( ALLEGRO_USTR*, int, const( char )*, const( char )* );
-    alias da_al_ustr_equal = bool function( const( ALLEGRO_USTR )*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_compare = int function( const( ALLEGRO_USTR )*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_ncompare = int function( const( ALLEGRO_USTR )*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_has_prefix = bool function( const( ALLEGRO_USTR )*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_has_prefix_cstr = bool function( const( ALLEGRO_USTR )*, const( char )* );
-    alias da_al_ustr_has_suffix = bool function( const( ALLEGRO_USTR )*, const( ALLEGRO_USTR )* );
-    alias da_al_ustr_has_suffix_cstr = bool function( const( ALLEGRO_USTR )*, const( char )* );
-    alias da_al_utf8_width = size_t function( int );
-    alias da_al_utf8_encode = size_t function( char*, int );
-    alias da_al_ustr_new_from_utf16 = ALLEGRO_USTR* function( const( ushort )* );
-    alias da_al_ustr_size_utf16 = size_t function( const( ALLEGRO_USTR )* );
-    alias da_al_ustr_encode_utf16 = size_t function( const( ALLEGRO_USTR )*, ushort*, size_t );
-    alias da_al_utf16_width = size_t function( int );
-    alias da_al_utf16_encode = size_t function( ushort*, int );
+    alias da_al_ref_cstr = const(ALLEGRO_USTR)* function(ALLEGRO_USTR_INFO*, const(char)*);
+    alias da_al_ref_buffer = const(ALLEGRO_USTR)* function(ALLEGRO_USTR_INFO*, const(char)*, size_t);
+    alias da_al_ref_ustr = const(ALLEGRO_USTR)* function(ALLEGRO_USTR_INFO*, const(ALLEGRO_USTR)*, int, int);
+    alias da_al_ustr_size = size_t function(const(ALLEGRO_USTR)*);
+    alias da_al_ustr_length = size_t function(const(ALLEGRO_USTR)*);
+    alias da_al_ustr_offset = int function(const(ALLEGRO_USTR)*, int);
+    alias da_al_ustr_next = bool function(const(ALLEGRO_USTR)*, int*);
+    alias da_al_ustr_prev = bool function(const(ALLEGRO_USTR)*, int*);
+    alias da_al_ustr_get = int function(const(ALLEGRO_USTR)*, int);
+    alias da_al_ustr_get_next = int function(const(ALLEGRO_USTR)*, int*);
+    alias da_al_ustr_prev_get = int function(const(ALLEGRO_USTR)*, int*);
+    alias da_al_ustr_insert = bool function(ALLEGRO_USTR*, int, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_insert_cstr = bool function(ALLEGRO_USTR*, int, const(char)*);
+    alias da_al_ustr_insert_chr = size_t function(ALLEGRO_USTR*, int, int);
+    alias da_al_ustr_append = bool function(ALLEGRO_USTR*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_append_cstr = bool function(ALLEGRO_USTR*, const(char)*);
+    alias da_al_ustr_append_chr = size_t function(ALLEGRO_USTR*, int);
+    alias da_al_ustr_appendf = bool function(ALLEGRO_USTR*, const(char)*, ...);
+    alias da_al_ustr_vappendf = bool function(ALLEGRO_USTR*, const(char)*, va_list);
+    alias da_al_ustr_remove_chr = bool function(ALLEGRO_USTR*, int);
+    alias da_al_ustr_remove_range = bool function(ALLEGRO_USTR*, int, int);
+    alias da_al_ustr_truncate = bool function(ALLEGRO_USTR*, int);
+    alias da_al_ustr_ltrim_ws = bool function(ALLEGRO_USTR*);
+    alias da_al_ustr_rtrim_ws = bool function(ALLEGRO_USTR*);
+    alias da_al_ustr_trim_ws = bool function(ALLEGRO_USTR*);
+    alias da_al_ustr_assign = bool function(ALLEGRO_USTR*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_assign_substr = bool function(ALLEGRO_USTR*, const(ALLEGRO_USTR)*, int, int);
+    alias da_al_ustr_assign_cstr = bool function(ALLEGRO_USTR*, const(char)*);
+    alias da_al_ustr_set_chr = size_t function(ALLEGRO_USTR*, int, int);
+    alias da_al_ustr_replace_range = bool function(ALLEGRO_USTR*, int, int, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_find_chr = int function(const(ALLEGRO_USTR)*, int, int);
+    alias da_al_ustr_rfind_chr = int function(const(ALLEGRO_USTR)*, int, int);
+    alias da_al_ustr_find_set = int function(const(ALLEGRO_USTR)*, int, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_find_set_cstr = int function(const(ALLEGRO_USTR)*, int, const(char)*);
+    alias da_al_ustr_find_cset = int function(const(ALLEGRO_USTR)*, int, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_find_cset_cstr = int function(const(ALLEGRO_USTR)*, int, const(char)*);
+    alias da_al_ustr_find_str = int function(const(ALLEGRO_USTR)*, int, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_find_cstr = int function(const(ALLEGRO_USTR)*, int, const(char)*);
+    alias da_al_ustr_rfind_str = int function(const(ALLEGRO_USTR)*, int, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_rfind_cstr = int function(const(ALLEGRO_USTR)*, int, const(char)*);
+    alias da_al_ustr_find_replace = bool function(ALLEGRO_USTR*, int, const(ALLEGRO_USTR)*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_find_replace_cstr = bool function(ALLEGRO_USTR*, int, const(char)*, const(char)*);
+    alias da_al_ustr_equal = bool function(const(ALLEGRO_USTR)*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_compare = int function(const(ALLEGRO_USTR)*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_ncompare = int function(const(ALLEGRO_USTR)*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_has_prefix = bool function(const(ALLEGRO_USTR)*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_has_prefix_cstr = bool function(const(ALLEGRO_USTR)*, const(char)*);
+    alias da_al_ustr_has_suffix = bool function(const(ALLEGRO_USTR)*, const(ALLEGRO_USTR)*);
+    alias da_al_ustr_has_suffix_cstr = bool function(const(ALLEGRO_USTR)*, const(char)*);
+    alias da_al_utf8_width = size_t function(int);
+    alias da_al_utf8_encode = size_t function(char*, int);
+    alias da_al_ustr_new_from_utf16 = ALLEGRO_USTR* function(const(ushort)*);
+    alias da_al_ustr_size_utf16 = size_t function(const(ALLEGRO_USTR)*);
+    alias da_al_ustr_encode_utf16 = size_t function(const(ALLEGRO_USTR)*, ushort*, size_t);
+    alias da_al_utf16_width = size_t function(int);
+    alias da_al_utf16_encode = size_t function(ushort*, int);
 }
 
 __gshared {

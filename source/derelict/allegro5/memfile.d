@@ -4,7 +4,7 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
-this license ( the "Software" ) to use, reproduce, display, distribute,
+this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
 Software, and to permit third-parties to whom the Software is furnished to
 do so, all subject to the following:
@@ -28,16 +28,17 @@ DEALINGS IN THE SOFTWARE.
 module derelict.allegro5.memfile;
 
 private {
-    import derelict.util.loader;
+    import derelict.util.loader,
+           derelict.util.system;
 
     import derelict.allegro5.internal,
            derelict.allegro5.types;
 
-    enum libNames = genLibNames( "Memfile" );
+    enum libNames = genLibNames("Memfile");
 }
 
-extern( C ) nothrow {
-    alias da_al_open_memfile = ALLEGRO_FILE* function( void*, long, const( char )* );
+extern(C) nothrow {
+    alias da_al_open_memfile = ALLEGRO_FILE* function(void*, long, const(char)*);
     alias da_al_get_allegro_memfile_version = uint function();
 }
 
@@ -48,12 +49,12 @@ __gshared {
 
 class DerelictAllegro5MemFileLoader : SharedLibLoader {
     public this() {
-        super( libNames );
+        super(libNames);
     }
 
     protected override void loadSymbols() {
-        bindFunc( cast( void** )&al_open_memfile, "al_open_memfile" );
-        bindFunc( cast( void** )&al_get_allegro_memfile_version, "al_get_allegro_memfile_version" );
+        bindFunc(cast(void**)&al_open_memfile, "al_open_memfile");
+        bindFunc(cast(void**)&al_get_allegro_memfile_version, "al_get_allegro_memfile_version");
     }
 }
 

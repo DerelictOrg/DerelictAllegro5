@@ -28,7 +28,8 @@ DEALINGS IN THE SOFTWARE.
 module derelict.allegro5.ttf;
 
 private {
-    import derelict.util.loader;
+    import derelict.util.loader,
+           derelict.util.system;
 
     import derelict.allegro5.font,
            derelict.allegro5.internal,
@@ -37,7 +38,7 @@ private {
     enum libNames = genLibNames( "TTF" );
 }
 
-extern( C ) nothrow {
+extern( C ) @nogc nothrow {
     alias da_al_load_ttf_font = ALLEGRO_FONT* function( const( char )*, int, int );
     alias da_al_load_ttf_font_f = ALLEGRO_FONT* function( ALLEGRO_FILE*, const( char )*, int, int );
     alias da_al_load_ttf_font_stretch = ALLEGRO_FONT* function( const( char )*, int, int, int );

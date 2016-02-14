@@ -4,7 +4,7 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
-this license ( the "Software" ) to use, reproduce, display, distribute,
+this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
 Software, and to permit third-parties to whom the Software is furnished to
 do so, all subject to the following:
@@ -29,12 +29,14 @@ module derelict.allegro5.primitives;
 
 private {
     import core.stdc.stdint;
-    import derelict.util.loader;
+
+    import derelict.util.loader,
+           derelict.util.system;
 
     import derelict.allegro5.internal,
            derelict.allegro5.types;
 
-    enum libNames = genLibNames( "Primitives" );
+    enum libNames = genLibNames("Primitives");
 }
 
 alias int ALLEGRO_PRIM_TYPE;
@@ -81,50 +83,50 @@ struct ALLEGRO_VERTEX {
     float u, v;
 }
 
-extern( C ) nothrow {
+extern(C) @nogc nothrow {
     alias da_al_get_allegro_primitives_version = uint function();
     alias da_al_init_primitives_addon = bool function();
     alias da_al_shutdown_primitives_addon = void function();
-    alias da_al_draw_prim = int function( const( void )*, const( ALLEGRO_VERTEX_DECL )*, ALLEGRO_BITMAP*, int, int, int );
-    alias da_al_draw_indexed_prim = int function( const( void )*, const( ALLEGRO_VERTEX_DECL )*, ALLEGRO_BITMAP*, const( int )*, int, int );
+    alias da_al_draw_prim = int function(const(void)*, const(ALLEGRO_VERTEX_DECL)*, ALLEGRO_BITMAP*, int, int, int);
+    alias da_al_draw_indexed_prim = int function(const(void)*, const(ALLEGRO_VERTEX_DECL)*, ALLEGRO_BITMAP*, const(int)*, int, int);
 
-    alias da_al_create_vertex_decl = ALLEGRO_VERTEX_DECL* function( const( ALLEGRO_VERTEX_ELEMENT )*, int );
-    alias da_al_destroy_vertex_decl = void function( ALLEGRO_VERTEX_DECL* );
+    alias da_al_create_vertex_decl = ALLEGRO_VERTEX_DECL* function(const(ALLEGRO_VERTEX_ELEMENT)*, int);
+    alias da_al_destroy_vertex_decl = void function(ALLEGRO_VERTEX_DECL*);
 
-    alias da_al_draw_soft_triangle = void function( ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, uintptr_t,
-            void function( uintptr_t, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX* ),
-            void function( uintptr_t, int, int, int, int ),
-            void function( uintptr_t, int ),
-            void function( uintptr_t, int, int, int ));
-    alias da_al_draw_soft_line = void function( ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, uintptr_t,
-        void function( uintptr_t, int, int, ALLEGRO_VERTEX*, ALLEGRO_VERTEX* ),
-        void function( uintptr_t, int ),
-        void function( uintptr_t, int, int ) );
+    alias da_al_draw_soft_triangle = void function(ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, uintptr_t,
+            void function(uintptr_t, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
+            void function(uintptr_t, int, int, int, int),
+            void function(uintptr_t, int),
+            void function(uintptr_t, int, int, int));
+    alias da_al_draw_soft_line = void function(ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, uintptr_t,
+        void function(uintptr_t, int, int, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
+        void function(uintptr_t, int),
+        void function(uintptr_t, int, int));
 
-    alias da_al_draw_line = void function( float, float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_triangle = void function( float, float, float, float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_rectangle = void function( float, float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_rounded_rectangle = void function( float, float, float, float, float, float, ALLEGRO_COLOR, float );
+    alias da_al_draw_line = void function(float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_triangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_rectangle = void function(float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_rounded_rectangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR, float);
 
-    alias da_al_calculate_arc = void function( float*, int, float, float, float, float, float, float, float, int );
-    alias da_al_draw_circle = void function( float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_ellipse = void function( float, float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_arc = void function( float, float, float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_elliptical_arc = void function( float, float, float, float, float, float, ALLEGRO_COLOR, float );
-    alias da_al_draw_pieslice = void function( float, float, float, float, float, ALLEGRO_COLOR, float );
+    alias da_al_calculate_arc = void function(float*, int, float, float, float, float, float, float, float, int);
+    alias da_al_draw_circle = void function(float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_ellipse = void function(float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_arc = void function(float, float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_elliptical_arc = void function(float, float, float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_draw_pieslice = void function(float, float, float, float, float, ALLEGRO_COLOR, float);
 
-    alias da_al_calculate_spline = void function( float*, int, float*, float, int );
-    alias da_al_draw_spline = void function( float*, ALLEGRO_COLOR, float );
+    alias da_al_calculate_spline = void function(float*, int, float*, float, int);
+    alias da_al_draw_spline = void function(float*, ALLEGRO_COLOR, float);
 
-    alias da_al_calculate_ribbon = void function( float*, int, const( float* ), int, float, int );
-    alias da_al_draw_ribbon = void function( const( float )*, int, ALLEGRO_COLOR, float, int );
+    alias da_al_calculate_ribbon = void function(float*, int, const(float*), int, float, int);
+    alias da_al_draw_ribbon = void function(const(float)*, int, ALLEGRO_COLOR, float, int);
 
-    alias da_al_draw_filled_triangle = void function( float, float, float, float, float, float, ALLEGRO_COLOR );
-    alias da_al_draw_filled_rectangle = void function( float, float, float, float, ALLEGRO_COLOR );
-    alias da_al_draw_filled_ellipse = void function( float, float, float, float, ALLEGRO_COLOR );
-    alias da_al_draw_filled_circle = void function( float, float, float, ALLEGRO_COLOR );
-    alias da_al_draw_filled_pieslice = void function( float, float, float, float, float, ALLEGRO_COLOR );
-    alias da_al_draw_filled_rounded_rectangle = void function( float, float, float, float, float, float, ALLEGRO_COLOR );
+    alias da_al_draw_filled_triangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR);
+    alias da_al_draw_filled_rectangle = void function(float, float, float, float, ALLEGRO_COLOR);
+    alias da_al_draw_filled_ellipse = void function(float, float, float, float, ALLEGRO_COLOR);
+    alias da_al_draw_filled_circle = void function(float, float, float, ALLEGRO_COLOR);
+    alias da_al_draw_filled_pieslice = void function(float, float, float, float, float, ALLEGRO_COLOR);
+    alias da_al_draw_filled_rounded_rectangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR);
 }
 
 __gshared {
@@ -161,38 +163,38 @@ __gshared {
 
 class DerelictAllegro5PrimitivesLoader : SharedLibLoader {
     public this() {
-        super( libNames );
+        super(libNames);
     }
 
     protected override void loadSymbols() {
-        bindFunc( cast( void** )&al_get_allegro_primitives_version, "al_get_allegro_primitives_version" );
-        bindFunc( cast( void** )&al_init_primitives_addon, "al_init_primitives_addon" );
-        bindFunc( cast( void** )&al_shutdown_primitives_addon, "al_shutdown_primitives_addon" );
-        bindFunc( cast( void** )&al_draw_prim, "al_draw_prim" );
-        bindFunc( cast( void** )&al_draw_indexed_prim, "al_draw_indexed_prim" );
-        bindFunc( cast( void** )&al_create_vertex_decl, "al_create_vertex_decl" );
-        bindFunc( cast( void** )&al_destroy_vertex_decl, "al_destroy_vertex_decl" );
-        bindFunc( cast( void** )&al_draw_soft_triangle, "al_draw_soft_triangle" );
-        bindFunc( cast( void** )&al_draw_soft_line, "al_draw_soft_line" );
-        bindFunc( cast( void** )&al_draw_line, "al_draw_line" );
-        bindFunc( cast( void** )&al_draw_triangle, "al_draw_triangle" );
-        bindFunc( cast( void** )&al_draw_rectangle, "al_draw_rectangle" );
-        bindFunc( cast( void** )&al_draw_rounded_rectangle, "al_draw_rounded_rectangle" );
-        bindFunc( cast( void** )&al_draw_circle, "al_draw_circle" );
-        bindFunc( cast( void** )&al_draw_ellipse, "al_draw_ellipse" );
-        bindFunc( cast( void** )&al_draw_arc, "al_draw_arc" );
-        bindFunc( cast( void** )&al_draw_elliptical_arc, "al_draw_elliptical_arc" );
-        bindFunc( cast( void** )&al_draw_pieslice, "al_draw_pieslice" );
-        bindFunc( cast( void** )&al_calculate_spline, "al_calculate_spline" );
-        bindFunc( cast( void** )&al_draw_spline, "al_draw_spline" );
-        bindFunc( cast( void** )&al_calculate_ribbon, "al_calculate_ribbon" );
-        bindFunc( cast( void** )&al_draw_ribbon, "al_draw_ribbon" );
-        bindFunc( cast( void** )&al_draw_filled_triangle, "al_draw_filled_triangle" );
-        bindFunc( cast( void** )&al_draw_filled_rectangle, "al_draw_filled_rectangle" );
-        bindFunc( cast( void** )&al_draw_filled_ellipse, "al_draw_filled_ellipse" );
-        bindFunc( cast( void** )&al_draw_filled_circle, "al_draw_filled_circle" );
-        bindFunc( cast( void** )&al_draw_filled_pieslice, "al_draw_filled_pieslice" );
-        bindFunc( cast( void** )&al_draw_filled_rounded_rectangle, "al_draw_filled_rounded_rectangle" );
+        bindFunc(cast(void**)&al_get_allegro_primitives_version, "al_get_allegro_primitives_version");
+        bindFunc(cast(void**)&al_init_primitives_addon, "al_init_primitives_addon");
+        bindFunc(cast(void**)&al_shutdown_primitives_addon, "al_shutdown_primitives_addon");
+        bindFunc(cast(void**)&al_draw_prim, "al_draw_prim");
+        bindFunc(cast(void**)&al_draw_indexed_prim, "al_draw_indexed_prim");
+        bindFunc(cast(void**)&al_create_vertex_decl, "al_create_vertex_decl");
+        bindFunc(cast(void**)&al_destroy_vertex_decl, "al_destroy_vertex_decl");
+        bindFunc(cast(void**)&al_draw_soft_triangle, "al_draw_soft_triangle");
+        bindFunc(cast(void**)&al_draw_soft_line, "al_draw_soft_line");
+        bindFunc(cast(void**)&al_draw_line, "al_draw_line");
+        bindFunc(cast(void**)&al_draw_triangle, "al_draw_triangle");
+        bindFunc(cast(void**)&al_draw_rectangle, "al_draw_rectangle");
+        bindFunc(cast(void**)&al_draw_rounded_rectangle, "al_draw_rounded_rectangle");
+        bindFunc(cast(void**)&al_draw_circle, "al_draw_circle");
+        bindFunc(cast(void**)&al_draw_ellipse, "al_draw_ellipse");
+        bindFunc(cast(void**)&al_draw_arc, "al_draw_arc");
+        bindFunc(cast(void**)&al_draw_elliptical_arc, "al_draw_elliptical_arc");
+        bindFunc(cast(void**)&al_draw_pieslice, "al_draw_pieslice");
+        bindFunc(cast(void**)&al_calculate_spline, "al_calculate_spline");
+        bindFunc(cast(void**)&al_draw_spline, "al_draw_spline");
+        bindFunc(cast(void**)&al_calculate_ribbon, "al_calculate_ribbon");
+        bindFunc(cast(void**)&al_draw_ribbon, "al_draw_ribbon");
+        bindFunc(cast(void**)&al_draw_filled_triangle, "al_draw_filled_triangle");
+        bindFunc(cast(void**)&al_draw_filled_rectangle, "al_draw_filled_rectangle");
+        bindFunc(cast(void**)&al_draw_filled_ellipse, "al_draw_filled_ellipse");
+        bindFunc(cast(void**)&al_draw_filled_circle, "al_draw_filled_circle");
+        bindFunc(cast(void**)&al_draw_filled_pieslice, "al_draw_filled_pieslice");
+        bindFunc(cast(void**)&al_draw_filled_rounded_rectangle, "al_draw_filled_rounded_rectangle");
     }
 }
 

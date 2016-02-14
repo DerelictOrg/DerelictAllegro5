@@ -4,7 +4,7 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
-this license ( the "Software" ) to use, reproduce, display, distribute,
+this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
 Software, and to permit third-parties to whom the Software is furnished to
 do so, all subject to the following:
@@ -28,12 +28,13 @@ DEALINGS IN THE SOFTWARE.
 module derelict.allegro5.dialog;
 
 private {
-    import derelict.util.loader;
+    import derelict.util.loader,
+           derelict.util.system;
 
     import derelict.allegro5.internal,
            derelict.allegro5.types;
 
-    enum libNames = genLibNames( "Dialog" );
+    enum libNames = genLibNames("Dialog");
 }
 
 struct ALLEGRO_FILECHOOSER;
@@ -41,7 +42,7 @@ struct ALLEGRO_TEXTLOG;
 struct ALLEGRO_MENU;
 
 struct ALLEGRO_MENU_INFO {
-    const( char )* caption;
+    const(char)* caption;
     ushort id;
     int flags;
     ALLEGRO_BITMAP* icon;
@@ -73,19 +74,19 @@ enum {
    ALLEGRO_EVENT_NATIVE_DIALOG_CLOSE = 600
 }
 
-extern( C ) nothrow {
+extern(C) @nogc nothrow {
     alias da_al_init_native_dialog_addon = bool function();
     alias da_al_shutdown_native_dialog_addon = void function();
-    alias da_al_create_native_file_dialog = ALLEGRO_FILECHOOSER* function( const( char )*, const( char )*, const( char )*, int );
-    alias da_al_show_native_file_dialog = bool function( ALLEGRO_DISPLAY*, ALLEGRO_FILECHOOSER* );
-    alias da_al_get_native_file_dialog_count = int function( const( ALLEGRO_FILECHOOSER )* );
-    alias da_al_get_native_file_dialog_path = const( char )* function( const( ALLEGRO_FILECHOOSER )*, size_t );
-    alias da_al_destroy_native_file_dialog = void function( ALLEGRO_FILECHOOSER* );
-    alias da_al_show_native_message_box = int function( ALLEGRO_DISPLAY*, const( char )*, const( char )*, const( char )*, const( char )*, int );
-    alias da_al_open_native_text_log = ALLEGRO_TEXTLOG* function( const( char )*, int );
-    alias da_al_close_native_text_log = void function( ALLEGRO_TEXTLOG* );
-    alias da_al_append_native_text_log = void function( ALLEGRO_TEXTLOG*, const( char )*, ... );
-    alias da_al_get_native_text_log_event_source = ALLEGRO_EVENT_SOURCE* function( ALLEGRO_TEXTLOG* );
+    alias da_al_create_native_file_dialog = ALLEGRO_FILECHOOSER* function(const(char)*, const(char)*, const(char)*, int);
+    alias da_al_show_native_file_dialog = bool function(ALLEGRO_DISPLAY*, ALLEGRO_FILECHOOSER*);
+    alias da_al_get_native_file_dialog_count = int function(const(ALLEGRO_FILECHOOSER)*);
+    alias da_al_get_native_file_dialog_path = const(char)* function(const(ALLEGRO_FILECHOOSER)*, size_t);
+    alias da_al_destroy_native_file_dialog = void function(ALLEGRO_FILECHOOSER*);
+    alias da_al_show_native_message_box = int function(ALLEGRO_DISPLAY*, const(char)*, const(char)*, const(char)*, const(char)*, int);
+    alias da_al_open_native_text_log = ALLEGRO_TEXTLOG* function(const(char)*, int);
+    alias da_al_close_native_text_log = void function(ALLEGRO_TEXTLOG*);
+    alias da_al_append_native_text_log = void function(ALLEGRO_TEXTLOG*, const(char)*, ...);
+    alias da_al_get_native_text_log_event_source = ALLEGRO_EVENT_SOURCE* function(ALLEGRO_TEXTLOG*);
     alias da_al_get_allegro_native_dialog_version = uint function();
 }
 
@@ -107,23 +108,23 @@ __gshared {
 
 class DerelictAllegro5DialogLoader : SharedLibLoader {
     public this() {
-        super( libNames );
+        super(libNames);
     }
 
     protected override void loadSymbols() {
-        bindFunc( cast( void** )&al_init_native_dialog_addon, "al_init_native_dialog_addon" );
-        bindFunc( cast( void** )&al_shutdown_native_dialog_addon, "al_shutdown_native_dialog_addon" );
-        bindFunc( cast( void** )&al_create_native_file_dialog, "al_create_native_file_dialog" );
-        bindFunc( cast( void** )&al_show_native_file_dialog, "al_show_native_file_dialog" );
-        bindFunc( cast( void** )&al_get_native_file_dialog_count, "al_get_native_file_dialog_count" );
-        bindFunc( cast( void** )&al_get_native_file_dialog_path, "al_get_native_file_dialog_path" );
-        bindFunc( cast( void** )&al_destroy_native_file_dialog, "al_destroy_native_file_dialog" );
-        bindFunc( cast( void** )&al_show_native_message_box, "al_show_native_message_box" );
-        bindFunc( cast( void** )&al_open_native_text_log, "al_open_native_text_log" );
-        bindFunc( cast( void** )&al_close_native_text_log, "al_close_native_text_log" );
-        bindFunc( cast( void** )&al_append_native_text_log, "al_append_native_text_log" );
-        bindFunc( cast( void** )&al_get_native_text_log_event_source, "al_get_native_text_log_event_source" );
-        bindFunc( cast( void** )&al_get_allegro_native_dialog_version, "al_get_allegro_native_dialog_version" );
+        bindFunc(cast(void**)&al_init_native_dialog_addon, "al_init_native_dialog_addon");
+        bindFunc(cast(void**)&al_shutdown_native_dialog_addon, "al_shutdown_native_dialog_addon");
+        bindFunc(cast(void**)&al_create_native_file_dialog, "al_create_native_file_dialog");
+        bindFunc(cast(void**)&al_show_native_file_dialog, "al_show_native_file_dialog");
+        bindFunc(cast(void**)&al_get_native_file_dialog_count, "al_get_native_file_dialog_count");
+        bindFunc(cast(void**)&al_get_native_file_dialog_path, "al_get_native_file_dialog_path");
+        bindFunc(cast(void**)&al_destroy_native_file_dialog, "al_destroy_native_file_dialog");
+        bindFunc(cast(void**)&al_show_native_message_box, "al_show_native_message_box");
+        bindFunc(cast(void**)&al_open_native_text_log, "al_open_native_text_log");
+        bindFunc(cast(void**)&al_close_native_text_log, "al_close_native_text_log");
+        bindFunc(cast(void**)&al_append_native_text_log, "al_append_native_text_log");
+        bindFunc(cast(void**)&al_get_native_text_log_event_source, "al_get_native_text_log_event_source");
+        bindFunc(cast(void**)&al_get_allegro_native_dialog_version, "al_get_allegro_native_dialog_version");
     }
 }
 

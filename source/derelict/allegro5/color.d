@@ -4,7 +4,7 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
-this license ( the "Software" ) to use, reproduce, display, distribute,
+this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
 Software, and to permit third-parties to whom the Software is furnished to
 do so, all subject to the following:
@@ -28,34 +28,35 @@ DEALINGS IN THE SOFTWARE.
 module derelict.allegro5.color;
 
 private {
-    import derelict.util.loader;
+    import derelict.util.loader,
+           derelict.util.system;
 
     import derelict.allegro5.internal,
            derelict.allegro5.types;
 
-    enum libNames = genLibNames( "Color" );
+    enum libNames = genLibNames("Color");
 }
 
-extern( C ) nothrow {
+extern(C) @nogc nothrow {
     alias da_al_get_allegro_color_version = uint function();
-    alias da_al_color_hsv_to_rgb = void function( float, float, float, float*, float*, float* );
-    alias da_al_color_rgb_to_hsl = void function( float, float, float, float*, float*, float* );
-    alias da_al_color_rgb_to_hsv = void function( float, float, float, float*, float*, float* );
-    alias da_al_color_hsl_to_rgb = void function( float, float, float, float*, float*, float* );
-    alias da_al_color_name_to_rgb = bool function( const( char )*, float*, float*, float* );
-    alias da_al_color_rgb_to_name = const( char )* function( float, float, float );
-    alias da_al_color_cmyk_to_rgb = void function( float, float, float, float, float*, float*, float* );
-    alias da_al_color_rgb_to_cmyk = void function( float, float, float, float*, float*, float*, float* );
-    alias da_al_color_yuv_to_rgb = void function( float, float, float, float*, float*, float* );
-    alias da_al_color_rgb_to_yuv = void function( float, float, float, float*, float*, float* );
-    alias da_al_color_rgb_to_html = void function( float, float, float, char* );
-    alias da_al_color_html_to_rgb = void function( const( char )*, float*, float*, float* );
-    alias da_al_color_yuv = ALLEGRO_COLOR function( float, float, float );
-    alias da_al_color_cmyk = ALLEGRO_COLOR function( float, float, float, float );
-    alias da_al_color_hsl = ALLEGRO_COLOR function( float, float, float );
-    alias da_al_color_hsv = ALLEGRO_COLOR function( float, float, float );
-    alias da_al_color_name = ALLEGRO_COLOR function( const( char )* );
-    alias da_al_color_html = ALLEGRO_COLOR function( const( char )* );
+    alias da_al_color_hsv_to_rgb = void function(float, float, float, float*, float*, float*);
+    alias da_al_color_rgb_to_hsl = void function(float, float, float, float*, float*, float*);
+    alias da_al_color_rgb_to_hsv = void function(float, float, float, float*, float*, float*);
+    alias da_al_color_hsl_to_rgb = void function(float, float, float, float*, float*, float*);
+    alias da_al_color_name_to_rgb = bool function(const(char)*, float*, float*, float*);
+    alias da_al_color_rgb_to_name = const(char)* function(float, float, float);
+    alias da_al_color_cmyk_to_rgb = void function(float, float, float, float, float*, float*, float*);
+    alias da_al_color_rgb_to_cmyk = void function(float, float, float, float*, float*, float*, float*);
+    alias da_al_color_yuv_to_rgb = void function(float, float, float, float*, float*, float*);
+    alias da_al_color_rgb_to_yuv = void function(float, float, float, float*, float*, float*);
+    alias da_al_color_rgb_to_html = void function(float, float, float, char*);
+    alias da_al_color_html_to_rgb = void function(const(char)*, float*, float*, float*);
+    alias da_al_color_yuv = ALLEGRO_COLOR function(float, float, float);
+    alias da_al_color_cmyk = ALLEGRO_COLOR function(float, float, float, float);
+    alias da_al_color_hsl = ALLEGRO_COLOR function(float, float, float);
+    alias da_al_color_hsv = ALLEGRO_COLOR function(float, float, float);
+    alias da_al_color_name = ALLEGRO_COLOR function(const(char)*);
+    alias da_al_color_html = ALLEGRO_COLOR function(const(char)*);
 }
 
 __gshared {
@@ -82,29 +83,29 @@ __gshared {
 
 class DerelictAllegro5ColorLoader : SharedLibLoader {
     public this() {
-        super( libNames );
+        super(libNames);
     }
 
     protected override void loadSymbols() {
-        bindFunc( cast( void** )&al_get_allegro_color_version, "al_get_allegro_color_version" );
-        bindFunc( cast( void** )&al_color_hsv_to_rgb, "al_color_hsv_to_rgb" );
-        bindFunc( cast( void** )&al_color_rgb_to_hsl, "al_color_rgb_to_hsl" );
-        bindFunc( cast( void** )&al_color_rgb_to_hsv, "al_color_rgb_to_hsv" );
-        bindFunc( cast( void** )&al_color_hsl_to_rgb, "al_color_hsl_to_rgb" );
-        bindFunc( cast( void** )&al_color_name_to_rgb, "al_color_name_to_rgb" );
-        bindFunc( cast( void** )&al_color_rgb_to_name, "al_color_rgb_to_name" );
-        bindFunc( cast( void** )&al_color_cmyk_to_rgb, "al_color_cmyk_to_rgb" );
-        bindFunc( cast( void** )&al_color_rgb_to_cmyk, "al_color_rgb_to_cmyk" );
-        bindFunc( cast( void** )&al_color_yuv_to_rgb, "al_color_yuv_to_rgb" );
-        bindFunc( cast( void** )&al_color_rgb_to_yuv, "al_color_rgb_to_yuv" );
-        bindFunc( cast( void** )&al_color_rgb_to_html, "al_color_rgb_to_html" );
-        bindFunc( cast( void** )&al_color_html_to_rgb, "al_color_html_to_rgb" );
-        bindFunc( cast( void** )&al_color_yuv, "al_color_yuv" );
-        bindFunc( cast( void** )&al_color_cmyk, "al_color_cmyk" );
-        bindFunc( cast( void** )&al_color_hsl, "al_color_hsl" );
-        bindFunc( cast( void** )&al_color_hsv, "al_color_hsv" );
-        bindFunc( cast( void** )&al_color_name, "al_color_name" );
-        bindFunc( cast( void** )&al_color_html, "al_color_html" );
+        bindFunc(cast(void**)&al_get_allegro_color_version, "al_get_allegro_color_version");
+        bindFunc(cast(void**)&al_color_hsv_to_rgb, "al_color_hsv_to_rgb");
+        bindFunc(cast(void**)&al_color_rgb_to_hsl, "al_color_rgb_to_hsl");
+        bindFunc(cast(void**)&al_color_rgb_to_hsv, "al_color_rgb_to_hsv");
+        bindFunc(cast(void**)&al_color_hsl_to_rgb, "al_color_hsl_to_rgb");
+        bindFunc(cast(void**)&al_color_name_to_rgb, "al_color_name_to_rgb");
+        bindFunc(cast(void**)&al_color_rgb_to_name, "al_color_rgb_to_name");
+        bindFunc(cast(void**)&al_color_cmyk_to_rgb, "al_color_cmyk_to_rgb");
+        bindFunc(cast(void**)&al_color_rgb_to_cmyk, "al_color_rgb_to_cmyk");
+        bindFunc(cast(void**)&al_color_yuv_to_rgb, "al_color_yuv_to_rgb");
+        bindFunc(cast(void**)&al_color_rgb_to_yuv, "al_color_rgb_to_yuv");
+        bindFunc(cast(void**)&al_color_rgb_to_html, "al_color_rgb_to_html");
+        bindFunc(cast(void**)&al_color_html_to_rgb, "al_color_html_to_rgb");
+        bindFunc(cast(void**)&al_color_yuv, "al_color_yuv");
+        bindFunc(cast(void**)&al_color_cmyk, "al_color_cmyk");
+        bindFunc(cast(void**)&al_color_hsl, "al_color_hsl");
+        bindFunc(cast(void**)&al_color_hsv, "al_color_hsv");
+        bindFunc(cast(void**)&al_color_name, "al_color_name");
+        bindFunc(cast(void**)&al_color_html, "al_color_html");
     }
 }
 

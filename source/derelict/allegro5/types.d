@@ -282,7 +282,7 @@ bool ALLEGRO_EVENT_TYPE_IS_USER( uint t ) {
 alias ALLEGRO_GET_EVENT_TYPE = AL_ID;
 
 struct ALLEGRO_EVENT_SOURCE {
-    int[ 32 ] __pad = void;
+    int[32] __pad = void;
 }
 
 template _AL_EVENT_HEADER( T ) {
@@ -439,12 +439,12 @@ struct ALLEGRO_DISPLAY_MODE {
 struct ALLEGRO_JOYSTICK;
 
 struct _Axes {
-    float[ _AL_MAX_JOYSTICK_AXES ] axis;
+    float[_AL_MAX_JOYSTICK_AXES] axis;
 }
 
 struct ALLEGRO_JOYSTICK_STATE {
-    _Axes[ _AL_MAX_JOYSTICK_STICKS ] stick;
-    int[ _AL_MAX_JOYSTICK_BUTTONS ] button;
+    _Axes[_AL_MAX_JOYSTICK_STICKS] stick;
+    int[_AL_MAX_JOYSTICK_BUTTONS] button;
 }
 
 alias ALLEGRO_JOYFLAGS = int;
@@ -647,7 +647,7 @@ struct ALLEGRO_MOUSE_STATE {
     int y;
     int z;
     int w;
-    int[ ALLEGRO_MOUSE_MAX_EXTRA_AXES ] more_axes;
+    int[ALLEGRO_MOUSE_MAX_EXTRA_AXES] more_axes;
     int button;
     float pressure;
     ALLEGRO_DISPLAY* display;
@@ -746,7 +746,7 @@ enum {
 }
 
 struct ALLEGRO_STATE {
-    ubyte[ 1024 ] _tls = void;
+    ubyte[1024] _tls = void;
 }
 
 // transformations.h
