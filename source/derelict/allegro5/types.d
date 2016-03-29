@@ -338,6 +338,10 @@ struct ALLEGRO_TIMER_EVENT {
 struct ALLEGRO_USER_EVENT {
     mixin _AL_EVENT_HEADER!( ALLEGRO_EVENT_SOURCE );
     void* __internal__descr;
+    intptr_t data1;
+    intptr_t data2;
+    intptr_t data3;
+    intptr_t data4;
 }
 
 union ALLEGRO_EVENT {
