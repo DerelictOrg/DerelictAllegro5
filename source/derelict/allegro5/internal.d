@@ -40,7 +40,7 @@ package string genLibNames( string prefix ) {
         else {
             lwr = "";
         }
-        auto s = "liballegro"~lwr~"-5.0.11.so,liballegro"~lwr~"-5.0.so";
+        auto s = "liballegro"~lwr~".so.5.0.11,liballegro"~lwr~".so.5.0";
     }
     else {
         static assert( 0, "Allegro library names not yet implemented on this platform." );
