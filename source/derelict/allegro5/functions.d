@@ -184,7 +184,7 @@ extern(C) @nogc nothrow {
     alias da_al_get_display_refresh_rate = int function(ALLEGRO_DISPLAY*);
     alias da_al_get_display_flags = int function(ALLEGRO_DISPLAY*);
     alias da_al_set_display_flag = bool function(ALLEGRO_DISPLAY*, int, bool);
-    alias da_al_toggle_display_flag = bool function(ALLEGRO_DISPLAY*, int, bool);
+    //alias da_al_toggle_display_flag = bool function(ALLEGRO_DISPLAY*, int, bool);
 
     alias da_al_create_display = ALLEGRO_DISPLAY* function(int, int);
     alias da_al_destroy_display = void function(ALLEGRO_DISPLAY*);
@@ -642,7 +642,7 @@ __gshared {
     da_al_get_display_refresh_rate al_get_display_refresh_rate;
     da_al_get_display_flags al_get_display_flags;
     da_al_set_display_flag al_set_display_flag;
-    da_al_toggle_display_flag al_toggle_display_flag;
+    //da_al_toggle_display_flag al_toggle_display_flag;
     da_al_create_display al_create_display;
     da_al_destroy_display al_destroy_display;
     da_al_get_current_display al_get_current_display;

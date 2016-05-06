@@ -7,13 +7,13 @@ package string genLibNames( string prefix ) {
     import std.string : toLower;
 
     static if( Derelict_OS_Windows ) {
-        enum MonolithNames = "allegro-5.0-monolith.dll,allegro-5.0.11-monolith-mt.dll,allegro-5.0.10-monolith-mt.dll,";
+        enum MonolithNames = "allegro-5.2-monolith.dll,allegro-5.2.0-monolith-mt.dll";
 
         auto s = prefix.toLower();
         if( s != "allegro" ) {
             s = "allegro_" ~ s;
         }
-        s ~= "-5.0.dll," ~ s ~ "-5.0.11-mt.dll," ~ s ~ "-5.0.10-mt.dll";
+        s ~= "-5.2.dll," ~ s ~ "-5.2.0-mt.dll";
     }
     else static if( Derelict_OS_Mac ) {
         // TODO Do they build a monolith target on Mac?
@@ -28,7 +28,7 @@ package string genLibNames( string prefix ) {
         else {
             lwr = "";
         }
-        auto s = "../Frameworks/"~name~"-5.0.framework,/Library/Frameworks/"~name~"-5.0.framwork,liballegro"~lwr~"-5.0.11.dylib,liballegro"~lwr~"-5.0.dylib";
+        auto s = "../Frameworks/"~name~"-5.2.framework,/Library/Frameworks/"~name~"-5.2.0.framework,liballegro"~lwr~".5.2.0.dylib,liballegro"~lwr~".5.2.dylib,/usr/local/lib/liballegro"~lwr~".5.2.0.dylib,/usr/local/lib/liballegro"~lwr~".5.2.dylib";
     }
     else static if( Derelict_OS_Posix ) {
         // TODO What is the monolith name format on other Posix platforms?
@@ -40,7 +40,7 @@ package string genLibNames( string prefix ) {
         else {
             lwr = "";
         }
-        auto s = "liballegro"~lwr~".so.5.0.11,liballegro"~lwr~".so.5.0";
+        auto s = "liballegro"~lwr~".so.5.2.0,liballegro"~lwr~".so.5.2";
     }
     else {
         static assert( 0, "Allegro library names not yet implemented on this platform." );

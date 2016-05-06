@@ -163,7 +163,7 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc( cast( void** )&al_get_display_refresh_rate, "al_get_display_refresh_rate" );
         bindFunc( cast( void** )&al_get_display_flags, "al_get_display_flags" );
         bindFunc( cast( void** )&al_set_display_flag, "al_set_display_flag" );
-        bindFunc( cast( void** )&al_toggle_display_flag, "al_toggle_display_flag" );
+        //bindFunc( cast( void** )&al_toggle_display_flag, "al_toggle_display_flag" );
         bindFunc( cast( void** )&al_create_display, "al_create_display" );
         bindFunc( cast( void** )&al_destroy_display, "al_destroy_display" );
         bindFunc( cast( void** )&al_get_current_display, "al_get_current_display" );
