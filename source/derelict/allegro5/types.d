@@ -33,7 +33,7 @@ private {
 }
 
 public {
-    version( Windows ) {
+    version(Windows) {
         alias off_t = long;
     } else {
         import core.sys.posix.sys.types : off_t;
@@ -49,19 +49,19 @@ struct ALLEGRO_TIMEOUT {
 
 // base.h
 enum ALLEGRO_VERSION = 5;
-enum ALLEGRO_SUB_VERSION = 0;
-enum ALLEGRO_WIP_VERSION = 10;
+enum ALLEGRO_SUB_VERSION = 2;
+enum ALLEGRO_WIP_VERSION = 0;
 enum ALLEGRO_RELEASE_NUMBER = 1;
-enum ALLEGRO_VERSION_STR = "5.0.10";
-enum ALLEGRO_DATA_STR = "2013";
+enum ALLEGRO_VERSION_STR = "5.2.0";
+enum ALLEGRO_DATA_STR = "2016";
 enum ALLEGRO_DATE = 20130616;
-enum uint ALLEGRO_VERSION_INT = (( ALLEGRO_VERSION << 24 ) | ( ALLEGRO_SUB_VERSION << 16 ) |
-                                 ( ALLEGRO_WIP_VERSION << 8 ) | ALLEGRO_RELEASE_NUMBER );
+enum uint ALLEGRO_VERSION_INT = ((ALLEGRO_VERSION << 24) | (ALLEGRO_SUB_VERSION << 16) |
+                                 (ALLEGRO_WIP_VERSION << 8) | ALLEGRO_RELEASE_NUMBER);
 
 enum ALLEGRO_PI = 3.14159265358979323846;
 
-uint AL_ID( int a, int b, int c, int d ) {
-    return (( a << 24 ) | ( b << 16 ) | ( c << 8 ) | d );
+uint AL_ID(int a, int b, int c, int d) {
+    return ((a << 24) | (b << 16) | (c << 8) | d);
 }
 
 // bitmap.h
@@ -69,16 +69,17 @@ struct ALLEGRO_BITMAP;
 
 enum {
     ALLEGRO_MEMORY_BITMAP            = 0x0001,
-    ALLEGRO_KEEP_BITMAP_FORMAT       = 0x0002,
+    _ALLEGRO_KEEP_BITMAP_FORMAT       = 0x0002,
     ALLEGRO_FORCE_LOCKING            = 0x0004,
     ALLEGRO_NO_PRESERVE_TEXTURE      = 0x0008,
-    ALLEGRO_ALPHA_TEST               = 0x0010,
+    _ALLEGRO_ALPHA_TEST               = 0x0010,
     _ALLEGRO_INTERNAL_OPENGL         = 0x0020,
     ALLEGRO_MIN_LINEAR               = 0x0040,
     ALLEGRO_MAG_LINEAR               = 0x0080,
     ALLEGRO_MIPMAP                   = 0x0100,
-    ALLEGRO_NO_PREMULTIPLIED_ALPHA   = 0x0200,
+    _ALLEGRO_NO_PREMULTIPLIED_ALPHA   = 0x0200,
     ALLEGRO_VIDEO_BITMAP             = 0x0400,
+    ALLEGRO_CONVERT_BITMAP           = 0x1000,
 }
 
 // bitmap_draw.h
@@ -88,11 +89,18 @@ enum {
 }
 
 // bitmap_io.h
-extern( C ) nothrow {
-    alias ALLEGRO_IIO_LOADER_FUNCTION = ALLEGRO_BITMAP* function( const( char )* );
-    alias ALLEGRO_IIO_FS_LOADER_FUNCTION = ALLEGRO_BITMAP* function( ALLEGRO_FILE* );
-    alias ALLEGRO_IIO_SAVER_FUNCTION = bool function( const( char )*, ALLEGRO_BITMAP* );
-    alias ALLEGRO_IIO_FS_SAVER_FUNCTION = bool function( ALLEGRO_FILE*, ALLEGRO_BITMAP* );
+enum {
+   ALLEGRO_KEEP_BITMAP_FORMAT       = 0x0002,
+   ALLEGRO_NO_PREMULTIPLIED_ALPHA   = 0x0200,
+   ALLEGRO_KEEP_INDEX               = 0x0800
+}
+
+extern(C) nothrow {
+    alias ALLEGRO_IIO_LOADER_FUNCTION = ALLEGRO_BITMAP* function(const(char)*);
+    alias ALLEGRO_IIO_FS_LOADER_FUNCTION = ALLEGRO_BITMAP* function(ALLEGRO_FILE*);
+    alias ALLEGRO_IIO_SAVER_FUNCTION = bool function(const(char)*, ALLEGRO_BITMAP*);
+    alias ALLEGRO_IIO_FS_SAVER_FUNCTION = bool function(ALLEGRO_FILE*, ALLEGRO_BITMAP*);
+    alias ALLEGRO_IIO_IDENTIFIER_FUNCTION = bool function(ALLEGRO_FILE*)
 }
 
 // bitmap_lock.h
@@ -112,14 +120,16 @@ struct ALLEGRO_LOCKED_REGION {
 // blender.h
 alias ALLEGRO_BLEND_MODE = int;
 enum {
-   ALLEGRO_ZERO               = 0,
-   ALLEGRO_ONE                = 1,
-   ALLEGRO_ALPHA              = 2,
-   ALLEGRO_INVERSE_ALPHA      = 3,
-   ALLEGRO_SRC_COLOR          = 4,
-   ALLEGRO_DEST_COLOR         = 5,
-   ALLEGRO_INVERSE_SRC_COLOR  = 6,
-   ALLEGRO_INVERSE_DEST_COLOR = 7,
+   ALLEGRO_ZERO                 = 0,
+   ALLEGRO_ONE                  = 1,
+   ALLEGRO_ALPHA                = 2,
+   ALLEGRO_INVERSE_ALPHA        = 3,
+   ALLEGRO_SRC_COLOR            = 4,
+   ALLEGRO_DEST_COLOR           = 5,
+   ALLEGRO_INVERSE_SRC_COLOR    = 6,
+   ALLEGRO_INVERSE_DEST_COLOR   = 7,
+   ALLEGRO_CONST_COLOR          = 8,
+   ALLEGRO_INVERSE_CONST_COLOR  = 9,
    ALLEGRO_NUM_BLEND_MODES,
 }
 
@@ -275,7 +285,7 @@ enum {
     ALLEGRO_EVENT_DISPLAY_ORIENTATION         = 47,
 }
 
-bool ALLEGRO_EVENT_TYPE_IS_USER( uint t ) {
+bool ALLEGRO_EVENT_TYPE_IS_USER(uint t) {
     return t >= 512;
 }
 
@@ -285,25 +295,25 @@ struct ALLEGRO_EVENT_SOURCE {
     int[32] __pad = void;
 }
 
-template _AL_EVENT_HEADER( T ) {
+template _AL_EVENT_HEADER(T) {
     ALLEGRO_EVENT_TYPE type;
     T* source;
     double timestamp;
 }
 
 struct ALLEGRO_ANY_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_EVENT_SOURCE );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_EVENT_SOURCE);
 }
 
 struct ALLEGRO_DISPLAY_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_DISPLAY );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_DISPLAY);
     int x, y;
     int width, height;
     int orientation;
 }
 
 struct ALLEGRO_JOYSTICK_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_JOYSTICK );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_JOYSTICK);
     ALLEGRO_JOYSTICK* id;
     int stick;
     int axis;
@@ -312,7 +322,7 @@ struct ALLEGRO_JOYSTICK_EVENT {
 }
 
 struct ALLEGRO_KEYBOARD_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_KEYBOARD );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_KEYBOARD);
     ALLEGRO_DISPLAY* display;
     int keycode;
     int unichar;
@@ -321,7 +331,7 @@ struct ALLEGRO_KEYBOARD_EVENT {
 }
 
 struct ALLEGRO_MOUSE_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_MOUSE );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_MOUSE);
     ALLEGRO_DISPLAY* display;
     int x, y, z, w;
     int dx, dy, dz, dw;
@@ -330,13 +340,13 @@ struct ALLEGRO_MOUSE_EVENT {
 }
 
 struct ALLEGRO_TIMER_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_TIMER );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_TIMER);
     long count;
     double error;
 }
 
 struct ALLEGRO_USER_EVENT {
-    mixin _AL_EVENT_HEADER!( ALLEGRO_EVENT_SOURCE );
+    mixin _AL_EVENT_HEADER!(ALLEGRO_EVENT_SOURCE);
     void* __internal__descr;
     intptr_t data1;
     intptr_t data2;
@@ -361,19 +371,19 @@ struct ALLEGRO_EVENT_QUEUE;
 struct ALLEGRO_FILE;
 
 struct ALLEGRO_FILE_INTERFACE {
-    extern( C ) nothrow {
-        void* function( const( char )*, const( char )* ) fi_fopen;
-        void function( ALLEGRO_FILE* ) fi_fclose;
-        size_t function( ALLEGRO_FILE*, void*, size_t ) fi_fread;
-        size_t function( ALLEGRO_FILE*, const( void )*, size_t ) fi_fwrite;
-        bool function( ALLEGRO_FILE* ) fi_fflush;
-        long function( ALLEGRO_FILE* ) fi_ftell;
-        bool function( ALLEGRO_FILE*, long, int ) fi_fseek;
-        bool function( ALLEGRO_FILE* ) fi_feof;
-        bool function( ALLEGRO_FILE* ) fi_ferror;
-        void function( ALLEGRO_FILE* ) fi_fclearerr;
-        int function( ALLEGRO_FILE*, int ) fi_fungetc;
-        off_t function( ALLEGRO_FILE* ) fi_fsize;
+    extern(C) nothrow {
+        void* function(const(char)*, const(char)*) fi_fopen;
+        void function(ALLEGRO_FILE*) fi_fclose;
+        size_t function(ALLEGRO_FILE*, void*, size_t) fi_fread;
+        size_t function(ALLEGRO_FILE*, const(void)*, size_t) fi_fwrite;
+        bool function(ALLEGRO_FILE*) fi_fflush;
+        long function(ALLEGRO_FILE*) fi_ftell;
+        bool function(ALLEGRO_FILE*, long, int) fi_fseek;
+        bool function(ALLEGRO_FILE*) fi_feof;
+        bool function(ALLEGRO_FILE*) fi_ferror;
+        void function(ALLEGRO_FILE*) fi_fclearerr;
+        int function(ALLEGRO_FILE*, int) fi_fungetc;
+        off_t function(ALLEGRO_FILE*) fi_fsize;
     }
 }
 
@@ -386,7 +396,7 @@ enum {
 
 // fshook.h
 struct ALLEGRO_FS_ENTRY {
-    const( ALLEGRO_FS_INTERFACE )* vtable;
+    const(ALLEGRO_FS_INTERFACE)* vtable;
 }
 
 alias ALLEGRO_FILE_MODE = int;
@@ -400,30 +410,30 @@ enum {
 }
 
 struct ALLEGRO_FS_INTERFACE {
-    extern( C ) nothrow {
-        ALLEGRO_FS_ENTRY* function( const( char )* ) fs_create_entry;
-        void function( ALLEGRO_FS_ENTRY* ) fs_destroy_entry;
-        const( char )* function( ALLEGRO_FS_ENTRY* ) fs_entry_name;
-        bool function( ALLEGRO_FS_ENTRY* ) fs_update_entry;
-        uint function( ALLEGRO_FS_ENTRY* ) fs_entry_mode;
-        time_t function( ALLEGRO_FS_ENTRY* ) fs_entry_atime;
-        time_t function( ALLEGRO_FS_ENTRY* ) fs_entry_mtime;
-        time_t function( ALLEGRO_FS_ENTRY* ) fs_entry_ctime;
-        off_t function( ALLEGRO_FS_ENTRY* ) fs_entry_size;
-        bool function( ALLEGRO_FS_ENTRY* ) fs_entry_exists;
-        bool function( ALLEGRO_FS_ENTRY* ) fs_remove_entry;
+    extern(C) nothrow {
+        ALLEGRO_FS_ENTRY* function(const(char)*) fs_create_entry;
+        void function(ALLEGRO_FS_ENTRY*) fs_destroy_entry;
+        const(char)* function(ALLEGRO_FS_ENTRY*) fs_entry_name;
+        bool function(ALLEGRO_FS_ENTRY*) fs_update_entry;
+        uint function(ALLEGRO_FS_ENTRY*) fs_entry_mode;
+        time_t function(ALLEGRO_FS_ENTRY*) fs_entry_atime;
+        time_t function(ALLEGRO_FS_ENTRY*) fs_entry_mtime;
+        time_t function(ALLEGRO_FS_ENTRY*) fs_entry_ctime;
+        off_t function(ALLEGRO_FS_ENTRY*) fs_entry_size;
+        bool function(ALLEGRO_FS_ENTRY*) fs_entry_exists;
+        bool function(ALLEGRO_FS_ENTRY*) fs_remove_entry;
 
-        bool function( ALLEGRO_FS_ENTRY* ) fs_open_directory;
-        ALLEGRO_FS_ENTRY* function( ALLEGRO_FS_ENTRY* ) fs_read_directory;
-        bool function( ALLEGRO_FS_ENTRY* ) fs_close_directory;
+        bool function(ALLEGRO_FS_ENTRY*) fs_open_directory;
+        ALLEGRO_FS_ENTRY* function(ALLEGRO_FS_ENTRY*) fs_read_directory;
+        bool function(ALLEGRO_FS_ENTRY*) fs_close_directory;
 
-        bool function( const( char )* ) fs_filename_exists;
-        bool function( const( char )* ) fs_remove_filename;
+        bool function(const(char)*) fs_filename_exists;
+        bool function(const(char)*) fs_remove_filename;
         char* function() fs_get_current_directory;
-        bool function( const( char )* ) fs_change_directory;
-        bool function( const( char )* ) fs_make_directory;
+        bool function(const(char)*) fs_change_directory;
+        bool function(const(char)*) fs_make_directory;
 
-        ALLEGRO_FILE* function( ALLEGRO_FS_ENTRY*, const( char )* ) fs_open_file;
+        ALLEGRO_FILE* function(ALLEGRO_FS_ENTRY*, const(char)*) fs_open_file;
     }
 }
 
@@ -618,16 +628,16 @@ struct ALLEGRO_KEYBOARD;
 
 struct ALLEGRO_KEYBOARD_STATE {
     ALLEGRO_DISPLAY* display;
-    uint[( ALLEGRO_KEY_MAX + 31 ) / 32] __key_down__internal__;
+    uint[(ALLEGRO_KEY_MAX + 31) / 32] __key_down__internal__;
 }
 
 // memory.h
 struct ALLEGRO_MEMORY_INTERFACE {
-    extern( C ) nothrow {
-        void* function( size_t, int, const( char )*, const( char )* ) mi_malloc;
-        void function( void*, int, const( char )*, const( char )* ) mi_free;
-        void* function( void*, size_t, int, const( char )*, const( char )* ) mi_realloc;
-        void* function( size_t, size_t, int, const( char )*, const( char )* ) mi_calloc;
+    extern(C) nothrow {
+        void* function(size_t, int, const(char)*, const(char)*) mi_malloc;
+        void function(void*, int, const(char)*, const(char)*) mi_free;
+        void* function(void*, size_t, int, const(char)*, const(char)*) mi_realloc;
+        void* function(size_t, size_t, int, const(char)*, const(char)*) mi_calloc;
     }
 }
 
@@ -686,7 +696,7 @@ enum {
 }
 
 // path.h
-version( Windows ) {
+version(Windows) {
     enum ALLEGRO_NATIVE_PATH_SEP = '\\';
     enum ALLEGRO_NATIVE_DRIVE_SEP = ':';
 } else {
@@ -712,18 +722,18 @@ enum {
 
 // timer.h
 pure nothrow {
-    double ALLEGRO_USECS_TO_SECS( double x ) { return x / 1_000_000; }
-    double ALLEGRO_MSECS_TO_SECS( double x ) { return x / 1_000; }
-    double ALLEGRO_BPS_TO_SECS( double x ) {
-        if( x > 0 ) {
+    double ALLEGRO_USECS_TO_SECS(double x) { return x / 1_000_000; }
+    double ALLEGRO_MSECS_TO_SECS(double x) { return x / 1_000; }
+    double ALLEGRO_BPS_TO_SECS(double x) {
+        if(x > 0) {
             return 1.0 / x;
         } else {
             return 0;
         }
     }
 
-    double ALLEGRO_BPM_TO_SECS( double x ) {
-        if( x > 0 ) {
+    double ALLEGRO_BPM_TO_SECS(double x) {
+        if(x > 0) {
             return 60.0 / x;
         } else {
             return 0;
