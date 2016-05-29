@@ -136,6 +136,7 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc( cast( void** )&al_unmap_rgba, "al_unmap_rgba" );
         bindFunc( cast( void** )&al_unmap_rgb_f, "al_unmap_rgb_f" );
         bindFunc( cast( void** )&al_unmap_rgba_f, "al_unmap_rgba_f" );
+        bindFunc( cast( void** )&al_get_pixel_size, "al_get_pixel_size" );
         bindFunc( cast( void** )&al_get_pixel_format_bits, "al_get_pixel_format_bits" );
         bindFunc( cast( void** )&al_create_config, "al_create_config" );
         bindFunc( cast( void** )&al_add_config_section, "al_add_config_section" );
