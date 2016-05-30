@@ -1,7 +1,7 @@
 DerelictAllegro5
 ================
 
-A dynamic binding to version 5.0 of the [Allegro][1] library and its associated addons for the D Programming Language.
+A dynamic binding to version 5.2 of the [Allegro][1] library and its associated addons for the D Programming Language.
 
 Please see the pages [Building and Linking Derelict][2] and [Using Derelict][3], in the Derelict documentation, for information on how to build DerelictAllegro5 and load the Allegro 5 libraries at run time. In the meantime, here's some sample code.
 
