@@ -172,10 +172,14 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_merge_config_into, "al_merge_config_into");
         bindFunc(cast(void**)&al_merge_config, "al_merge_config");
         bindFunc(cast(void**)&al_destroy_config, "al_destroy_config");
+        bindFunc(cast(void**)&al_remove_config_section, "al_remove_config_section");
+        bindFunc(cast(void**)&al_remove_config_key, "al_remove_config_key");
         bindFunc(cast(void**)&al_get_first_config_section, "al_get_first_config_section");
         bindFunc(cast(void**)&al_get_next_config_section, "al_get_next_config_section");
         bindFunc(cast(void**)&al_get_first_config_entry, "al_get_first_config_entry");
         bindFunc(cast(void**)&al_get_next_config_entry, "al_get_next_config_entry");
+        bindFunc(cast(void**)&al_get_cpu_count, "al_get_cpu_count");
+        bindFunc(cast(void**)&al_get_ram_size, "al_get_ram_size");
         bindFunc(cast(void**)&al_set_new_display_refresh_rate, "al_set_new_display_refresh_rate");
         bindFunc(cast(void**)&al_set_new_display_flags, "al_set_new_display_flags");
         bindFunc(cast(void**)&al_get_new_display_refresh_rate, "al_get_new_display_refresh_rate");
@@ -185,8 +189,8 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_get_display_format, "al_get_display_format");
         bindFunc(cast(void**)&al_get_display_refresh_rate, "al_get_display_refresh_rate");
         bindFunc(cast(void**)&al_get_display_flags, "al_get_display_flags");
+        bindFunc(cast(void**)&al_get_display_orientation, "al_get_display_orientation");
         bindFunc(cast(void**)&al_set_display_flag, "al_set_display_flag");
-        //bindFunc(cast(void**)&al_toggle_display_flag, "al_toggle_display_flag");
         bindFunc(cast(void**)&al_create_display, "al_create_display");
         bindFunc(cast(void**)&al_destroy_display, "al_destroy_display");
         bindFunc(cast(void**)&al_get_current_display, "al_get_current_display");
@@ -209,14 +213,20 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_get_new_window_position, "al_get_new_window_position");
         bindFunc(cast(void**)&al_set_window_position, "al_set_window_position");
         bindFunc(cast(void**)&al_get_window_position, "al_get_window_position");
+        bindFunc(cast(void**)&al_set_window_constraints, "al_set_window_constraints");
+        bindFunc(cast(void**)&al_al_get_window_constraints, "al_get_window_constraints");
         bindFunc(cast(void**)&al_set_window_title, "al_set_window_title");
         bindFunc(cast(void**)&al_set_new_display_option, "al_set_new_display_option");
         bindFunc(cast(void**)&al_get_new_display_option, "al_get_new_display_option");
         bindFunc(cast(void**)&al_reset_new_display_options, "al_reset_new_display_options");
+        bindFunc(cast(void**)&al_set_display_option, "al_set_display_option");
         bindFunc(cast(void**)&al_get_display_option, "al_get_display_option");
         bindFunc(cast(void**)&al_hold_bitmap_drawing, "al_hold_bitmap_drawing");
         bindFunc(cast(void**)&al_is_bitmap_drawing_held, "al_is_bitmap_drawing_held");
+        bindFunc(cast(void**)&al_acknowledge_drawing_halt, "al_acknowledge_drawing_halt");
+        bindFunc(cast(void**)&al_acknowledge_drawing_resume, "al_acknowledge_drawing_resume");
         bindFunc(cast(void**)&al_clear_to_color, "al_clear_to_color");
+        bindFunc(cast(void**)&al_clear_depth_buffer, "al_clear_depth_buffer");
         bindFunc(cast(void**)&al_draw_pixel, "al_draw_pixel");
         bindFunc(cast(void**)&al_get_errno, "al_get_errno");
         bindFunc(cast(void**)&al_set_errno, "al_set_errno");
@@ -228,8 +238,10 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_get_event_source_data, "al_get_event_source_data");
         bindFunc(cast(void**)&al_create_event_queue, "al_create_event_queue");
         bindFunc(cast(void**)&al_destroy_event_queue, "al_destroy_event_queue");
+        bindFunc(cast(void**)&al_is_event_source_registered, "al_is_event_source_registered");
         bindFunc(cast(void**)&al_register_event_source, "al_register_event_source");
         bindFunc(cast(void**)&al_unregister_event_source, "al_unregister_event_source");
+        bindFunc(cast(void**)&al_pause_event_queue, "al_pause_event_queue");
         bindFunc(cast(void**)&al_is_event_queue_empty, "al_is_event_queue_empty");
         bindFunc(cast(void**)&al_get_next_event, "al_get_next_event");
         bindFunc(cast(void**)&al_peek_next_event, "al_peek_next_event");
@@ -249,6 +261,7 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_fseek, "al_fseek");
         bindFunc(cast(void**)&al_feof, "al_feof");
         bindFunc(cast(void**)&al_ferror, "al_ferror");
+        bindFunc(cast(void**)&al_ferrmsg, "al_ferrmsg");
         bindFunc(cast(void**)&al_fclearerr, "al_fclearerr");
         bindFunc(cast(void**)&al_fungetc, "al_fungetc");
         bindFunc(cast(void**)&al_fsize, "al_fsize");
@@ -263,8 +276,10 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_fwrite32le, "al_fwrite32le");
         bindFunc(cast(void**)&al_fwrite32be, "al_fwrite32be");
         bindFunc(cast(void**)&al_fgets, "al_fgets");
-       // bindFunc(cast(void**)&al_fget_ustr, "al_fget_ustr");
+        bindFunc(cast(void**)&al_fget_ustr, "al_fget_ustr");
         bindFunc(cast(void**)&al_fputs, "al_fputs");
+        bindFunc(cast(void**)&al_fprintf, "al_fprintf");
+        bindFunc(cast(void**)&al_vfprintf, "al_vfprintf");
         bindFunc(cast(void**)&al_fopen_fd, "al_fopen_fd");
         bindFunc(cast(void**)&al_make_temp_file, "al_make_temp_file");
         bindFunc(cast(void**)&al_fopen_slice, "al_fopen_slice");
@@ -292,6 +307,7 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_change_directory, "al_change_directory");
         bindFunc(cast(void**)&al_make_directory, "al_make_directory");
         bindFunc(cast(void**)&al_open_fs_entry, "al_open_fs_entry");
+        bindFunc(cast(void**)&al_for_each_fs_entry, "al_for_each_fs_entry");
         bindFunc(cast(void**)&al_get_fs_interface, "al_get_fs_interface");
         bindFunc(cast(void**)&al_set_fs_interface, "al_set_fs_interface");
         bindFunc(cast(void**)&al_set_standard_fs_interface, "al_set_standard_fs_interface");
@@ -344,6 +360,8 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_get_mouse_cursor_position, "al_get_mouse_cursor_position");
         bindFunc(cast(void**)&al_grab_mouse, "al_grab_mouse");
         bindFunc(cast(void**)&al_ungrab_mouse, "al_ungrab_mouse");
+        bindFunc(cast(void**)&al_set_mouse_wheel_precision, "al_set_mouse_wheel_precision");
+        bindFunc(cast(void**)&al_get_mouse_wheel_precision, "al_get_mouse_wheel_precision")
         bindFunc(cast(void**)&al_get_mouse_event_source, "al_get_mouse_event_source");
         bindFunc(cast(void**)&al_create_mouse_cursor, "al_create_mouse_cursor");
         bindFunc(cast(void**)&al_destroy_mouse_cursor, "al_destroy_mouse_cursor");
@@ -390,6 +408,7 @@ class DerelictAllegro5Loader : SharedLibLoader {
         bindFunc(cast(void**)&al_destroy_timer, "al_destroy_timer");
         bindFunc(cast(void**)&al_start_timer, "al_start_timer");
         bindFunc(cast(void**)&al_stop_timer, "al_stop_timer");
+        bindFunc(cast(void**)&al_resume_timer, "al_resume_timer");
         bindFunc(cast(void**)&al_get_timer_started, "al_get_timer_started");
         bindFunc(cast(void**)&al_get_timer_speed, "al_get_timer_speed");
         bindFunc(cast(void**)&al_set_timer_speed, "al_set_timer_speed");

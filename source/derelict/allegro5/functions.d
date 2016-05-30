@@ -190,11 +190,17 @@ extern(C) @nogc nothrow {
     alias da_al_merge_config_into = void function(ALLEGRO_CONFIG*,const(ALLEGRO_CONFIG)*);
     alias da_al_merge_config = ALLEGRO_CONFIG* function(const(ALLEGRO_CONFIG)*,const(ALLEGRO_CONFIG)*);
     alias da_al_destroy_config = void function(ALLEGRO_CONFIG*);
+    alias da_al_remove_config_section = bool function(ALLEGRO_CONFIG*,const(char)*,const(char)*);
+    alias da_al_remove_config_key = bool function(ALLEGRO_CONFIG*,const(char)*,const(char)*);
 
     alias da_al_get_first_config_section = const(char)* function(const(ALLEGRO_CONFIG)*,ALLEGRO_CONFIG_SECTION**);
     alias da_al_get_next_config_section = const(char)* function(ALLEGRO_CONFIG_SECTION**);
     alias da_al_get_first_config_entry = const(char)* function(const(ALLEGRO_CONFIG)*,const(char)*,ALLEGRO_CONFIG_ENTRY**);
     alias da_al_get_next_config_entry = const(char)* function(ALLEGRO_CONFIG_ENTRY**);
+
+    // cpu.h
+    alias da_al_get_cpu_count = int function();
+    alias da_al_get_ram_size = int function();
 
     // display.h
     alias da_al_set_new_display_refresh_rate = void function(int);
@@ -207,8 +213,8 @@ extern(C) @nogc nothrow {
     alias da_al_get_display_format = int function(ALLEGRO_DISPLAY*);
     alias da_al_get_display_refresh_rate = int function(ALLEGRO_DISPLAY*);
     alias da_al_get_display_flags = int function(ALLEGRO_DISPLAY*);
+    alias da_al_get_display_orientation = int function(ALLEGRO_DISPLAY*);
     alias da_al_set_display_flag = bool function(ALLEGRO_DISPLAY*,int,bool);
-    //alias da_al_toggle_display_flag = bool function(ALLEGRO_DISPLAY*,int,bool);
 
     alias da_al_create_display = ALLEGRO_DISPLAY* function(int,int);
     alias da_al_destroy_display = void function(ALLEGRO_DISPLAY*);
@@ -237,19 +243,26 @@ extern(C) @nogc nothrow {
     alias da_al_get_new_window_position = void function(int*,int*);
     alias da_al_set_window_position = void function(ALLEGRO_DISPLAY*,int,int);
     alias da_al_get_window_position = void function(ALLEGRO_DISPLAY*,int*,int*);
+    alias da_al_set_window_constraints = bool function(ALLEGRO_DISPLAY*,int,int,int,int);
+    alias da_al_get_window_constraints = bool function(ALLEGRO_DISPLAY*,int*,int*,int*,int*);
 
     alias da_al_set_window_title = void function(ALLEGRO_DISPLAY*,const(char)*);
 
     alias da_al_set_new_display_option = void function(int,int,int);
     alias da_al_get_new_display_option = int function(int,int*);
     alias da_al_reset_new_display_options = void function();
+    alias da_al_set_display_option = void function(ALLEGRO_DISPLAY*,int,int);
     alias da_al_get_display_option = int function(ALLEGRO_DISPLAY*,int);
 
     alias da_al_hold_bitmap_drawing = void function(bool);
     alias da_al_is_bitmap_drawing_held = bool function();
 
+    alias da_al_acknowledge_drawing_halt = void function(ALLEGRO_DISPLAY*);
+    alias da_al_acknowledge_drawing_resume = void function(ALLEGRO_DISPLAY*);
+
     // drawing.h
     alias da_al_clear_to_color = void function(ALLEGRO_COLOR);
+    alias da_al_clear_depth_buffer = void function(float);
     alias da_al_draw_pixel = void function(float,float,ALLEGRO_COLOR);
 
     // error.h
@@ -266,8 +279,10 @@ extern(C) @nogc nothrow {
 
     alias da_al_create_event_queue = ALLEGRO_EVENT_QUEUE* function();
     alias da_al_destroy_event_queue = void function(ALLEGRO_EVENT_QUEUE*);
+    alias da_al_is_event_source_registered = bool function(ALLEGRO_EVENT_QUEUE*,ALLEGRO_EVENT_SOURCE*);
     alias da_al_register_event_source = void function(ALLEGRO_EVENT_QUEUE*,ALLEGRO_EVENT_SOURCE*);
     alias da_al_unregister_event_source = void function(ALLEGRO_EVENT_QUEUE*,ALLEGRO_EVENT_SOURCE*);
+    alias da_al_pause_event_queue = void function(ALLEGRO_EVENT_QUEUE*);
     alias da_al_is_event_queue_empty = bool function(ALLEGRO_EVENT_QUEUE*);
     alias da_al_get_next_event = bool function(ALLEGRO_EVENT_QUEUE*,ALLEGRO_EVENT*);
     alias da_al_peek_next_event = bool function(ALLEGRO_EVENT_QUEUE*,ALLEGRO_EVENT*);
@@ -289,6 +304,7 @@ extern(C) @nogc nothrow {
     alias da_al_fseek = bool function(ALLEGRO_FILE*,long,int);
     alias da_al_feof = bool function(ALLEGRO_FILE*);
     alias da_al_ferror = bool function(ALLEGRO_FILE*);
+    alias da_al_ferrmsg = const(char)* function(ALLEGRO_FILE*);
     alias da_al_fclearerr = void function(ALLEGRO_FILE*);
     alias da_al_fungetc = int function(ALLEGRO_FILE*,int);
     alias da_al_fsize = long function(ALLEGRO_FILE*);
@@ -304,8 +320,10 @@ extern(C) @nogc nothrow {
     alias da_al_fwrite32le = size_t function(ALLEGRO_FILE*,int);
     alias da_al_fwrite32be = size_t function(ALLEGRO_FILE*,int);
     alias da_al_fgets = char* function(ALLEGRO_FILE*);
-    //alias da_al_fget_ustr = ALLEGRO_USTR* function(ALLEGRO_FILE*);
+    alias da_al_fget_ustr = ALLEGRO_USTR* function(ALLEGRO_FILE*);
     alias da_al_fputs = int function(ALLEGRO_FILE*,const(char)*);
+    alias da_al_fprintf = int function(ALLEGRO_FILE*,const(char)*,...);
+    alias da_al_vfprintf = int function(ALLEGRO_FILE*,const(char)*,va_list);
 
     alias da_al_fopen_fd = ALLEGRO_FILE* function(int,const(char)*);
     alias da_al_make_temp_file = ALLEGRO_FILE* function(const(char)*,ALLEGRO_PATH**);
@@ -342,6 +360,8 @@ extern(C) @nogc nothrow {
     alias da_al_make_directory = bool function(const(char)*);
 
     alias da_al_open_fs_entry = ALLEGRO_FILE* function(ALLEGRO_FS_ENTRY*,const(char)*);
+
+    alias da_al_for_each_fs_entry = int function(ALLEGRO_FS_ENTRY*,foreachCallback,void*);
 
     alias da_al_get_fs_interface = const(ALLEGRO_FS_INTERFACE)* function();
     alias da_al_set_fs_interface = void function(const(ALLEGRO_FS_INTERFACE)*);
@@ -417,6 +437,8 @@ extern(C) @nogc nothrow {
     alias da_al_get_mouse_cursor_position = bool function(int*,int*);
     alias da_al_grab_mouse = bool function(ALLEGRO_DISPLAY*);
     alias da_al_ungrab_mouse = bool function();
+    alias da_al_set_mouse_wheel_precision = void function(int);
+    alias da_al_get_mouse_wheel_precision = int function();
 
     alias da_al_get_mouse_event_source = ALLEGRO_EVENT_SOURCE* function();
 
@@ -480,6 +502,7 @@ extern(C) @nogc nothrow {
     alias da_al_destroy_timer = void function(ALLEGRO_TIMER*);
     alias da_al_start_timer = void function(ALLEGRO_TIMER*);
     alias da_al_stop_timer = void function(ALLEGRO_TIMER*);
+    alias da_al_resume_timer = void function(const(ALLEGRO_TIMER)*);
     alias da_al_get_timer_started = bool function(const(ALLEGRO_TIMER)*);
     alias da_al_get_timer_speed = double function(const(ALLEGRO_TIMER)*);
     alias da_al_set_timer_speed = void function(ALLEGRO_TIMER*,double);
@@ -674,10 +697,14 @@ __gshared {
     da_al_merge_config_into al_merge_config_into;
     da_al_merge_config al_merge_config;
     da_al_destroy_config al_destroy_config;
+    da_al_remove_config_section al_remove_config_section;
+    da_al_remove_config_key al_remove_config_key;
     da_al_get_first_config_section al_get_first_config_section;
     da_al_get_next_config_section al_get_next_config_section;
     da_al_get_first_config_entry al_get_first_config_entry;
     da_al_get_next_config_entry al_get_next_config_entry;
+    da_al_get_cpu_count al_get_cpu_count;
+    da_al_get_ram_size al_get_ram_size;
     da_al_set_new_display_refresh_rate al_set_new_display_refresh_rate;
     da_al_set_new_display_flags al_set_new_display_flags;
     da_al_get_new_display_refresh_rate al_get_new_display_refresh_rate;
@@ -687,8 +714,8 @@ __gshared {
     da_al_get_display_format al_get_display_format;
     da_al_get_display_refresh_rate al_get_display_refresh_rate;
     da_al_get_display_flags al_get_display_flags;
+    da_al_get_display_orientation al_get_display_orientation;
     da_al_set_display_flag al_set_display_flag;
-    //da_al_toggle_display_flag al_toggle_display_flag;
     da_al_create_display al_create_display;
     da_al_destroy_display al_destroy_display;
     da_al_get_current_display al_get_current_display;
@@ -711,14 +738,20 @@ __gshared {
     da_al_get_new_window_position al_get_new_window_position;
     da_al_set_window_position al_set_window_position;
     da_al_get_window_position al_get_window_position;
+    da_al_set_window_constraints al_set_window_constraints;
+    da_al_get_window_constraints al_get_window_constraints;
     da_al_set_window_title al_set_window_title;
     da_al_set_new_display_option al_set_new_display_option;
     da_al_get_new_display_option al_get_new_display_option;
     da_al_reset_new_display_options al_reset_new_display_options;
+    da_al_set_display_option al_set_display_option;
     da_al_get_display_option al_get_display_option;
     da_al_hold_bitmap_drawing al_hold_bitmap_drawing;
     da_al_is_bitmap_drawing_held al_is_bitmap_drawing_held;
+    da_al_acknowledge_drawing_halt al_acknowledge_drawing_halt;
+    da_al_acknowledge_drawing_resume al_acknowledge_drawing_resume;
     da_al_clear_to_color al_clear_to_color;
+    da_al_clear_depth_buffer al_clear_depth_buffer;
     da_al_draw_pixel al_draw_pixel;
     da_al_get_errno al_get_errno;
     da_al_set_errno al_set_errno;
@@ -730,8 +763,10 @@ __gshared {
     da_al_get_event_source_data al_get_event_source_data;
     da_al_create_event_queue al_create_event_queue;
     da_al_destroy_event_queue al_destroy_event_queue;
+    da_al_is_event_source_registered al_is_event_source_registered;
     da_al_register_event_source al_register_event_source;
     da_al_unregister_event_source al_unregister_event_source;
+    da_al_pause_event_queue al_pause_event_queue;
     da_al_is_event_queue_empty al_is_event_queue_empty;
     da_al_get_next_event al_get_next_event;
     da_al_peek_next_event al_peek_next_event;
@@ -751,6 +786,7 @@ __gshared {
     da_al_fseek al_fseek;
     da_al_feof al_feof;
     da_al_ferror al_ferror;
+    da_al_ferrmsg al_ferrmsg;
     da_al_fclearerr al_fclearerr;
     da_al_fungetc al_fungetc;
     da_al_fsize al_fsize;
@@ -765,8 +801,10 @@ __gshared {
     da_al_fwrite32le al_fwrite32le;
     da_al_fwrite32be al_fwrite32be;
     da_al_fgets al_fgets;
-    //da_al_fget_ustr al_fget_ustr;
+    da_al_fget_ustr al_fget_ustr;
     da_al_fputs al_fputs;
+    da_al_fprintf al_fprintf;
+    da_al_vfprintf al_vfprintf;
     da_al_fopen_fd al_fopen_fd;
     da_al_make_temp_file al_make_temp_file;
     da_al_fopen_slice al_fopen_slice;
@@ -794,6 +832,7 @@ __gshared {
     da_al_change_directory al_change_directory;
     da_al_make_directory al_make_directory;
     da_al_open_fs_entry al_open_fs_entry;
+    da_al_for_each_fs_entry al_for_each_fs_entry;
     da_al_get_fs_interface al_get_fs_interface;
     da_al_set_fs_interface al_set_fs_interface;
     da_al_set_standard_fs_interface al_set_standard_fs_interface;
@@ -846,6 +885,8 @@ __gshared {
     da_al_get_mouse_cursor_position al_get_mouse_cursor_position;
     da_al_grab_mouse al_grab_mouse;
     da_al_ungrab_mouse al_ungrab_mouse;
+    da_al_set_mouse_wheel_precision al_set_mouse_wheel_precision;
+    da_al_get_mouse_wheel_precision al_get_mouse_wheel_precision;
     da_al_get_mouse_event_source al_get_mouse_event_source;
     da_al_create_mouse_cursor al_create_mouse_cursor;
     da_al_destroy_mouse_cursor al_destroy_mouse_cursor;
@@ -892,6 +933,7 @@ __gshared {
     da_al_destroy_timer al_destroy_timer;
     da_al_start_timer al_start_timer;
     da_al_stop_timer al_stop_timer;
+    da_al_resume_timer al_resume_timer;
     da_al_get_timer_started al_get_timer_started;
     da_al_get_timer_speed al_get_timer_speed;
     da_al_set_timer_speed al_set_timer_speed;
