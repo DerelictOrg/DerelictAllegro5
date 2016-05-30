@@ -831,6 +831,23 @@ struct ALLEGRO_STATE {
     ubyte[1024] _tls = void;
 }
 
+// touch_input.h
+struct ALLEGRO_TOUCH_INPUT;
+
+struct ALLEGRO_TOUCH_STATE {
+    int id;
+    float x, y;
+    float dx, dy;
+    bool primary;
+    ALLEGRO_DISPLAY* display;
+}
+
+enum ALLEGRO_TOUCH_INPUT_MAX_TOUCH_COUNT = 16;
+
+struct ALLEGRO_TOUCH_INPUT_STATE {
+    ALLEGRO_TOUCH_STATE[ALLEGRO_TOUCH_INPUT_MAX_TOUCH_COUNT] touches = void;
+}
+
 // transformations.h
 struct ALLEGRO_TRANSFORM {
     float[4][4] m;

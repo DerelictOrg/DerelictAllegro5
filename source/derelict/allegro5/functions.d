@@ -515,19 +515,38 @@ extern(C) @nogc nothrow {
     alias da_al_store_state = void function(ALLEGRO_STATE*,int);
     alias da_al_restore_state = void function(const(ALLEGRO_STATE)*);
 
+    // touch_input.h
+    alias da_al_is_touch_input_installed = bool function();
+    alias da_al_install_touch_input = bool function();
+    alias da_al_uninstall_touch_input = void function();
+    alias da_al_get_touch_input_state = void function(ALLEGRO_TOUCH_INPUT_STATE*);
+    alias da_al_get_touch_input_event_source = ALLEGRO_EVENT_SOURCE* function();
+
     // transformations.h
     alias da_al_use_transform = void function(const(ALLEGRO_TRANSFORM)*);
+    alias da_al_use_projection_transform = void function(const(ALLEGRO_TRANSFORM)*);
     alias da_al_copy_transform = void function(ALLEGRO_TRANSFORM*,const(ALLEGRO_TRANSFORM)*);
     alias da_al_identity_transform = void function(ALLEGRO_TRANSFORM*);
     alias da_al_build_transform = void function(ALLEGRO_TRANSFORM*,float,float,float,float,float);
+    alias da_al_build_camera_transform = void function(ALLEGRO_TRANSFORM*,float,float,float,float,float,float,float,float,float);
     alias da_al_translate_transform = void function(ALLEGRO_TRANSFORM*,float,float);
+    alias da_al_translate_transform_3d = void function(ALLEGRO_TRANSFORM*,float,float,float);
     alias da_al_rotate_transform = void function(ALLEGRO_TRANSFORM*,float);
+    alias da_al_rotate_transform_3d = void function(ALLEGRO_TRANSFORM*,float,float,float,float);
     alias da_al_scale_transform = void function(ALLEGRO_TRANSFORM*,float,float);
+    alias da_al_scale_transform_3d = void function(ALLEGRO_TRANSFORM*,float,float,float);
     alias da_al_transform_coordinates = void function(const(ALLEGRO_TRANSFORM)*,float*,float*);
+    alias da_al_transform_coordinates_3d = void function(const(ALLEGRO_TRANSFORM)*,float*,float*,float*);
     alias da_al_compose_transform = void function(ALLEGRO_TRANSFORM*,const(ALLEGRO_TRANSFORM)*);
     alias da_al_get_current_transform = const(ALLEGRO_TRANSFORM)* function();
+    alias da_al_get_current_inverse_transform = const(ALLEGRO_TRANSFORM)* function();
+    alias da_al_get_current_projection_transform = const(ALLEGRO_TRANSFORM)* function();
     alias da_al_invert_transform = void function(ALLEGRO_TRANSFORM*);
     alias da_al_check_inverse = int function(const(ALLEGRO_TRANSFORM)*,float);
+    alias da_al_orthographic_transform = void function(ALLEGRO_TRANSFORM*,float,float,float,float,float,float);
+    alias da_al_perspective_transform = void function(ALLEGRO_TRANSFORM*,float,float,float,float,float,float);
+    alias da_al_horizontal_shear_transform = void function(ALLEGRO_TRANSFORM*,float);
+    alias da_al_vertical_shear_transform = void function(ALLEGRO_TRANSFORM*,float);
 
     // utf8.h
     alias da_al_ustr_new = ALLEGRO_USTR* function(const(char)*);
@@ -539,37 +558,47 @@ extern(C) @nogc nothrow {
     alias da_al_cstr_dup = char* function(const(ALLEGRO_USTR)*);
     alias da_al_ustr_dup = ALLEGRO_USTR* function(const(ALLEGRO_USTR)*);
     alias da_al_ustr_dup_substr = ALLEGRO_USTR* function(const(ALLEGRO_USTR)*,int,int);
+
     alias da_al_ustr_empty_string = ALLEGRO_USTR* function();
+
     alias da_al_ref_cstr = const(ALLEGRO_USTR)* function(ALLEGRO_USTR_INFO*,const(char)*);
     alias da_al_ref_buffer = const(ALLEGRO_USTR)* function(ALLEGRO_USTR_INFO*,const(char)*,size_t);
     alias da_al_ref_ustr = const(ALLEGRO_USTR)* function(ALLEGRO_USTR_INFO*,const(ALLEGRO_USTR)*,int,int);
+
     alias da_al_ustr_size = size_t function(const(ALLEGRO_USTR)*);
     alias da_al_ustr_length = size_t function(const(ALLEGRO_USTR)*);
     alias da_al_ustr_offset = int function(const(ALLEGRO_USTR)*,int);
     alias da_al_ustr_next = bool function(const(ALLEGRO_USTR)*,int*);
     alias da_al_ustr_prev = bool function(const(ALLEGRO_USTR)*,int*);
+
     alias da_al_ustr_get = int function(const(ALLEGRO_USTR)*,int);
     alias da_al_ustr_get_next = int function(const(ALLEGRO_USTR)*,int*);
     alias da_al_ustr_prev_get = int function(const(ALLEGRO_USTR)*,int*);
+
     alias da_al_ustr_insert = bool function(ALLEGRO_USTR*,int,const(ALLEGRO_USTR)*);
     alias da_al_ustr_insert_cstr = bool function(ALLEGRO_USTR*,int,const(char)*);
     alias da_al_ustr_insert_chr = size_t function(ALLEGRO_USTR*,int,int);
+
     alias da_al_ustr_append = bool function(ALLEGRO_USTR*,const(ALLEGRO_USTR)*);
     alias da_al_ustr_append_cstr = bool function(ALLEGRO_USTR*,const(char)*);
     alias da_al_ustr_append_chr = size_t function(ALLEGRO_USTR*,int);
     alias da_al_ustr_appendf = bool function(ALLEGRO_USTR*,const(char)*,...);
     alias da_al_ustr_vappendf = bool function(ALLEGRO_USTR*,const(char)*,va_list);
+
     alias da_al_ustr_remove_chr = bool function(ALLEGRO_USTR*,int);
     alias da_al_ustr_remove_range = bool function(ALLEGRO_USTR*,int,int);
     alias da_al_ustr_truncate = bool function(ALLEGRO_USTR*,int);
     alias da_al_ustr_ltrim_ws = bool function(ALLEGRO_USTR*);
     alias da_al_ustr_rtrim_ws = bool function(ALLEGRO_USTR*);
     alias da_al_ustr_trim_ws = bool function(ALLEGRO_USTR*);
+
     alias da_al_ustr_assign = bool function(ALLEGRO_USTR*,const(ALLEGRO_USTR)*);
     alias da_al_ustr_assign_substr = bool function(ALLEGRO_USTR*,const(ALLEGRO_USTR)*,int,int);
     alias da_al_ustr_assign_cstr = bool function(ALLEGRO_USTR*,const(char)*);
+
     alias da_al_ustr_set_chr = size_t function(ALLEGRO_USTR*,int,int);
     alias da_al_ustr_replace_range = bool function(ALLEGRO_USTR*,int,int,const(ALLEGRO_USTR)*);
+
     alias da_al_ustr_find_chr = int function(const(ALLEGRO_USTR)*,int,int);
     alias da_al_ustr_rfind_chr = int function(const(ALLEGRO_USTR)*,int,int);
     alias da_al_ustr_find_set = int function(const(ALLEGRO_USTR)*,int,const(ALLEGRO_USTR)*);
@@ -582,6 +611,7 @@ extern(C) @nogc nothrow {
     alias da_al_ustr_rfind_cstr = int function(const(ALLEGRO_USTR)*,int,const(char)*);
     alias da_al_ustr_find_replace = bool function(ALLEGRO_USTR*,int,const(ALLEGRO_USTR)*,const(ALLEGRO_USTR)*);
     alias da_al_ustr_find_replace_cstr = bool function(ALLEGRO_USTR*,int,const(char)*,const(char)*);
+
     alias da_al_ustr_equal = bool function(const(ALLEGRO_USTR)*,const(ALLEGRO_USTR)*);
     alias da_al_ustr_compare = int function(const(ALLEGRO_USTR)*,const(ALLEGRO_USTR)*);
     alias da_al_ustr_ncompare = int function(const(ALLEGRO_USTR)*,const(ALLEGRO_USTR)*);
@@ -589,8 +619,10 @@ extern(C) @nogc nothrow {
     alias da_al_ustr_has_prefix_cstr = bool function(const(ALLEGRO_USTR)*,const(char)*);
     alias da_al_ustr_has_suffix = bool function(const(ALLEGRO_USTR)*,const(ALLEGRO_USTR)*);
     alias da_al_ustr_has_suffix_cstr = bool function(const(ALLEGRO_USTR)*,const(char)*);
+
     alias da_al_utf8_width = size_t function(int);
     alias da_al_utf8_encode = size_t function(char*,int);
+
     alias da_al_ustr_new_from_utf16 = ALLEGRO_USTR* function(const(ushort)*);
     alias da_al_ustr_size_utf16 = size_t function(const(ALLEGRO_USTR)*);
     alias da_al_ustr_encode_utf16 = size_t function(const(ALLEGRO_USTR)*,ushort*,size_t);
@@ -943,18 +975,35 @@ __gshared {
     da_al_get_timer_event_source al_get_timer_event_source;
     da_al_store_state al_store_state;
     da_al_restore_state al_restore_state;
+    da_al_is_touch_input_installed al_is_touch_input_installed;
+    da_al_install_touch_input al_install_touch_input;
+    da_al_uninstall_touch_input al_uninstall_touch_input;
+    da_al_get_touch_input_state al_get_touch_input_state;
+    da_al_get_touch_input_event_source al_get_touch_input_event_source;
     da_al_use_transform al_use_transform;
+    da_al_use_projection_transform al_use_projection_transform;
     da_al_copy_transform al_copy_transform;
     da_al_identity_transform al_identity_transform;
     da_al_build_transform al_build_transform;
+    da_al_build_camera_transform al_build_camera_transform;
     da_al_translate_transform al_translate_transform;
+    da_al_translate_transform_3d al_translate_transform_3d;
     da_al_rotate_transform al_rotate_transform;
+    da_al_rotate_transform_3d al_rotate_transform_3d;
     da_al_scale_transform al_scale_transform;
+    da_al_scale_transform_3d al_scale_transform_3d;
     da_al_transform_coordinates al_transform_coordinates;
+    da_al_transform_coordinates_3d al_transform_coordinates_3d;
     da_al_compose_transform al_compose_transform;
     da_al_get_current_transform al_get_current_transform;
+    da_al_get_current_inverse_transform al_get_current_inverse_transform;
+    da_al_get_current_projection_transform al_get_current_projection_transform;
     da_al_invert_transform al_invert_transform;
     da_al_check_inverse al_check_inverse;
+    da_al_orthographic_transform al_orthographic_transform;
+    da_al_perspective_transform al_perspective_transform;
+    da_al_horizontal_shear_transform al_horizontal_shear_transform;
+    da_al_vertical_shear_transform al_vertical_shear_transform;
     da_al_ustr_new al_ustr_new;
     da_al_ustr_new_from_buffer al_ustr_new_from_buffer;
     da_al_ustr_newf al_ustr_newf;
