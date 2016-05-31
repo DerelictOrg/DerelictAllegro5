@@ -480,6 +480,29 @@ extern(C) @nogc nothrow {
 
     alias da_al_make_path_canonical = bool function(ALLEGRO_PATH*);
 
+    // render_state.h
+    alias da_al_set_render_state = void function(ALLEGRO_RENDER_STATE,int);
+
+    // shader.h
+    alias da_al_create_shader = ALLEGRO_SHADER* function(ALLEGRO_SHADER_PLATFORM);
+    alias da_al_attach_shader_source = bool function(ALLEGRO_SHADER*,ALLEGRO_SHADER_TYPE,const(char)*);
+    alias da_al_attach_shader_source_file = bool function(ALLEGRO_SHADER*,ALLEGRO_SHADER_TYPE,const(char)*);
+    alias da_al_build_shader = bool function(ALLEGRO_SHADER*);
+    alias da_al_get_shader_log = const(char)* function(ALLEGRO_SHADER*);
+    alias da_al_get_shader_platform = ALLEGRO_SHADER_PLATFORM function(ALLEGRO_SHADER*);
+    alias da_al_use_shader = bool function(ALLEGRO_SHADER*);
+    alias da_al_destroy_shader = bool function(ALLEGRO_SHADER*);
+
+    alias da_al_set_shader_sampler = bool function(const(char)*,ALLEGRO_BITMAP*,int);
+    alias da_al_set_shader_matrix = bool function(const(char)*,ALLEGRO_TRANSFORM*);
+    alias da_al_set_shader_int = bool function(const(char)*,int);
+    alias da_al_set_shader_float = bool function(const(char)*,float);
+    alias da_al_set_shader_int_vector = bool function(const(char)*,int,int*,int);
+    alias da_al_set_shader_float_vector = bool function(const(char)*,int,float*,int);
+    alias da_al_set_shader_bool = bool function(const(char)*,bool);
+
+    alias da_al_get_default_shader_source = const(char)* function(ALLEGRO_SHADER_PLATFORM,ALLEGRO_SHADER_TYPE);
+
     // system.h
     alias da_al_install_system = bool function(int,int function(void function()));
     alias da_al_uninstall_system = void function();
@@ -949,6 +972,23 @@ __gshared {
     da_al_set_path_extension al_set_path_extension;
     da_al_get_path_basename al_get_path_basename;
     da_al_make_path_canonical al_make_path_canonical;
+    da_al_set_render_state al_set_render_state;
+    da_al_create_shader al_create_shader;
+    da_al_attach_shader_source al_attach_shader_source;
+    da_al_attach_shader_source_file al_attach_shader_source_file;
+    da_al_build_shader al_build_shader;
+    da_al_get_shader_log al_get_shader_log;
+    da_al_get_shader_platform al_get_shader_platform;
+    da_al_use_shader al_use_shader;
+    da_al_destroy_shader al_destroy_shader;
+    da_al_set_shader_sampler al_set_shader_sampler;
+    da_al_set_shader_matrix al_set_shader_matrix;
+    da_al_set_shader_int al_set_shader_int;
+    da_al_set_shader_float al_set_shader_float;
+    da_al_set_shader_int_vector al_set_shader_int_vector;
+    da_al_set_shader_float_vector al_set_shader_float_vector;
+    da_al_set_shader_bool al_set_shader_bool;
+    da_al_get_default_shader_source al_get_default_shader_source;
     da_al_install_system al_install_system;
     da_al_uninstall_system al_uninstall_system;
     da_al_is_system_installed al_is_system_installed;
