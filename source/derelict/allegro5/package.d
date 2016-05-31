@@ -10,4 +10,5 @@ public import derelict.allegro5.acodec,
               derelict.allegro5.memfile,
               derelict.allegro5.physfs,
               derelict.allegro5.primitives,
-              derelict.allegro5.ttf;
+              derelict.allegro5.ttf,
+              derelict.allegro5.video;
