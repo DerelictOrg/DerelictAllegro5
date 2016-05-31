@@ -850,6 +850,14 @@ enum {
     ALLEGRO_MASK_RGBA = (ALLEGRO_MASK_RGB | ALLEGRO_MASK_ALPHA),
 }
 
+// threads.h
+struct ALLEGRO_THREAD;
+struct ALLEGRO_MUTEX;
+struct ALLEGRO_COND;
+
+// Callbac for al_create_thread
+extern(C) nothrow alias threadProc = void* function(ALLEGRO_THREAD*,void*);
+
 // timer.h
 @nogc nothrow {
     double ALLEGRO_USECS_TO_SECS(double x) { return x / 1_000_000; }

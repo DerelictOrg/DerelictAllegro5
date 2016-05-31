@@ -520,6 +520,28 @@ extern(C) @nogc nothrow {
 
     alias da_al_inhibit_screensaver = bool function(bool);
 
+    // threads.h
+    alias da_al_create_thread = ALLEGRO_THREAD* function(threadProc,void*);
+    alias da_al_start_thread = void function(ALLEGRO_THREAD*);
+    alias da_al_join_thread = void function(ALLEGRO_THREAD*,void**);
+    alias da_al_set_thread_should_stop = void function(ALLEGRO_THREAD*);
+    alias da_al_get_thread_should_stop = void function(ALLEGRO_THREAD*);
+    alias da_al_destroy_thread = void function(ALLEGRO_THREAD*);
+    alias da_al_run_detached_thread = void function(threadProc,void*);
+
+    alias da_al_create_mutex = ALLEGRO_MUTEX* function();
+    alias da_al_create_mutex_recursive = ALLEGRO_MUTEX* function();
+    alias da_al_lock_mutex = void function(ALLEGRO_MUTEX*);
+    alias da_al_unlock_mutex = void function(ALLEGRO_MUTEX*);
+    alias da_al_destroy_mutex = void function(ALLEGRO_MUTEX*);
+
+    alias da_al_create_cond = ALLEGRO_COND* function();
+    alias da_al_destroy_cond = void function(ALLEGRO_COND*);
+    alias da_al_wait_cond = void function(ALLEGRO_COND*,ALLEGRO_MUTEX*);
+    alias da_al_wait_cond_until = int function(ALLEGRO_COND*,ALLEGRO_MUTEX*,const(ALLEGRO_TIMEOUT)*);
+    alias da_al_broadcast_cond = void function(ALLEGRO_COND*);
+    alias da_al_signal_cond = void function(ALLEGRO_COND*);
+
     // timer.h
     alias da_al_create_timer = ALLEGRO_TIMER* function(double);
     alias da_al_destroy_timer = void function(ALLEGRO_TIMER*);
@@ -1001,6 +1023,24 @@ __gshared {
     da_al_get_org_name al_get_org_name;
     da_al_get_app_name al_get_app_name;
     da_al_inhibit_screensaver al_inhibit_screensaver;
+    da_al_create_thread al_create_thread;
+    da_al_start_thread al_start_thread;
+    da_al_join_thread al_join_thread;
+    da_al_set_thread_should_stop al_set_thread_should_stop;
+    da_al_get_thread_should_stop al_get_thread_should_stop;
+    da_al_destroy_thread al_destroy_thread;
+    da_al_run_detached_thread al_run_detached_thread;
+    da_al_create_mutex al_create_mutex;
+    da_al_create_mutex_recursive al_create_mutex_recursive;
+    da_al_lock_mutex al_lock_mutex;
+    da_al_unlock_mutex al_unlock_mutex;
+    da_al_destroy_mutex al_destroy_mutex;
+    da_al_create_cond al_create_cond;
+    da_al_destroy_cond al_destroy_cond;
+    da_al_wait_cond al_wait_cond;
+    da_al_wait_cond_until al_wait_cond_until;
+    da_al_broadcast_cond al_broadcast_cond;
+    da_al_signal_cond al_signal_cond;
     da_al_create_timer al_create_timer;
     da_al_destroy_timer al_destroy_timer;
     da_al_start_timer al_start_timer;
