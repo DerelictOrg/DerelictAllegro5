@@ -49,44 +49,84 @@ struct ALLEGRO_MENU_INFO {
 }
 
 enum {
-   ALLEGRO_FILECHOOSER_FILE_MUST_EXIST = 1,
-   ALLEGRO_FILECHOOSER_SAVE = 2,
-   ALLEGRO_FILECHOOSER_FOLDER = 4,
-   ALLEGRO_FILECHOOSER_PICTURES = 8,
-   ALLEGRO_FILECHOOSER_SHOW_HIDDEN = 16,
-   ALLEGRO_FILECHOOSER_MULTIPLE = 32
+    ALLEGRO_FILECHOOSER_FILE_MUST_EXIST = 1,
+    ALLEGRO_FILECHOOSER_SAVE = 2,
+    ALLEGRO_FILECHOOSER_FOLDER = 4,
+    ALLEGRO_FILECHOOSER_PICTURES = 8,
+    ALLEGRO_FILECHOOSER_SHOW_HIDDEN = 16,
+    ALLEGRO_FILECHOOSER_MULTIPLE = 32
 }
 
 enum {
-   ALLEGRO_MESSAGEBOX_WARN = 1<<0,
-   ALLEGRO_MESSAGEBOX_ERROR = 1<<1,
-   ALLEGRO_MESSAGEBOX_OK_CANCEL = 1<<2,
-   ALLEGRO_MESSAGEBOX_YES_NO = 1<<3,
-   ALLEGRO_MESSAGEBOX_QUESTION = 1<<4
+    ALLEGRO_MESSAGEBOX_WARN = 1<<0,
+    ALLEGRO_MESSAGEBOX_ERROR = 1<<1,
+    ALLEGRO_MESSAGEBOX_OK_CANCEL = 1<<2,
+    ALLEGRO_MESSAGEBOX_YES_NO = 1<<3,
+    ALLEGRO_MESSAGEBOX_QUESTION = 1<<4
 }
 
 enum {
-   ALLEGRO_TEXTLOG_NO_CLOSE = 1<<0,
-   ALLEGRO_TEXTLOG_MONOSPACE = 1<<1
+    ALLEGRO_TEXTLOG_NO_CLOSE = 1<<0,
+    ALLEGRO_TEXTLOG_MONOSPACE = 1<<1
 }
 
 enum {
-   ALLEGRO_EVENT_NATIVE_DIALOG_CLOSE = 600
+    ALLEGRO_EVENT_NATIVE_DIALOG_CLOSE = 600
 }
+
+enum {
+    ALLEGRO_MENU_ITEM_ENABLED            = 0,
+    ALLEGRO_MENU_ITEM_CHECKBOX           = 1,
+    ALLEGRO_MENU_ITEM_CHECKED            = 2,
+    ALLEGRO_MENU_ITEM_DISABLED           = 4
+};
 
 extern(C) @nogc nothrow {
     alias da_al_init_native_dialog_addon = bool function();
     alias da_al_shutdown_native_dialog_addon = void function();
-    alias da_al_create_native_file_dialog = ALLEGRO_FILECHOOSER* function(const(char)*, const(char)*, const(char)*, int);
-    alias da_al_show_native_file_dialog = bool function(ALLEGRO_DISPLAY*, ALLEGRO_FILECHOOSER*);
+
+    alias da_al_create_native_file_dialog = ALLEGRO_FILECHOOSER* function(const(char)*,const(char)*,const(char)*,int);
+    alias da_al_show_native_file_dialog = bool function(ALLEGRO_DISPLAY*,ALLEGRO_FILECHOOSER*);
     alias da_al_get_native_file_dialog_count = int function(const(ALLEGRO_FILECHOOSER)*);
-    alias da_al_get_native_file_dialog_path = const(char)* function(const(ALLEGRO_FILECHOOSER)*, size_t);
+    alias da_al_get_native_file_dialog_path = const(char)* function(const(ALLEGRO_FILECHOOSER)*,size_t);
     alias da_al_destroy_native_file_dialog = void function(ALLEGRO_FILECHOOSER*);
-    alias da_al_show_native_message_box = int function(ALLEGRO_DISPLAY*, const(char)*, const(char)*, const(char)*, const(char)*, int);
-    alias da_al_open_native_text_log = ALLEGRO_TEXTLOG* function(const(char)*, int);
+
+    alias da_al_show_native_message_box = int function(ALLEGRO_DISPLAY*,const(char)*,const(char)*,const(char)*,const(char)*,int);
+
+    alias da_al_open_native_text_log = ALLEGRO_TEXTLOG* function(const(char)*,int);
     alias da_al_close_native_text_log = void function(ALLEGRO_TEXTLOG*);
-    alias da_al_append_native_text_log = void function(ALLEGRO_TEXTLOG*, const(char)*, ...);
+    alias da_al_append_native_text_log = void function(ALLEGRO_TEXTLOG*,const(char)*,...);
     alias da_al_get_native_text_log_event_source = ALLEGRO_EVENT_SOURCE* function(ALLEGRO_TEXTLOG*);
+
+    alias da_al_create_menu = ALLEGRO_MENU* function();
+    alias da_al_create_popup_menu = ALLEGRO_MENU* function();
+    alias da_al_build_menu = ALLEGRO_MENU* function(ALLEGRO_MENU_INFO*);
+    alias da_al_append_menu_item = int function(ALLEGRO_MENU*,const(char)*,short,int,ALLEGRO_BITMAP*,ALLEGRO_MENU*);
+    alias da_al_insert_menu_item = int function(ALLEGRO_MENU*,int,const(char)*,short,int,ALLEGRO_BITMAP*,ALLEGRO_MENU*);
+    alias da_al_remove_menu_item = bool function(ALLEGRO_MENU*,int);
+    alias da_al_clone_menu = ALLEGRO_MENU* function(ALLEGRO_MENU*);
+    alias da_al_clone_menu_for_popup = ALLEGRO_MENU* function(ALLEGRO_MENU*);
+    alias da_al_destroy_menu = void function(ALLEGRO_MENU*);
+
+    alias da_al_get_menu_item_caption = const(char)* function(ALLEGRO_MENU*,int);
+    alias da_al_set_menu_item_caption = void function(ALLEGRO_MENU*,int,const(char)*);
+    alias da_al_get_menu_item_flags = int function(ALLEGRO_MENU*,int);
+    alias da_al_set_menu_item_flags = void function(ALLEGRO_MENU*,int,int);
+    alias da_al_get_menu_item_icon = ALLEGRO_BITMAP* function(ALLEGRO_MENU*,int);
+    alias da_al_set_menu_item_icon = void function(ALLEGRO_MENU*,int,ALLEGRO_BITMAP*);
+
+    alias da_al_find_menu = ALLEGRO_MENU* function(ALLEGRO_MENU*,short);
+    alias da_al_find_menu_item = bool function(ALLEGRO_MENU*,short,ALLEGRO_MENU**,int*);
+
+    alias da_al_get_default_menu_event_source = ALLEGRO_EVENT_SOURCE* function();
+    alias da_al_enable_menu_event_source = ALLEGRO_EVENT_SOURCE* function(ALLEGRO_MENU*);
+    alias da_al_disable_menu_event_source = void function(ALLEGRO_MENU*);
+
+    alias da_al_get_display_menu = ALLEGRO_MENU* function(ALLEGRO_DISPLAY*);
+    alias da_al_set_display_menu = bool function(ALLEGRO_DISPLAY*,ALLEGRO_MENU*);
+    alias da_al_popup_menu = bool function(ALLEGRO_MENU*,ALLEGRO_DISPLAY*);
+    alias da_al_remove_display_menu = ALLEGRO_MENU* function(ALLEGRO_DISPLAY*);
+
     alias da_al_get_allegro_native_dialog_version = uint function();
 }
 
@@ -103,6 +143,30 @@ __gshared {
     da_al_close_native_text_log al_close_native_text_log;
     da_al_append_native_text_log al_append_native_text_log;
     da_al_get_native_text_log_event_source al_get_native_text_log_event_source;
+    da_al_create_menu al_create_menu;
+    da_al_create_popup_menu al_create_popup_menu;
+    da_al_build_menu al_build_menu;
+    da_al_append_menu_item al_append_menu_item;
+    da_al_insert_menu_item al_insert_menu_item;
+    da_al_remove_menu_item al_remove_menu_item;
+    da_al_clone_menu al_clone_menu;
+    da_al_clone_menu_for_popup al_clone_menu_for_popup;
+    da_al_destroy_menu al_destroy_menu;
+    da_al_get_menu_item_caption al_get_menu_item_caption;
+    da_al_set_menu_item_caption al_set_menu_item_caption;
+    da_al_get_menu_item_flags al_get_menu_item_flags;
+    da_al_set_menu_item_flags al_set_menu_item_flags;
+    da_al_get_menu_item_icon al_get_menu_item_icon;
+    da_al_set_menu_item_icon al_set_menu_item_icon;
+    da_al_find_menu al_find_menu;
+    da_al_find_menu_item al_find_menu_item;
+    da_al_get_default_menu_event_source al_get_default_menu_event_source;
+    da_al_enable_menu_event_source al_enable_menu_event_source;
+    da_al_disable_menu_event_source al_disable_menu_event_source;
+    da_al_get_display_menu al_get_display_menu;
+    da_al_set_display_menu al_set_display_menu;
+    da_al_popup_menu al_popup_menu;
+    da_al_remove_display_menu al_remove_display_menu;
     da_al_get_allegro_native_dialog_version al_get_allegro_native_dialog_version;
 }
 
@@ -124,6 +188,33 @@ class DerelictAllegro5DialogLoader : SharedLibLoader {
         bindFunc(cast(void**)&al_close_native_text_log, "al_close_native_text_log");
         bindFunc(cast(void**)&al_append_native_text_log, "al_append_native_text_log");
         bindFunc(cast(void**)&al_get_native_text_log_event_source, "al_get_native_text_log_event_source");
+        bindFunc(cast(void**)&al_create_menu, "al_create_menu");
+        bindFunc(cast(void**)&al_create_popup_menu, "al_create_popup_menu");
+        bindFunc(cast(void**)&al_build_menu, "al_build_menu");
+        bindFunc(cast(void**)&al_append_menu_item, "al_append_menu_item");
+        bindFunc(cast(void**)&al_insert_menu_item, "al_insert_menu_item");
+        bindFunc(cast(void**)&al_remove_menu_item, "al_remove_menu_item");
+        bindFunc(cast(void**)&al_clone_menu, "al_clone_menu");
+        bindFunc(cast(void**)&al_clone_menu_for_popup, "al_clone_menu_for_popup");
+        bindFunc(cast(void**)&al_destroy_menu, "al_destroy_menu");
+
+        bindFunc(cast(void**)&al_get_menu_item_caption, "al_get_menu_item_caption");
+        bindFunc(cast(void**)&al_set_menu_item_caption, "al_set_menu_item_caption");
+        bindFunc(cast(void**)&al_get_menu_item_flags, "al_get_menu_item_flags");
+        bindFunc(cast(void**)&al_set_menu_item_flags, "al_set_menu_item_flags");
+        bindFunc(cast(void**)&al_get_menu_item_icon, "al_get_menu_item_icon");
+        bindFunc(cast(void**)&al_set_menu_item_icon, "al_set_menu_item_icon");
+
+        bindFunc(cast(void**)&al_find_menu, "al_find_menu");
+        bindFunc(cast(void**)&al_find_menu_item, "al_find_menu_item");
+        bindFunc(cast(void**)&al_get_default_menu_event_source, "al_get_default_menu_event_source");
+        bindFunc(cast(void**)&al_enable_menu_event_source, "al_enable_menu_event_source");
+        bindFunc(cast(void**)&al_disable_menu_event_source, "al_disable_menu_event_source");
+        bindFunc(cast(void**)&al_get_display_menu, "al_get_display_menu");
+        bindFunc(cast(void**)&al_set_display_menu, "al_set_display_menu");
+        bindFunc(cast(void**)&al_popup_menu, "al_popup_menu");
+        bindFunc(cast(void**)&al_remove_display_menu, "al_remove_display_menu");
+
         bindFunc(cast(void**)&al_get_allegro_native_dialog_version, "al_get_allegro_native_dialog_version");
     }
 }
