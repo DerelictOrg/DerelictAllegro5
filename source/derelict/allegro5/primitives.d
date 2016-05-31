@@ -147,7 +147,7 @@ extern(C) @nogc nothrow {
     alias da_al_draw_prim = int function(const(void)*,const(ALLEGRO_VERTEX_DECL)*,ALLEGRO_BITMAP*,int,int,int);
     alias da_al_draw_indexed_prim = int function(const(void)*,const(ALLEGRO_VERTEX_DECL)*,ALLEGRO_BITMAP*,const(int)*,int,int);
     alias da_al_draw_vertex_buffer = int function(ALLEGRO_VERTEX_BUFFER*,ALLEGRO_BITMAP*,int,int,int);
-    alias da_al_draw_indexed_buffer = int function(ALLEGRO_VERTEX_BUFFER,ALLEGRO_BITMAP*,int,int,int);
+    alias da_al_draw_indexed_buffer = int function(ALLEGRO_VERTEX_BUFFER*,ALLEGRO_BITMAP*,int,int,int);
 
     alias da_al_create_vertex_decl = ALLEGRO_VERTEX_DECL* function(const(ALLEGRO_VERTEX_ELEMENT)*,int);
     alias da_al_destroy_vertex_decl = void function(ALLEGRO_VERTEX_DECL*);
