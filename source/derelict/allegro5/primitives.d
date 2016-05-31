@@ -51,20 +51,60 @@ enum {
     ALLEGRO_PRIM_NUM_TYPES,
 }
 
+enum ALLEGRO_PRIM_MAX_USER_ATTR = _ALLEGRO_PRIM_MAX_USER_ATTR;
+
 alias int ALLEGRO_PRIM_ATTR;
 enum {
     ALLEGRO_PRIM_POSITION = 1,
     ALLEGRO_PRIM_COLOR_ATTR,
     ALLEGRO_PRIM_TEX_COORD,
     ALLEGRO_PRIM_TEX_COORD_PIXEL,
-    ALLEGRO_PRIM_ATTR_NUM,
+    ALLEGRO_PRIM_USER_ATTR,
+    ALLEGRO_PRIM_ATTR_NUM = ALLEGRO_PRIM_USER_ATTR + ALLEGRO_PRIM_MAX_USER_ATTR,
 }
 
 alias int ALLEGRO_PRIM_STORAGE;
 enum {
-   ALLEGRO_PRIM_FLOAT_2,
-   ALLEGRO_PRIM_FLOAT_3,
-   ALLEGRO_PRIM_SHORT_2,
+    ALLEGRO_PRIM_FLOAT_2,
+    ALLEGRO_PRIM_FLOAT_3,
+    ALLEGRO_PRIM_SHORT_2,
+    ALLEGRO_PRIM_FLOAT_1,
+    ALLEGRO_PRIM_FLOAT_4,
+    ALLEGRO_PRIM_UBYTE_4,
+    ALLEGRO_PRIM_SHORT_4,
+    ALLEGRO_PRIM_NORMALIZED_UBYTE_4,
+    ALLEGRO_PRIM_NORMALIZED_SHORT_2,
+    ALLEGRO_PRIM_NORMALIZED_SHORT_4,
+    ALLEGRO_PRIM_NORMALIZED_USHORT_2,
+    ALLEGRO_PRIM_NORMALIZED_USHORT_4,
+    ALLEGRO_PRIM_HALF_FLOAT_2,
+    ALLEGRO_PRIM_HALF_FLOAT_4
+}
+
+alias ALLEGRO_LINE_JOIN = int;
+enum {
+    ALLEGRO_LINE_JOIN_NONE,
+    ALLEGRO_LINE_JOIN_BEVEL,
+    ALLEGRO_LINE_JOIN_ROUND,
+    ALLEGRO_LINE_JOIN_MITER,
+    ALLEGRO_LINE_JOIN_MITRE = ALLEGRO_LINE_JOIN_MITER
+}
+
+alias ALLEGRO_LINE_CAP = int;
+enum {
+    ALLEGRO_LINE_CAP_NONE,
+    ALLEGRO_LINE_CAP_SQUARE,
+    ALLEGRO_LINE_CAP_ROUND,
+    ALLEGRO_LINE_CAP_TRIANGLE,
+    ALLEGRO_LINE_CAP_CLOSED
+}
+
+alias ALLEGRO_PRIM_BUFFER_FLAGS = int;
+enum {
+    ALLEGRO_PRIM_BUFFER_STREAM       = 0x01,
+    ALLEGRO_PRIM_BUFFER_STATIC       = 0x02,
+    ALLEGRO_PRIM_BUFFER_DYNAMIC      = 0x04,
+    ALLEGRO_PRIM_BUFFER_READWRITE    = 0x08
 }
 
 enum ALLEGRO_VERTEX_CACHE_SIZE = 256;
@@ -81,52 +121,86 @@ struct ALLEGRO_VERTEX_DECL;
 struct ALLEGRO_VERTEX {
     float x, y, z;
     float u, v;
+    ALLEGRO_COLOR color;
+}
+
+struct ALLEGRO_VERTEX_BUFFER;
+struct ALLEGRO_INDEX_BUFFER;
+
+// Callbacks used as arguments in some of the functions below
+extern(C) nothrow {
+    alias SoftTriInit = void function(uintptr_t,ALLEGRO_VERTEX*,ALLEGRO_VERTEX*,ALLEGRO_VERTEX*);
+    alias SoftTriFirst = void function(uintptr_t,int,int,int,int);
+    alias SoftTriStep = void function(uintptr_t,int);
+    alias SoftTriDraw = void function(uintptr_t,int,int,int);
+    alias SoftLineFirst = void function(uintptr_t,int,int,ALLEGRO_VERTEX*,ALLEGRO_VERTEX*);
+    alias SoftLineStep = void function(uintptr_t,int);
+    alias SoftLineDraw = void function(uintptr_t,int,int);
+    alias EmitTriangle = void function(int,int,int,void*);
 }
 
 extern(C) @nogc nothrow {
     alias da_al_get_allegro_primitives_version = uint function();
+
     alias da_al_init_primitives_addon = bool function();
     alias da_al_shutdown_primitives_addon = void function();
-    alias da_al_draw_prim = int function(const(void)*, const(ALLEGRO_VERTEX_DECL)*, ALLEGRO_BITMAP*, int, int, int);
-    alias da_al_draw_indexed_prim = int function(const(void)*, const(ALLEGRO_VERTEX_DECL)*, ALLEGRO_BITMAP*, const(int)*, int, int);
+    alias da_al_draw_prim = int function(const(void)*,const(ALLEGRO_VERTEX_DECL)*,ALLEGRO_BITMAP*,int,int,int);
+    alias da_al_draw_indexed_prim = int function(const(void)*,const(ALLEGRO_VERTEX_DECL)*,ALLEGRO_BITMAP*,const(int)*,int,int);
+    alias da_al_draw_vertex_buffer = int function(ALLEGRO_VERTEX_BUFFER*,ALLEGRO_BITMAP*,int,int,int);
+    alias da_al_draw_indexed_buffer = int function(ALLEGRO_VERTEX_BUFFER,ALLEGRO_BITMAP*,int,int,int);
 
-    alias da_al_create_vertex_decl = ALLEGRO_VERTEX_DECL* function(const(ALLEGRO_VERTEX_ELEMENT)*, int);
+    alias da_al_create_vertex_decl = ALLEGRO_VERTEX_DECL* function(const(ALLEGRO_VERTEX_ELEMENT)*,int);
     alias da_al_destroy_vertex_decl = void function(ALLEGRO_VERTEX_DECL*);
 
-    alias da_al_draw_soft_triangle = void function(ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, uintptr_t,
-            void function(uintptr_t, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
-            void function(uintptr_t, int, int, int, int),
-            void function(uintptr_t, int),
-            void function(uintptr_t, int, int, int));
-    alias da_al_draw_soft_line = void function(ALLEGRO_VERTEX*, ALLEGRO_VERTEX*, uintptr_t,
-        void function(uintptr_t, int, int, ALLEGRO_VERTEX*, ALLEGRO_VERTEX*),
-        void function(uintptr_t, int),
-        void function(uintptr_t, int, int));
+    alias da_al_create_vertex_buffer = ALLEGRO_VERTEX_BUFFER* function(ALLEGRO_VERTEX_DECL*,const(void*),int,int);
+    alias da_al_destroy_vertex_buffer = void function(ALLEGRO_VERTEX_BUFFER*);
+    alias da_al_lock_vertex_buffer = void* function(ALLEGRO_VERTEX_BUFFER*,int,int,int);
+    alias da_al_unlock_vertex_buffer = void function(ALLEGRO_VERTEX_BUFFER*);
+    alias da_al_get_vertex_buffer_size = int function(ALLEGRO_VERTEX_BUFFER*);
 
-    alias da_al_draw_line = void function(float, float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_triangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_rectangle = void function(float, float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_rounded_rectangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_create_index_buffer = ALLEGRO_INDEX_BUFFER* function(int,const(void)*,int,int);
+    alias da_al_destroy_index_buffer = void function(ALLEGRO_INDEX_BUFFER*);
+    alias da_al_lock_index_buffer = void* function(ALLEGRO_INDEX_BUFFER*,int,int,int);
+    alias da_al_unlock_index_buffer = void function(ALLEGRO_INDEX_BUFFER*);
+    alias da_al_get_index_buffer_size = int function(ALLEGRO_INDEX_BUFFER*);
 
-    alias da_al_calculate_arc = void function(float*, int, float, float, float, float, float, float, float, int);
-    alias da_al_draw_circle = void function(float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_ellipse = void function(float, float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_arc = void function(float, float, float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_elliptical_arc = void function(float, float, float, float, float, float, ALLEGRO_COLOR, float);
-    alias da_al_draw_pieslice = void function(float, float, float, float, float, ALLEGRO_COLOR, float);
+    alias da_al_triangulate_polygon = bool function(const(float)*,size_t,const(int)*,EmitTriangle,void*);
 
-    alias da_al_calculate_spline = void function(float*, int, float*, float, int);
-    alias da_al_draw_spline = void function(float*, ALLEGRO_COLOR, float);
+    alias da_al_draw_soft_triangle = void function(ALLEGRO_VERTEX*,ALLEGRO_VERTEX*,ALLEGRO_VERTEX*,uintptr_t,
+            SoftTriInit,SoftTriFirst,SoftTriStep,SoftTriDraw);
+    alias da_al_draw_soft_line = void function(ALLEGRO_VERTEX*,ALLEGRO_VERTEX*,uintptr_t,
+        SoftLineFirst,SoftLineStep,SoftLineDraw);
 
-    alias da_al_calculate_ribbon = void function(float*, int, const(float*), int, float, int);
-    alias da_al_draw_ribbon = void function(const(float)*, int, ALLEGRO_COLOR, float, int);
+    alias da_al_draw_line = void function(float,float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_triangle = void function(float,float,float,float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_rectangle = void function(float,float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_rounded_rectangle = void function(float,float,float,float,float,float,ALLEGRO_COLOR,float);
 
-    alias da_al_draw_filled_triangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR);
-    alias da_al_draw_filled_rectangle = void function(float, float, float, float, ALLEGRO_COLOR);
-    alias da_al_draw_filled_ellipse = void function(float, float, float, float, ALLEGRO_COLOR);
-    alias da_al_draw_filled_circle = void function(float, float, float, ALLEGRO_COLOR);
-    alias da_al_draw_filled_pieslice = void function(float, float, float, float, float, ALLEGRO_COLOR);
-    alias da_al_draw_filled_rounded_rectangle = void function(float, float, float, float, float, float, ALLEGRO_COLOR);
+    alias da_al_calculate_arc = void function(float*,int,float,float,float,float,float,float,float,int);
+    alias da_al_draw_circle = void function(float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_ellipse = void function(float,float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_arc = void function(float,float,float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_elliptical_arc = void function(float,float,float,float,float,float,ALLEGRO_COLOR,float);
+    alias da_al_draw_pieslice = void function(float,float,float,float,float,ALLEGRO_COLOR,float);
+
+    alias da_al_calculate_spline = void function(float*,int,float*,float,int);
+    alias da_al_draw_spline = void function(float*,ALLEGRO_COLOR,float);
+
+    alias da_al_calculate_ribbon = void function(float*,int,const(float*),int,float,int);
+    alias da_al_draw_ribbon = void function(const(float)*,int,ALLEGRO_COLOR,float,int);
+
+    alias da_al_draw_filled_triangle = void function(float,float,float,float,float,float,ALLEGRO_COLOR);
+    alias da_al_draw_filled_rectangle = void function(float,float,float,float,ALLEGRO_COLOR);
+    alias da_al_draw_filled_ellipse = void function(float,float,float,float,ALLEGRO_COLOR);
+    alias da_al_draw_filled_circle = void function(float,float,float,ALLEGRO_COLOR);
+    alias da_al_draw_filled_pieslice = void function(float,float,float,float,float,ALLEGRO_COLOR);
+    alias da_al_draw_filled_rounded_rectangle = void function(float,float,float,float,float,float,ALLEGRO_COLOR);
+
+    alias da_al_draw_polyline = void function(const(float)*,int,int,int,int,ALLEGRO_COLOR,float,float);
+
+    alias da_al_draw_polygon = void function(const(float)*,int,int,ALLEGRO_COLOR,float,float);
+    alias da_al_draw_filled_polygon = void function(const(float)*,int,ALLEGRO_COLOR);
+    alias da_al_draw_filled_polygon_with_holes = void function(const(float)*,const(int)*,ALLEGRO_COLOR);
 }
 
 __gshared {
@@ -135,8 +209,21 @@ __gshared {
     da_al_shutdown_primitives_addon al_shutdown_primitives_addon;
     da_al_draw_prim al_draw_prim;
     da_al_draw_indexed_prim al_draw_indexed_prim;
+    da_al_draw_vertex_buffer al_draw_vertex_buffer;
+    da_al_draw_indexed_buffer al_draw_indexed_buffer;
     da_al_create_vertex_decl al_create_vertex_decl;
     da_al_destroy_vertex_decl al_destroy_vertex_decl;
+    da_al_create_vertex_buffer al_create_vertex_buffer;
+    da_al_destroy_vertex_buffer al_destroy_vertex_buffer;
+    da_al_lock_vertex_buffer al_lock_vertex_buffer;
+    da_al_unlock_vertex_buffer al_unlock_vertex_buffer;
+    da_al_get_vertex_buffer_size al_get_vertex_buffer_size;
+    da_al_create_index_buffer al_create_index_buffer;
+    da_al_destroy_index_buffer al_destroy_index_buffer;
+    da_al_lock_index_buffer al_lock_index_buffer;
+    da_al_unlock_index_buffer al_unlock_index_buffer;
+    da_al_get_index_buffer_size al_get_index_buffer_size;
+    da_al_triangulate_polygon al_triangulate_polygon;
     da_al_draw_soft_triangle al_draw_soft_triangle;
     da_al_draw_soft_line al_draw_soft_line;
     da_al_draw_line al_draw_line;
@@ -159,6 +246,10 @@ __gshared {
     da_al_draw_filled_circle al_draw_filled_circle;
     da_al_draw_filled_pieslice al_draw_filled_pieslice;
     da_al_draw_filled_rounded_rectangle al_draw_filled_rounded_rectangle;
+    da_al_draw_polyline al_draw_polyline;
+    da_al_draw_polygon al_draw_polygon;
+    da_al_draw_filled_polygon al_draw_filled_polygon;
+    da_al_draw_filled_polygon_with_holes al_draw_filled_polygon_with_holes;
 }
 
 class DerelictAllegro5PrimitivesLoader : SharedLibLoader {
@@ -172,8 +263,22 @@ class DerelictAllegro5PrimitivesLoader : SharedLibLoader {
         bindFunc(cast(void**)&al_shutdown_primitives_addon, "al_shutdown_primitives_addon");
         bindFunc(cast(void**)&al_draw_prim, "al_draw_prim");
         bindFunc(cast(void**)&al_draw_indexed_prim, "al_draw_indexed_prim");
+        bindFunc(cast(void**)&al_draw_vertex_buffer, "al_draw_vertex_buffer");
+        bindFunc(cast(void**)&al_draw_indexed_buffer, "al_draw_indexed_buffer");
         bindFunc(cast(void**)&al_create_vertex_decl, "al_create_vertex_decl");
         bindFunc(cast(void**)&al_destroy_vertex_decl, "al_destroy_vertex_decl");
+        bindFunc(cast(void**)&al_create_vertex_buffer, "al_create_vertex_buffer");
+        bindFunc(cast(void**)&al_destroy_vertex_buffer, "al_destroy_vertex_buffer");
+        bindFunc(cast(void**)&al_lock_vertex_buffer, "al_lock_vertex_buffer");
+        bindFunc(cast(void**)&al_unlock_vertex_buffer, "al_unlock_vertex_buffer");
+        bindFunc(cast(void**)&al_get_vertex_buffer_size, "al_get_vertex_buffer_size");
+        bindFunc(cast(void**)&al_create_index_buffer, "al_create_index_buffer");
+        bindFunc(cast(void**)&al_lock_index_buffer, "al_lock_index_buffer");
+        bindFunc(cast(void**)&al_destroy_index_buffer, "al_destroy_index_buffer");
+        bindFunc(cast(void**)&al_unlock_index_buffer, "al_unlock_index_buffer");
+        bindFunc(cast(void**)&al_get_index_buffer_size, "al_get_index_buffer_size");
+        bindFunc(cast(void**)&al_destroy_index_buffer, "al_destroy_index_buffer");
+        bindFunc(cast(void**)&al_triangulate_polygon, "al_triangulate_polygon");
         bindFunc(cast(void**)&al_draw_soft_triangle, "al_draw_soft_triangle");
         bindFunc(cast(void**)&al_draw_soft_line, "al_draw_soft_line");
         bindFunc(cast(void**)&al_draw_line, "al_draw_line");
@@ -195,6 +300,12 @@ class DerelictAllegro5PrimitivesLoader : SharedLibLoader {
         bindFunc(cast(void**)&al_draw_filled_circle, "al_draw_filled_circle");
         bindFunc(cast(void**)&al_draw_filled_pieslice, "al_draw_filled_pieslice");
         bindFunc(cast(void**)&al_draw_filled_rounded_rectangle, "al_draw_filled_rounded_rectangle");
+
+        bindFunc(cast(void**)&al_draw_polyline, "al_draw_polyline");
+        bindFunc(cast(void**)&al_draw_polygon, "al_draw_polygon");
+        bindFunc(cast(void**)&al_draw_filled_polygon, "al_draw_filled_polygon");
+        bindFunc(cast(void**)&al_draw_filled_polygon_with_holes, "al_draw_filled_polygon_with_holes");
+
     }
 }
 
