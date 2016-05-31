@@ -39,22 +39,22 @@ private {
 
 extern(C) @nogc nothrow {
     alias da_al_get_allegro_color_version = uint function();
-    alias da_al_color_hsv_to_rgb = void function(float, float, float, float*, float*, float*);
-    alias da_al_color_rgb_to_hsl = void function(float, float, float, float*, float*, float*);
-    alias da_al_color_rgb_to_hsv = void function(float, float, float, float*, float*, float*);
-    alias da_al_color_hsl_to_rgb = void function(float, float, float, float*, float*, float*);
-    alias da_al_color_name_to_rgb = bool function(const(char)*, float*, float*, float*);
-    alias da_al_color_rgb_to_name = const(char)* function(float, float, float);
-    alias da_al_color_cmyk_to_rgb = void function(float, float, float, float, float*, float*, float*);
-    alias da_al_color_rgb_to_cmyk = void function(float, float, float, float*, float*, float*, float*);
-    alias da_al_color_yuv_to_rgb = void function(float, float, float, float*, float*, float*);
-    alias da_al_color_rgb_to_yuv = void function(float, float, float, float*, float*, float*);
-    alias da_al_color_rgb_to_html = void function(float, float, float, char*);
-    alias da_al_color_html_to_rgb = void function(const(char)*, float*, float*, float*);
-    alias da_al_color_yuv = ALLEGRO_COLOR function(float, float, float);
-    alias da_al_color_cmyk = ALLEGRO_COLOR function(float, float, float, float);
-    alias da_al_color_hsl = ALLEGRO_COLOR function(float, float, float);
-    alias da_al_color_hsv = ALLEGRO_COLOR function(float, float, float);
+    alias da_al_color_hsv_to_rgb = void function(float,float,float,float*,float*,float*);
+    alias da_al_color_rgb_to_hsl = void function(float,float,float,float*,float*,float*);
+    alias da_al_color_rgb_to_hsv = void function(float,float,float,float*,float*,float*);
+    alias da_al_color_hsl_to_rgb = void function(float,float,float,float*,float*,float*);
+    alias da_al_color_name_to_rgb = bool function(const(char)*,float*,float*,float*);
+    alias da_al_color_rgb_to_name = const(char)* function(float,float,float);
+    alias da_al_color_cmyk_to_rgb = void function(float,float,float,float,float*,float*,float*);
+    alias da_al_color_rgb_to_cmyk = void function(float,float,float,float*,float*,float*,float*);
+    alias da_al_color_yuv_to_rgb = void function(float,float,float,float*,float*,float*);
+    alias da_al_color_rgb_to_yuv = void function(float,float,float,float*,float*,float*);
+    alias da_al_color_rgb_to_html = void function(float,float,float,char*);
+    alias da_al_color_html_to_rgb = void function(const(char)*,float*,float*,float*);
+    alias da_al_color_yuv = ALLEGRO_COLOR function(float,float,float);
+    alias da_al_color_cmyk = ALLEGRO_COLOR function(float,float,float,float);
+    alias da_al_color_hsl = ALLEGRO_COLOR function(float,float,float);
+    alias da_al_color_hsv = ALLEGRO_COLOR function(float,float,float);
     alias da_al_color_name = ALLEGRO_COLOR function(const(char)*);
     alias da_al_color_html = ALLEGRO_COLOR function(const(char)*);
 }

@@ -48,16 +48,20 @@ struct ALLEGRO_FONT_VTABLE {
         int function(const(ALLEGRO_FONT)*) font_height;
         int function(const(ALLEGRO_FONT)*) font_ascent;
         int function(const(ALLEGRO_FONT)*) font_descent;
-        int function(const(ALLEGRO_FONT)*, int) char_length;
-        int function(const(ALLEGRO_FONT)*, const(ALLEGRO_USTR)*) text_length;
-        int function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, int, float, float) render_char;
-        int function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, const(ALLEGRO_USTR)*, float, float) render;
+        int function(const(ALLEGRO_FONT)*,int) char_length;
+        int function(const(ALLEGRO_FONT)*,const(ALLEGRO_USTR)*) text_length;
+        int function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,int,float,float) render_char;
+        int function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,const(ALLEGRO_USTR)*,float,float) render;
         void function(ALLEGRO_FONT*) destroy;
-        void function(const(ALLEGRO_FONT)*, const(ALLEGRO_USTR)*, int*, int*, int*, int*) get_text_dimensions;
+        void function(const(ALLEGRO_FONT)*,const(ALLEGRO_USTR)*,int*,int*,int*,int*) get_text_dimensions;
+        int function(ALLEGRO_FONT*,int,int*) get_font_ranges;
+        bool function(const(ALLEGRO_FONT)*,int,int*,int*,int*,int*) get_glyph_dimensions;
+        int function(const(ALLEGRO_FONT)*,int,int) get_glyph_advance;
     }
 }
 
 enum {
+    ALLEGRO_NO_KERNING       = -1,
     ALLEGRO_ALIGN_LEFT       = 0,
     ALLEGRO_ALIGN_CENTRE     = 1,
     ALLEGRO_ALIGN_CENTER     = 1,
@@ -65,36 +69,60 @@ enum {
     ALLEGRO_ALIGN_INTEGER    = 4,
 }
 
-extern(C) @nogc nothrow {
-    alias da_al_register_font_loader = bool function(const(char)*, ALLEGRO_FONT* function(const(char)*, int, int));
-    alias da_al_load_bitmap_font = ALLEGRO_FONT* function(const(char)*);
-    alias da_al_load_font = ALLEGRO_FONT* function(const(char)*, int, int);
+// Callbacks used by do_multiline functions
+extern(C) nothrow {
+    alias DoTextCallback = bool function(int,const(char)*,int,void*);
+    alias DoUSTRCallback = bool function(int,const(ALLEGRO_USTR)*,void*);
+}
 
-    alias da_al_grab_font_from_bitmap = ALLEGRO_FONT* function(ALLEGRO_BITMAP*, int, const(int)*);
+extern(C) @nogc nothrow {
+    alias da_al_register_font_loader = bool function(const(char)*,ALLEGRO_FONT* function(const(char)*,int,int));
+    alias da_al_load_bitmap_font = ALLEGRO_FONT* function(const(char)*);
+    alias da_al_load_bitmap_font_flags = ALLEGRO_FONT* function(const(char)*,int);
+    alias da_al_load_font = ALLEGRO_FONT* function(const(char)*,int,int);
+
+    alias da_al_grab_font_from_bitmap = ALLEGRO_FONT* function(ALLEGRO_BITMAP*,int,const(int)*);
     alias da_al_create_builtin_font = ALLEGRO_FONT* function();
 
-    alias da_al_draw_ustr = void function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, float, float, int, const(ALLEGRO_USTR)*);
-    alias da_al_draw_text = void function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, float, float, int, const(char)*);
-    alias da_al_draw_justified_text = void function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, float, float, float, float, int, const(char)*);
-    alias da_al_draw_justified_ustr = void function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, float, float, float, float, int, const(ALLEGRO_USTR)*);
-    alias da_al_draw_textf = void function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, float, float, int, const(char)*, ...);
-    alias da_al_draw_justified_textf = void function(const(ALLEGRO_FONT)*, ALLEGRO_COLOR, float, float, float, float, int, const(char)*, ...);
-    alias da_al_get_text_width = int function(const(ALLEGRO_FONT)*, const(char)*);
-    alias da_al_get_ustr_width = int function(const(ALLEGRO_FONT)*, const(ALLEGRO_USTR)*);
+    alias da_al_draw_ustr = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,int,const(ALLEGRO_USTR)*);
+    alias da_al_draw_text = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,int,const(char)*);
+    alias da_al_draw_justified_text = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,float,float,int,const(char)*);
+    alias da_al_draw_justified_ustr = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,float,float,int,const(ALLEGRO_USTR)*);
+    alias da_al_draw_textf = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,int,const(char)*,...);
+    alias da_al_draw_justified_textf = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,float,float,int,const(char)*,...);
+    alias da_al_get_text_width = int function(const(ALLEGRO_FONT)*,const(char)*);
+    alias da_al_get_ustr_width = int function(const(ALLEGRO_FONT)*,const(ALLEGRO_USTR)*);
     alias da_al_get_font_line_height = int function(const(ALLEGRO_FONT)*);
     alias da_al_get_font_ascent = int function(const(ALLEGRO_FONT)*);
     alias da_al_get_font_descent = int function(const(ALLEGRO_FONT)*);
     alias da_al_destroy_font = void function(ALLEGRO_FONT*);
-    alias da_al_get_ustr_dimensions = void function(const(ALLEGRO_FONT)*, const(ALLEGRO_USTR)*, int*, int*, int*, int*);
-    alias da_al_get_text_dimensions = void function(const(ALLEGRO_FONT)*, const(char)*, int*, int*, int*, int*);
+    alias da_al_get_ustr_dimensions = void function(const(ALLEGRO_FONT)*,const(ALLEGRO_USTR)*,int*,int*,int*,int*);
+    alias da_al_get_text_dimensions = void function(const(ALLEGRO_FONT)*,const(char)*,int*,int*,int*,int*);
     alias da_al_init_font_addon = void function();
     alias da_al_shutdown_font_addon = void function();
     alias da_al_get_allegro_font_version = uint function();
+    alias da_al_get_font_ranges = int function(ALLEGRO_FONT*,int,int*);
+
+    alias da_al_draw_glyph = void function(ALLEGRO_FONT*,ALLEGRO_COLOR,float,float,int);
+    alias da_al_get_glyph_width = int function(const(ALLEGRO_FONT)*,int);
+    alias da_al_get_glyph_dimensions = bool function(const(ALLEGRO_FONT)*,int,int*,int*,int*,int*);
+    alias da_al_get_glyph_advance = int function(const(ALLEGRO_FONT)*,int,int);
+
+    alias da_al_draw_multiline_text = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,float,float,int,const(char)*);
+    alias da_al_draw_multiline_textf = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,float,float,int,const(char)*,...);
+    alias da_al_draw_multiline_ustr = void function(const(ALLEGRO_FONT)*,ALLEGRO_COLOR,float,float,float,float,int,const(ALLEGRO_USTR)*);
+
+    alias da_al_do_multiline_text = void function(const(ALLEGRO_FONT)*,float,const(char)*,DoTextCallback,void*);
+    alias da_al_do_multiline_ustr = void function(const(ALLEGRO_FONT)*,float,const(ALLEGRO_USTR)*,DoUSTRCallback,void*);
+
+    alias da_al_set_fallback_font = void function(ALLEGRO_FONT*,ALLEGRO_FONT*);
+    alias da_al_get_fallback_font = ALLEGRO_FONT* function(ALLEGRO_FONT*);
 }
 
 __gshared {
     da_al_register_font_loader al_register_font_loader;
     da_al_load_bitmap_font al_load_bitmap_font;
+    da_al_load_bitmap_font_flags al_load_bitmap_font_flags;
     da_al_load_font al_load_font;
     da_al_grab_font_from_bitmap al_grab_font_from_bitmap;
     da_al_create_builtin_font al_create_builtin_font;
@@ -115,6 +143,18 @@ __gshared {
     da_al_init_font_addon al_init_font_addon;
     da_al_shutdown_font_addon al_shutdown_font_addon;
     da_al_get_allegro_font_version al_get_allegro_font_version;
+    da_al_get_font_ranges al_get_font_ranges;
+    da_al_draw_glyph al_draw_glyph;
+    da_al_get_glyph_width al_get_glyph_width;
+    da_al_get_glyph_dimensions al_get_glyph_dimensions;
+    da_al_get_glyph_advance al_get_glyph_advance;
+    da_al_draw_multiline_text al_draw_multiline_text;
+    da_al_draw_multiline_textf al_draw_multiline_textf;
+    da_al_draw_multiline_ustr al_draw_multiline_ustr;
+    da_al_do_multiline_text al_do_multiline_text;
+    da_al_do_multiline_ustr al_do_multiline_ustr;
+    da_al_set_fallback_font al_set_fallback_font;
+    da_al_get_fallback_font al_get_fallback_font;
 }
 
 class DerelictAllegro5FontLoader : SharedLibLoader {
@@ -125,6 +165,7 @@ class DerelictAllegro5FontLoader : SharedLibLoader {
     protected override void loadSymbols() {
         bindFunc(cast(void**)&al_register_font_loader, "al_register_font_loader");
         bindFunc(cast(void**)&al_load_bitmap_font, "al_load_bitmap_font");
+        bindFunc(cast(void**)&al_load_bitmap_font_flags, "al_load_bitmap_font_flags");
         bindFunc(cast(void**)&al_load_font, "al_load_font");
         bindFunc(cast(void**)&al_grab_font_from_bitmap, "al_grab_font_from_bitmap");
         bindFunc(cast(void**)&al_create_builtin_font, "al_create_builtin_font");
@@ -144,6 +185,20 @@ class DerelictAllegro5FontLoader : SharedLibLoader {
         bindFunc(cast(void**)&al_init_font_addon, "al_init_font_addon");
         bindFunc(cast(void**)&al_shutdown_font_addon, "al_shutdown_font_addon");
         bindFunc(cast(void**)&al_get_allegro_font_version, "al_get_allegro_font_version");
+
+
+        bindFunc(cast(void**)&al_get_font_ranges, "al_get_font_ranges");
+        bindFunc(cast(void**)&al_draw_glyph, "al_draw_glyph");
+        bindFunc(cast(void**)&al_get_glyph_width, "al_get_glyph_width");
+        bindFunc(cast(void**)&al_get_glyph_dimensions, "al_get_glyph_dimensions");
+        bindFunc(cast(void**)&al_get_glyph_advance, "al_get_glyph_advance");
+        bindFunc(cast(void**)&al_draw_multiline_text, "al_draw_multiline_text");
+        bindFunc(cast(void**)&al_draw_multiline_textf, "al_draw_multiline_textf");
+        bindFunc(cast(void**)&al_draw_multiline_ustr, "al_draw_multiline_ustr");
+        bindFunc(cast(void**)&al_do_multiline_text, "al_do_multiline_text");
+        bindFunc(cast(void**)&al_do_multiline_ustr, "al_do_multiline_ustr");
+        bindFunc(cast(void**)&al_set_fallback_font, "al_set_fallback_font");
+        bindFunc(cast(void**)&al_get_fallback_font, "al_get_fallback_font");
     }
 }
 
