@@ -7,7 +7,7 @@ package string genLibNames( string prefix ) {
     import std.string : toLower;
 
     static if( Derelict_OS_Windows ) {
-        enum MonolithNames = "allegro_monolith-5.2.dll,allegro_monolith-5.2.0-mt.dll";
+        enum MonolithNames = "allegro_monolith-5.2.dll,allegro_monolith-5.2.0-mt.dll,";
 
         auto s = prefix.toLower();
         if( s != "allegro" ) {
