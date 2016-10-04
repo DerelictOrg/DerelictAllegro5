@@ -27,15 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.font;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
 
-    import derelict.allegro5.internal,
-           derelict.allegro5.types;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    enum libNames = genLibNames("Font");
-}
+private enum libNames = genLibNames("Font");
 
 struct ALLEGRO_FONT {
     void* data;
@@ -157,12 +155,12 @@ __gshared {
     da_al_get_fallback_font al_get_fallback_font;
 }
 
-class DerelictAllegro5FontLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5FontLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_register_font_loader, "al_register_font_loader");
         bindFunc(cast(void**)&al_load_bitmap_font, "al_load_bitmap_font");
         bindFunc(cast(void**)&al_load_bitmap_font_flags, "al_load_bitmap_font_flags");

@@ -27,53 +27,47 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.allegro;
 
-public {
-    import derelict.allegro5.functions,
-           derelict.allegro5.types;
-}
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
+public
+import derelict.allegro5.functions,
+       derelict.allegro5.types;
 
-    import derelict.allegro5.internal;
+private enum libNames = genLibNames("Allegro");
 
-    enum libNames = genLibNames("Allegro");
-}
+class DerelictAllegro5Loader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-class DerelictAllegro5Loader : SharedLibLoader {
-    public {
-        this() {
-            super(libNames);
-        }
-
-        // Derived from SiegeLord's implementation of al_run_allegro in DAllegro5.
-        int run(int function() userMain) {
-            extern(C) static int runner(int argc, char** argv) {
-                import core.thread;
-                static if(Derelict_OS_Mac) {
-                    thread_attachThis();
-                }
-
-                auto ret = (*cast(int function()*) argv[ 0 ])();
-
-                static if(Derelict_OS_Mac) {
-                    thread_detachThis();
-                }
-
-                return ret;
+    // Derived from SiegeLord's implementation of al_run_allegro in DAllegro5.
+    int run(int function() userMain) {
+        extern(C) static int runner(int argc, char** argv) {
+            import core.thread;
+            static if(Derelict_OS_Mac) {
+                thread_attachThis();
             }
 
-            import derelict.util.exception;
-            if(!isLoaded) {
-                throw new DerelictException("DerelictAllegro5.load must be called before the run method.");
+            auto ret = (*cast(int function()*) argv[ 0 ])();
+
+            static if(Derelict_OS_Mac) {
+                thread_detachThis();
             }
-            auto fakeArg = cast(char*)&userMain;
-            return al_run_main(0, &fakeArg, &runner);
+
+            return ret;
         }
+
+        import derelict.util.exception;
+        if(!isLoaded) {
+            throw new DerelictException("DerelictAllegro5.load must be called before the run method.");
+        }
+        auto fakeArg = cast(char*)&userMain;
+        return al_run_main(0, &fakeArg, &runner);
     }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_get_time, "al_get_time");
         bindFunc(cast(void**)&al_rest, "al_rest");
         bindFunc(cast(void**)&al_init_timeout, "al_init_timeout");

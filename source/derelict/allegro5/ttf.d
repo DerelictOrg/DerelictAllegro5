@@ -4,7 +4,7 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
-this license ( the "Software" ) to use, reproduce, display, distribute,
+this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
 Software, and to permit third-parties to whom the Software is furnished to
 do so, all subject to the following:
@@ -27,22 +27,19 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.ttf;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.font,
+       derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    import derelict.allegro5.font,
-           derelict.allegro5.internal,
-           derelict.allegro5.types;
+private enum libNames = genLibNames("TTF");
 
-    enum libNames = genLibNames( "TTF" );
-}
-
-extern( C ) @nogc nothrow {
-    alias da_al_load_ttf_font = ALLEGRO_FONT* function( const( char )*, int, int );
-    alias da_al_load_ttf_font_f = ALLEGRO_FONT* function( ALLEGRO_FILE*, const( char )*, int, int );
-    alias da_al_load_ttf_font_stretch = ALLEGRO_FONT* function( const( char )*, int, int, int );
-    alias da_al_load_ttf_font_stretch_f = ALLEGRO_FONT* function( ALLEGRO_FILE*, const( char )*, int, int, int );
+extern(C) @nogc nothrow {
+    alias da_al_load_ttf_font = ALLEGRO_FONT* function(const(char)*, int, int);
+    alias da_al_load_ttf_font_f = ALLEGRO_FONT* function(ALLEGRO_FILE*, const(char)*, int, int);
+    alias da_al_load_ttf_font_stretch = ALLEGRO_FONT* function(const(char)*, int, int, int);
+    alias da_al_load_ttf_font_stretch_f = ALLEGRO_FONT* function(ALLEGRO_FILE*, const(char)*, int, int, int);
     alias da_al_init_ttf_addon = bool function();
     alias da_al_shutdown_ttf_addon = void function();
     alias da_al_get_allegro_ttf_version = uint function();
@@ -58,19 +55,19 @@ __gshared {
     da_al_get_allegro_ttf_version al_get_allegro_ttf_version;
 }
 
-class DerelictAllegro5TTFLoader : SharedLibLoader {
-    public this() {
-        super( libNames );
-    }
+class DerelictAllegro5TTFLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
-        bindFunc( cast( void** )&al_load_ttf_font, "al_load_ttf_font" );
-        bindFunc( cast( void** )&al_load_ttf_font_f, "al_load_ttf_font_f" );
-        bindFunc( cast( void** )&al_load_ttf_font_stretch, "al_load_ttf_font_stretch" );
-        bindFunc( cast( void** )&al_load_ttf_font_stretch_f, "al_load_ttf_font_stretch_f" );
-        bindFunc( cast( void** )&al_init_ttf_addon, "al_init_ttf_addon" );
-        bindFunc( cast( void** )&al_shutdown_ttf_addon, "al_shutdown_ttf_addon" );
-        bindFunc( cast( void** )&al_get_allegro_ttf_version, "al_get_allegro_ttf_version" );
+    protected override void loadSymbols()
+    {
+        bindFunc(cast(void**)&al_load_ttf_font, "al_load_ttf_font");
+        bindFunc(cast(void**)&al_load_ttf_font_f, "al_load_ttf_font_f");
+        bindFunc(cast(void**)&al_load_ttf_font_stretch, "al_load_ttf_font_stretch");
+        bindFunc(cast(void**)&al_load_ttf_font_stretch_f, "al_load_ttf_font_stretch_f");
+        bindFunc(cast(void**)&al_init_ttf_addon, "al_init_ttf_addon");
+        bindFunc(cast(void**)&al_shutdown_ttf_addon, "al_shutdown_ttf_addon");
+        bindFunc(cast(void**)&al_get_allegro_ttf_version, "al_get_allegro_ttf_version");
     }
 }
 

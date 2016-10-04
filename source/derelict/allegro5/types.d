@@ -27,10 +27,8 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.types;
 
-private {
-    import core.stdc.stdint;
-    import core.stdc.time;
-}
+import core.stdc.stdint;
+import core.stdc.time;
 
 public {
     version(Windows) {

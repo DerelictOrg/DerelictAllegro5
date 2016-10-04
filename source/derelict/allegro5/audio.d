@@ -27,15 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.audio;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
 
-    import derelict.allegro5.internal,
-           derelict.allegro5.types;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    enum libNames = genLibNames("Audio");
-}
+private enum libNames = genLibNames("Audio");
 
 enum {
     ALLEGRO_EVENT_AUDIO_STREAM_FRAGMENT = 513,
@@ -386,12 +384,12 @@ __gshared {
     da_al_load_audio_stream_f al_load_audio_stream_f;
 }
 
-class DerelictAllegro5AudioLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5AudioLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_create_sample, "al_create_sample");
         bindFunc(cast(void**)&al_destroy_sample, "al_destroy_sample");
         bindFunc(cast(void**)&al_create_sample_instance, "al_create_sample_instance");

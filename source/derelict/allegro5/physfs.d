@@ -27,14 +27,12 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.physfs;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
 
-    import derelict.allegro5.internal;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal;
 
-    enum libNames = genLibNames("Physfs");
-}
+private enum libNames = genLibNames("Physfs");
 
 extern(C) @nogc nothrow {
     alias da_al_set_physfs_file_interface = void function();
@@ -46,12 +44,12 @@ __gshared {
     da_al_get_allegro_physfs_version al_get_allegro_physfs_version;
 }
 
-class DerelictAllegro5PhysFSLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5PhysFSLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_set_physfs_file_interface, "al_set_physfs_file_interface");
         bindFunc(cast(void**)&al_get_allegro_physfs_version, "al_get_allegro_physfs_version");
     }

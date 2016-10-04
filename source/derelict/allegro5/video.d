@@ -4,7 +4,7 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 Permission is hereby granted, free of charge, to any person or organization
 obtaining a copy of the software and accompanying documentation covered by
-this license ( the "Software" ) to use, reproduce, display, distribute,
+this license (the "Software") to use, reproduce, display, distribute,
 execute, and transmit the Software, and to prepare derivative works of the
 Software, and to permit third-parties to whom the Software is furnished to
 do so, all subject to the following:
@@ -27,16 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.video;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.audio,
+       derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    import derelict.allegro5.internal,
-           derelict.allegro5.audio,
-           derelict.allegro5.types;
-
-    enum libNames = genLibNames( "Video" );
-}
+private enum libNames = genLibNames("Video");
 
 alias ALLEGRO_VIDEO_EVENT_TYPE = int;
 enum {
@@ -53,7 +50,7 @@ enum {
 
 struct ALLEGRO_VIDEO;
 
-extern( C ) @nogc nothrow {
+extern(C) @nogc nothrow {
     alias da_al_open_video = ALLEGRO_VIDEO* function(const(char)*);
     alias da_al_close_video = void function(ALLEGRO_VIDEO*);
     alias da_al_start_video = void function(ALLEGRO_VIDEO*,ALLEGRO_MIXER*);
@@ -93,29 +90,29 @@ __gshared {
     da_al_get_allegro_video_version al_get_allegro_video_version;
 }
 
-class DerelictAllegro5VideoLoader : SharedLibLoader {
-    public this() {
-        super( libNames );
-    }
+class DerelictAllegro5VideoLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
-        bindFunc( cast( void** )&al_open_video, "al_open_video" );
-        bindFunc( cast( void** )&al_close_video, "al_close_video" );
-        bindFunc( cast( void** )&al_start_video, "al_start_video" );
-        bindFunc( cast( void** )&al_start_video_with_voice, "al_start_video_with_voice" );
-        bindFunc( cast( void** )&al_get_video_event_source, "al_get_video_event_source" );
-        bindFunc( cast( void** )&al_set_video_playing, "al_set_video_playing" );
-        bindFunc( cast( void** )&al_is_video_playing, "al_is_video_playing" );
-        bindFunc( cast( void** )&al_get_video_audio_rate, "al_get_video_audio_rate" );
-        bindFunc( cast( void** )&al_get_video_fps, "al_get_video_fps" );
-        bindFunc( cast( void** )&al_get_video_scaled_width, "al_get_video_scaled_width" );
-        bindFunc( cast( void** )&al_get_video_scaled_height, "al_get_video_scaled_height" );
-        bindFunc( cast( void** )&al_get_video_frame, "al_get_video_frame" );
-        bindFunc( cast( void** )&al_get_video_position, "al_get_video_position" );
-        bindFunc( cast( void** )&al_seek_video, "al_seek_video" );
-        bindFunc( cast( void** )&al_init_video_addon, "al_init_video_addon" );
-        bindFunc( cast( void** )&al_shutdown_video_addon, "al_shutdown_video_addon" );
-        bindFunc( cast( void** )&al_get_allegro_video_version, "al_get_allegro_video_version" );
+    protected override void loadSymbols()
+    {
+        bindFunc(cast(void**)&al_open_video, "al_open_video");
+        bindFunc(cast(void**)&al_close_video, "al_close_video");
+        bindFunc(cast(void**)&al_start_video, "al_start_video");
+        bindFunc(cast(void**)&al_start_video_with_voice, "al_start_video_with_voice");
+        bindFunc(cast(void**)&al_get_video_event_source, "al_get_video_event_source");
+        bindFunc(cast(void**)&al_set_video_playing, "al_set_video_playing");
+        bindFunc(cast(void**)&al_is_video_playing, "al_is_video_playing");
+        bindFunc(cast(void**)&al_get_video_audio_rate, "al_get_video_audio_rate");
+        bindFunc(cast(void**)&al_get_video_fps, "al_get_video_fps");
+        bindFunc(cast(void**)&al_get_video_scaled_width, "al_get_video_scaled_width");
+        bindFunc(cast(void**)&al_get_video_scaled_height, "al_get_video_scaled_height");
+        bindFunc(cast(void**)&al_get_video_frame, "al_get_video_frame");
+        bindFunc(cast(void**)&al_get_video_position, "al_get_video_position");
+        bindFunc(cast(void**)&al_seek_video, "al_seek_video");
+        bindFunc(cast(void**)&al_init_video_addon, "al_init_video_addon");
+        bindFunc(cast(void**)&al_shutdown_video_addon, "al_shutdown_video_addon");
+        bindFunc(cast(void**)&al_get_allegro_video_version, "al_get_allegro_video_version");
     }
 }
 

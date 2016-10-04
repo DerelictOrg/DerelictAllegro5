@@ -27,13 +27,11 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.acodec;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
-    import derelict.allegro5.internal;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal;
 
-    enum libNames = genLibNames("Acodec");
-}
+private enum libNames = genLibNames("Acodec");
 
 extern(C) @nogc nothrow {
     alias da_al_init_acodec_addon = bool function();
@@ -45,12 +43,12 @@ __gshared {
     da_al_get_allegro_acodec_version al_get_allegro_acodec_version;
 }
 
-class DerelictAllegro5ACodecLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5ACodecLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_init_acodec_addon, "al_init_acodec_addon");
         bindFunc(cast(void**)&al_get_allegro_acodec_version, "al_get_allegro_acodec_version");
     }

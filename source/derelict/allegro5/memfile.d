@@ -27,15 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.memfile;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
 
-    import derelict.allegro5.internal,
-           derelict.allegro5.types;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    enum libNames = genLibNames("Memfile");
-}
+private enum libNames = genLibNames("Memfile");
 
 extern(C) nothrow {
     alias da_al_open_memfile = ALLEGRO_FILE* function(void*, long, const(char)*);
@@ -47,12 +45,12 @@ __gshared {
     da_al_get_allegro_memfile_version al_get_allegro_memfile_version;
 }
 
-class DerelictAllegro5MemFileLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5MemFileLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_open_memfile, "al_open_memfile");
         bindFunc(cast(void**)&al_get_allegro_memfile_version, "al_get_allegro_memfile_version");
     }

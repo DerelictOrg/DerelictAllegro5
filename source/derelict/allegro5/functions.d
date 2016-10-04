@@ -27,14 +27,12 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.functions;
 
-private {
-    import core.stdc.stdarg,
-           core.stdc.stdint,
-           core.stdc.time;
+import core.stdc.stdarg,
+       core.stdc.stdint,
+       core.stdc.time;
 
-    import derelict.util.system;
-    import derelict.allegro5.types;
-}
+import derelict.util.system;
+import derelict.allegro5.types;
 
 nothrow {
     // memory.h

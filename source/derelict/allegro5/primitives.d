@@ -27,17 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.primitives;
 
-private {
-    import core.stdc.stdint;
+import core.stdc.stdint;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    import derelict.util.loader,
-           derelict.util.system;
-
-    import derelict.allegro5.internal,
-           derelict.allegro5.types;
-
-    enum libNames = genLibNames("Primitives");
-}
+private enum libNames = genLibNames("Primitives");
 
 alias int ALLEGRO_PRIM_TYPE;
 enum {
@@ -252,12 +248,12 @@ __gshared {
     da_al_draw_filled_polygon_with_holes al_draw_filled_polygon_with_holes;
 }
 
-class DerelictAllegro5PrimitivesLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5PrimitivesLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_get_allegro_primitives_version, "al_get_allegro_primitives_version");
         bindFunc(cast(void**)&al_init_primitives_addon, "al_init_primitives_addon");
         bindFunc(cast(void**)&al_shutdown_primitives_addon, "al_shutdown_primitives_addon");

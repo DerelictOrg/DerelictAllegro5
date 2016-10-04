@@ -27,15 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.color;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
 
-    import derelict.allegro5.internal,
-           derelict.allegro5.types;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    enum libNames = genLibNames("Color");
-}
+private enum libNames = genLibNames("Color");
 
 extern(C) @nogc nothrow {
     alias da_al_get_allegro_color_version = uint function();
@@ -81,12 +79,12 @@ __gshared {
     da_al_color_html al_color_html;
 }
 
-class DerelictAllegro5ColorLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5ColorLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_get_allegro_color_version, "al_get_allegro_color_version");
         bindFunc(cast(void**)&al_color_hsv_to_rgb, "al_color_hsv_to_rgb");
         bindFunc(cast(void**)&al_color_rgb_to_hsl, "al_color_rgb_to_hsl");

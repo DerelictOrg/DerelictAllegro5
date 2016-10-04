@@ -27,15 +27,13 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.dialog;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
 
-    import derelict.allegro5.internal,
-           derelict.allegro5.types;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal,
+       derelict.allegro5.types;
 
-    enum libNames = genLibNames("Dialog");
-}
+private enum libNames = genLibNames("Dialog");
 
 struct ALLEGRO_FILECHOOSER;
 struct ALLEGRO_TEXTLOG;
@@ -170,12 +168,12 @@ __gshared {
     da_al_get_allegro_native_dialog_version al_get_allegro_native_dialog_version;
 }
 
-class DerelictAllegro5DialogLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5DialogLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_init_native_dialog_addon, "al_init_native_dialog_addon");
         bindFunc(cast(void**)&al_shutdown_native_dialog_addon, "al_shutdown_native_dialog_addon");
         bindFunc(cast(void**)&al_create_native_file_dialog, "al_create_native_file_dialog");

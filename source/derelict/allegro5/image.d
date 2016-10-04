@@ -27,13 +27,11 @@ DEALINGS IN THE SOFTWARE.
 */
 module derelict.allegro5.image;
 
-private {
-    import derelict.util.loader,
-           derelict.util.system;
-    import derelict.allegro5.internal;
+import derelict.util.loader,
+       derelict.util.system;
+import derelict.allegro5.internal;
 
-    enum libNames = genLibNames("Image");
-}
+private enum libNames = genLibNames("Image");
 
 extern(C) @nogc nothrow {
     alias da_al_init_image_addon = bool function();
@@ -47,12 +45,12 @@ __gshared {
     da_al_get_allegro_image_version al_get_allegro_image_version;
 }
 
-class DerelictAllegro5ImageLoader : SharedLibLoader {
-    public this() {
-        super(libNames);
-    }
+class DerelictAllegro5ImageLoader : SharedLibLoader
+{
+    this() { super(libNames); }
 
-    protected override void loadSymbols() {
+    protected override void loadSymbols()
+    {
         bindFunc(cast(void**)&al_init_image_addon, "al_init_image_addon");
         bindFunc(cast(void**)&al_shutdown_image_addon, "al_shutdown_image_addon");
         bindFunc(cast(void**)&al_get_allegro_image_version, "al_get_allegro_image_version");
