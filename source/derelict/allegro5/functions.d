@@ -494,11 +494,11 @@ extern(C) @nogc nothrow {
     alias da_al_destroy_shader = bool function(ALLEGRO_SHADER*);
 
     alias da_al_set_shader_sampler = bool function(const(char)*,ALLEGRO_BITMAP*,int);
-    alias da_al_set_shader_matrix = bool function(const(char)*,ALLEGRO_TRANSFORM*);
+    alias da_al_set_shader_matrix = bool function(const(char)*,const(ALLEGRO_TRANSFORM)*);
     alias da_al_set_shader_int = bool function(const(char)*,int);
     alias da_al_set_shader_float = bool function(const(char)*,float);
-    alias da_al_set_shader_int_vector = bool function(const(char)*,int,int*,int);
-    alias da_al_set_shader_float_vector = bool function(const(char)*,int,float*,int);
+    alias da_al_set_shader_int_vector = bool function(const(char)*,int,const(int)*,int);
+    alias da_al_set_shader_float_vector = bool function(const(char)*,int,const(float)*,int);
     alias da_al_set_shader_bool = bool function(const(char)*,bool);
 
     alias da_al_get_default_shader_source = const(char)* function(ALLEGRO_SHADER_PLATFORM,ALLEGRO_SHADER_TYPE);
