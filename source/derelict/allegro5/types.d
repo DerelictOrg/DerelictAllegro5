@@ -513,7 +513,7 @@ enum {
 
 // keycodes.h
 enum {
-    ALLEGRO_KEY_A     = 1,
+    ALLEGRO_KEY_A        = 1,
     ALLEGRO_KEY_B        = 2,
     ALLEGRO_KEY_C        = 3,
     ALLEGRO_KEY_D        = 4,
