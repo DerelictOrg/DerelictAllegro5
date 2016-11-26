@@ -58,10 +58,7 @@ class DerelictAllegro5Loader : SharedLibLoader
             return ret;
         }
 
-        import derelict.util.exception;
-        if(!isLoaded) {
-            throw new DerelictException("DerelictAllegro5.load must be called before the run method.");
-        }
+        if(!isLoaded) load();
         auto fakeArg = cast(char*)&userMain;
         return al_run_main(0, &fakeArg, &runner);
     }
@@ -178,6 +175,8 @@ class DerelictAllegro5Loader : SharedLibLoader
         bindFunc(cast(void**)&al_set_new_display_flags, "al_set_new_display_flags");
         bindFunc(cast(void**)&al_get_new_display_refresh_rate, "al_get_new_display_refresh_rate");
         bindFunc(cast(void**)&al_get_new_display_flags, "al_get_new_display_flags");
+        bindFunc(cast(void**)&al_set_new_window_title, "al_set_new_window_title");
+        bindFunc(cast(void**)&al_get_new_window_title, "al_get_new_window_title");
         bindFunc(cast(void**)&al_get_display_width, "al_get_display_width");
         bindFunc(cast(void**)&al_get_display_height, "al_get_display_height");
         bindFunc(cast(void**)&al_get_display_format, "al_get_display_format");

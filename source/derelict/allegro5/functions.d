@@ -206,6 +206,9 @@ extern(C) @nogc nothrow {
     alias da_al_get_new_display_refresh_rate = int function();
     alias da_al_get_new_display_flags = int function();
 
+    alias da_al_set_new_window_title = void function(const(char)*);
+    alias da_al_get_new_window_title = const(char)* function();
+
     alias da_al_get_display_width = int function(ALLEGRO_DISPLAY*);
     alias da_al_get_display_height = int function(ALLEGRO_DISPLAY*);
     alias da_al_get_display_format = int function(ALLEGRO_DISPLAY*);
@@ -784,6 +787,8 @@ __gshared {
     da_al_set_new_display_flags al_set_new_display_flags;
     da_al_get_new_display_refresh_rate al_get_new_display_refresh_rate;
     da_al_get_new_display_flags al_get_new_display_flags;
+    da_al_set_new_window_title al_set_new_window_title;
+    da_al_get_new_window_title al_get_new_window_title;
     da_al_get_display_width al_get_display_width;
     da_al_get_display_height al_get_display_height;
     da_al_get_display_format al_get_display_format;

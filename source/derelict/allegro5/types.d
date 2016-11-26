@@ -269,6 +269,8 @@ enum _ALLEGRO_PRIM_MAX_USER_ATTR = 10;
 
 struct ALLEGRO_DISPLAY;
 
+enum ALLEGRO_NEW_WINDOW_TITLE_MAX_SIZE = 255;
+
 // events.h
 alias ALLEGRO_EVENT_TYPE = uint;
 
