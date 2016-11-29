@@ -47,12 +47,14 @@ class DerelictAllegro5Loader : SharedLibLoader
             import core.thread;
             static if(Derelict_OS_Mac) {
                 thread_attachThis();
+                rt_moduleTlsCtor();
             }
 
             auto ret = (*cast(int function()*) argv[ 0 ])();
 
             static if(Derelict_OS_Mac) {
                 thread_detachThis();
+                rt_moduleTlsDtor();
             }
 
             return ret;
