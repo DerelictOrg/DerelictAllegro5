@@ -35,7 +35,11 @@ public
 import derelict.allegro5.functions,
        derelict.allegro5.types;
 
-private enum libNames = genLibNames("Allegro");
+private {
+    enum libNames = genLibNames("Allegro");
+    extern(C) void rt_moduleTlsCtor();
+    extern(C) void rt_moduleTlsDtor();
+}
 
 class DerelictAllegro5Loader : SharedLibLoader
 {
